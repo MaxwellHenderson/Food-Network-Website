@@ -1,0 +1,90 @@
+main, body, header, .listings, .sidebar{
+    padding: 10px;
+}
+
+img{
+    border: 5px solid black;
+    margin: 5px;
+}
+
+header{
+    display: flex;
+    flex-flow: row;
+    background: #696969;
+    border: 1px solid black;
+    margin: 5px;
+    justify-content: right;
+}
+
+button{
+
+}
+
+.shaped{
+    flex-flow: row wrap;
+    justify-content: flex-end;
+}
+
+.app{
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.listings{
+    flex: 1;
+    /* flex-flow: wrap; */
+    /* background-image: linear-gradient(black, #696969); */
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.listing{
+    /* display: block; */
+    /* position: relative; */
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+.listingImage{
+    /* position: absolute; */
+}
+
+.listingText{
+    background: rgba(105, 105, 105, 0.3);
+    /* opacity: 0.4; */
+    position: absolute;
+    bottom: 20px;
+    left: 16px;
+}
+
+.sidebar{
+    display: flex;
+    flex: 0 1 150px;
+    flex-direction: column;
+    background-color: #859dc9;
+    border: 1px solid black;
+    margin: 5px;
+}
+
+
+
+.blinking{
+    animation:blinkingText 0.8s infinite;
+}
+@keyframes blinkingText{
+    0%{     color: #000;    }
+    10%{    color: pink; }
+    24%{    color: forestgreen; }
+    38%{    color: gold; }
+    50%{    color: yellow; }
+    63%{    color: skyblue;}
+    99%{    color:brown;  }
+    100%{   color: #000;    }
+}
