@@ -16,6 +16,10 @@ header{
     justify-content: right;
 }
 
+.navbar{
+    background-color: rgba(48, 52, 65, 0.39);
+}
+
 button{
 
 }
