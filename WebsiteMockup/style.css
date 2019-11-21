@@ -12,7 +12,7 @@ header{
     flex-flow: row;
     background: #696969;
     border: 1px solid black;
-    margin: 5px;
+    /* margin: 5px; */
     justify-content: right;
 }
 
@@ -38,7 +38,7 @@ button{
 
 .listings{
     flex: 1;
-    /* flex-flow: wrap; */
+    flex-flow: wrap;
     /* background-image: linear-gradient(black, #696969); */
     border: 1px solid black;
     margin: 5px;
@@ -53,22 +53,25 @@ button{
 }
 
 .listingImage{
+    width: 100%;
     /* position: absolute; */
 }
 
 .listingText{
-    background: rgba(105, 105, 105, 0.3);
-    /* opacity: 0.4; */
-    position: absolute;
+    /* display: inline-flex; */
+    /* box-sizing: content-box; */
+    background: rgba(256, 256, 256, 0.5);
     bottom: 20px;
     left: 16px;
+    position: absolute;
+ 
 }
 
 .sidebar{
     display: flex;
     flex: 0 1 150px;
     flex-direction: column;
-    background-color: #859dc9;
+    background-image: linear-gradient(darkgrey,#696969);
     border: 1px solid black;
     margin: 5px;
 }
