@@ -1,4 +1,5 @@
 main, body, header, .listings, .sidebar{
+    /* background-image: url("imgs/paz.jpg"); */
     padding: 10px;
 }
 
