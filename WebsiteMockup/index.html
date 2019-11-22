@@ -4,30 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    
-    <title>Document</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="styles/style.css"> -->
+    
+    <title>Food Network</title>
+
+    <!-- Jquery, Popper -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <!-- Font Icons -->
+    <script src="https://kit.fontawesome.com/e30f2cbfbb.js" crossorigin="anonymous"></script>
 </head>
-    <!-- Menu Bar -->
 <div class="app">
-    <div class="navbar navbar-expand-lg top-menu">
-        <a class="btn btn-dark" href="index.html">Home Button</a class="btn btn-dark" href="index.html">    <a class="btn btn-dark" href="index.html">Search</a class="btn btn-dark" href="index.html">     <a class="btn btn-dark" href="index.html">Inbox</a class="btn btn-dark" href="index.html">  <a class="btn btn-dark" href="index.html">Friends</a class="btn btn-dark" href="index.html">    <a class="btn btn-dark" href="index.html" class="btn btn-primary" data-toggle="collapse"data-target="#sidebar">Hamburger Menu</a class="btn btn-dark" href="index.html">
+    <!-- Menu Bar -->
+    <div class="navbar navbar-expand-md top-menu justify-content-between shadow">
+        <div class="font-weight-light">Food Network</div>
+        <div class="navbar-nav">
+            <div class="collapse navbar-collapse"  id="navbarNav">
+                <!-- <a class="nav-link" href=""> Home Button </a>    -->
+                <a class="nav-link disabled" href=""><i class="fas fa-search"></i></a>     
+                <a class="nav-link disabled" href=""><i class="fas fa-envelope"></i></a>  
+                <a class="nav-link disabled" href=""><i class="fas fa-user-friends"></i></a>    
+            </div>
+            <a class="nav-link disabled" href="" class="btn btn-primary" data-toggle="collapse"data-target="#sidebar"><i class="fas fa-bars"></i></a>
+        </div>
     </div>
 
-    <div class="flex-container">
-        <!-- Listings Section -->
-        <span class="listings d-flex">
-            <!-- <div class="listing flex-container">  
-                <img class="listingImage" src="imgs/makisushi.jpg" alt="good sushi" style="width:200px;height:200px;">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-2 col-xl-2 listing">  
+                <img src="imgs/makisushi.jpg" alt="good sushi" style="width:200px;height:200px;">
                 <p class="listingText">This is sushi!</p>
-            </div> -->
-            <span class="listing">  
+            </span>
+
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-2 col-xl-2 listing">  
+                <img src="imgs/ramen.jpg" alt="good ramen" style="width: 200px;height: 200px;">                
+                <p class="listingText"> Mmmmm, Ramen!</p>
+            </span>
+            
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-2 col-xl-2 listing">  
+                <img src="imgs/itsapizza.jpg" alt="itsa pizza" style="width: 200px;height: 200px;">
+                <p class="listingText">Pizzatime</p>
+            </span>
+
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-2 col-xl-2 listing">  
+                <img src="imgs/Sausages_large.jpg" alt="big meaty bois" style="width: 200px;height: 200px;">
+                <p class="listingText">Sausages</p>
+            </span>
+
+            <!-- Row Break -->
+            <div class="w-100"></div>
+            
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">  
+                <img src="imgs/lasagna.jpg" alt="i hate mondays" style="width: 200px;height: 200px;">
+                <p class="listingText">Mondays</p>
+            </span>
+    
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">  
+                <img src="imgs/tacos.jpg" alt="taco tuesday!" style="width: 200px;height: 200px;">
+                <p class="listingText">Taco Tuesday!</p>
+            </span>
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">  
+                <img src="imgs/Sausages_large.jpg" alt="big meaty bois" style="width: 200px;height: 200px;">
+                <p class="listingText">Sausages</p>
+            </span>
+            <span class="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">  
+                <img src="imgs/ramen.jpg" alt="good ramen" style="width: 200px;height: 200px;">                
+                <p class="listingText"> Mmmmm, Ramen!</p>
+            </span>
+        </div>
+        <!-- <span class="listings"> -->
+        <!-- Listings Section -->
+            <!-- <span class="listing">  
                 <img src="imgs/makisushi.jpg" alt="good sushi" style="width:200px;height:200px;">
                 <p class="listingText">This is sushi!</p>
             </span>
@@ -56,16 +107,14 @@
                 <img src="imgs/tacos.jpg" alt="taco tuesday!" style="width: 200px;height: 200px;">
                 <p class="listingText">Taco Tuesday!</p>
             </span>
-
-
-        </span>
+        </span> -->
 
         <!-- Popout Sidebar -->
-        <div id="sidebar" class="collapse sidebar sidebar">
+        <!-- <div id="sidebar" class="collapse sidebar sidebar">
             <a class="btn btn-dark" href="">Username</a>
             <a class="btn btn-dark" href="">My Listings</a>
             <a class="btn btn-dark" href="newItem.html">Make a listing</a>
-        </div>
+        </div> -->
     </div>
 </div>
 </html>

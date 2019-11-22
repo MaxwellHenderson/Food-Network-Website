@@ -1,6 +1,10 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 main, body, header, .listings, .sidebar{
     /* background-image: url("imgs/paz.jpg"); */
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 img{
@@ -18,7 +22,7 @@ header{
 }
 
 .navbar{
-    background-color: rgba(48, 52, 65, 0.39);
+    background-color: E0E0E0;
 }
 
 button{
