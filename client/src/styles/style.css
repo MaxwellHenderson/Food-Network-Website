@@ -1,36 +1,40 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
 main, body, header, .listings, .sidebar{
     /* background-image: url("imgs/paz.jpg"); */
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 img{
-    border: 5px solid black;
+    /* border: 5px solid black; */
     margin: 5px;
 }
 
 header{
     display: flex;
     flex-flow: row;
-    background: #696969;
+    background: #393D3F;
     border: 1px solid black;
     /* margin: 5px; */
     justify-content: right;
 }
 
-.navbar{
-    background-color: rgba(48, 52, 65, 0.39);
+.navbar {
+    background-color: #E0E0E0;
 }
 
-button{
+button {
 
 }
 
-.shaped{
+.shaped {
     flex-flow: row wrap;
     justify-content: flex-end;
 }
 
-.app{
+.app {
     /* display: flex; */
     /* flex-direction: column; */
 }
@@ -41,7 +45,7 @@ button{
     flex: 1;
 }
 
-.listings{
+.listings {
     flex: 1;
     flex-flow: wrap;
     /* background-image: linear-gradient(black, #696969); */
@@ -66,8 +70,8 @@ button{
     /* display: inline-flex; */
     /* box-sizing: content-box; */
     background: rgba(256, 256, 256, 0.5);
-    bottom: 20px;
-    left: 16px;
+    bottom: 10px;
+    left: 26px;
     position: absolute;
  
 }
@@ -76,7 +80,7 @@ button{
     display: flex;
     flex: 0 1 150px;
     flex-direction: column;
-    background-image: linear-gradient(darkgrey,#696969);
+    background-image: linear-gradient(#393D3F, rgb(44, 43, 43));
     border: 1px solid black;
     margin: 5px;
 }

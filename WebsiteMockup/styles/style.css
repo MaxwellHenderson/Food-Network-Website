@@ -1,0 +1,102 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+main, body, header, .listings, .sidebar{
+    /* background-image: url("imgs/paz.jpg"); */
+    /* padding: 10px; */
+}
+
+img{
+    border: 5px solid black;
+    margin: 5px;
+}
+
+header{
+    display: flex;
+    flex-flow: row;
+    background: #696969;
+    border: 1px solid black;
+    /* margin: 5px; */
+    justify-content: right;
+}
+
+.navbar{
+    background-color: E0E0E0;
+}
+
+button{
+
+}
+
+.shaped{
+    flex-flow: row wrap;
+    justify-content: flex-end;
+}
+
+.app{
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.listings{
+    flex: 1;
+    flex-flow: wrap;
+    /* background-image: linear-gradient(black, #696969); */
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.listing{
+    /* display: block; */
+    /* position: relative; */
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+.listingImage{
+    width: 100%;
+    /* position: absolute; */
+}
+
+.listingText{
+    /* display: inline-flex; */
+    /* box-sizing: content-box; */
+    background: rgba(256, 256, 256, 0.5);
+    bottom: 20px;
+    left: 16px;
+    position: absolute;
+ 
+}
+
+.sidebar{
+    display: flex;
+    flex: 0 1 150px;
+    flex-direction: column;
+    background-image: linear-gradient(darkgrey,#696969);
+    border: 1px solid black;
+    margin: 5px;
+}
+
+
+
+.blinking{
+    animation:blinkingText 0.8s infinite;
+}
+@keyframes blinkingText{
+    0%{     color: #000;    }
+    10%{    color: pink; }
+    24%{    color: forestgreen; }
+    38%{    color: gold; }
+    50%{    color: yellow; }
+    63%{    color: skyblue;}
+    99%{    color:brown;  }
+    100%{   color: #000;    }
+}
