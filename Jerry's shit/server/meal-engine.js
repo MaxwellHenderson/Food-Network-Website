@@ -1,8 +1,8 @@
 var AWS = require("aws-sdk");
 
 let awsConfig = {
-  region: "us-east-2",
-  endpoint: "http://dynamodb.us-east-2.amazonaws.com",
+  region: "us-west-2",
+  endpoint: "http://dynamodb.us-west-2.amazonaws.com",
   accessKeyId: "AKIAI2FNOYH6TIMH5UXQ",
   secretAccessKey: "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"
 };
@@ -44,6 +44,7 @@ let getMeals = async () => {
 };
 
 let createMeal = meal => {
+  console.log("Executed");
   const params = {
     TableName: "meals",
     Item: meal
@@ -61,14 +62,17 @@ let createMeal = meal => {
 };
 
 let updateMeal = meal => {
-  const { mealID, mealName } = meal;
+  const { mealID, mealName, mealPrice, mealDescription } = meal;
 
   const params = {
     TableName: "meals",
     Key: { mealID: mealID },
-    UpdateExpression: "set mealName = :updatedMealName",
+    UpdateExpression:
+      "SET mealName = :updatedMealName, mealPrice = :updatedMealPrice, mealDescription = :updateMealDescription",
     ExpressionAttributeValues: {
-      ":updatedMealName": mealName
+      ":updatedMealName": mealName,
+      ":updatedMealPrice": mealPrice,
+      ":updateMealDescription": mealDescription
     },
     ReturnValues: "UPDATED_NEW"
   };

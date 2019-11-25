@@ -22,7 +22,10 @@ createListing = async (request, response) => {
   const listings = await getMeals();
   const meal = {
     mealID: listings.length ? listings.length + 1 : 1,
-    mealName: request.body.mealName
+    mealName: request.body.mealName,
+    mealPrice: request.body.mealPrice,
+    mealDescription: request.body.mealDescription,
+    mealImagePath: request.body.mealImagePath
   };
 
   // createMeal(meal).then(() => displayListings(request, response));
@@ -36,6 +39,8 @@ updateListing = async (request, response) => {
 
   /* Update meal info */
   meal.mealName = request.body.mealName;
+  meal.mealPrice = request.body.mealPrice;
+  meal.mealDescription = request.body.mealDescription;
   updateMeal(meal).then(() => displayListings(request, response));
 };
 
