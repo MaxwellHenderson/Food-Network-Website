@@ -1,6 +1,7 @@
 "use strict";
 
 import React, { Component } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
 
 class CardList extends Component {
   render() {
@@ -8,10 +9,10 @@ class CardList extends Component {
     let foodCards = this.props.foodItems.map((foodItem, index) => {
       let card = (
         <FoodCard
-          // name={foodItem.name}
-          // imgUrl={foodItem.imgUrl}
-          // imgAlt={foodItem.imgAlt}
+          key={foodItem.mealID}
           name={foodItem.mealName}
+          price={foodItem.mealPrice}
+          description={foodItem.mealDescription}
           imgUrl={foodItem.mealImagePath}
           imgAlt={foodItem.imgAlt}
         />
@@ -39,7 +40,7 @@ class CardList extends Component {
 
 class FoodCard extends Component {
   render() {
-    const { name, imgUrl, imgAlt } = this.props;
+    const { name, price, description, imgUrl, imgAlt } = this.props;
     return (
       <span className="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">
         <img
@@ -47,7 +48,11 @@ class FoodCard extends Component {
           alt={imgAlt}
           style={{ width: "200px", height: "200px" }}
         />
-        <p className="listingText">{name}</p>
+        {/* <p className="listingText">{name}</p> */}
+        <ListGroup>
+          <ListGroup.Item>Name: {name}</ListGroup.Item>
+          <ListGroup.Item>Price: {price}</ListGroup.Item>
+        </ListGroup>
       </span>
     );
   }
