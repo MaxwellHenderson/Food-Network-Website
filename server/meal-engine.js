@@ -44,7 +44,8 @@ let getMeals = async () => {
 };
 
 let createMeal = meal => {
-  console.log("Executed");
+  const { mealID, mealName, mealPrice, mealDescription } = meal;
+  console.log(meal);
   const params = {
     TableName: "meals",
     Item: meal

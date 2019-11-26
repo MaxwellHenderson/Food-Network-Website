@@ -3,6 +3,7 @@ import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
+import AddListingForm from "./component/form";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
@@ -11,80 +12,19 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.mealNameInput = React.createRef();
+    this.mealPriceInput = React.createRef();
+    this.mealImagePathInput = React.createRef();
+
     this.sortOptions = [
-      { option: "ID", function: this.sortMealByID },
-      { option: "Name", function: this.sortMealByName },
-      { option: "Price", function: this.sortMealByPrice }
+      { option: "ID", sort: this.sortMealByID },
+      { option: "Name", sort: this.sortMealByName },
+      { option: "Price", sort: this.sortMealByPrice }
     ];
 
     this.state = {
-      selectedSortOption: this.sortOptions ? this.sortOptions[1] : {},
-      foodItems: [
-        {
-          name: "Sushi",
-          imgUrl: "imgs/makisushi.jpg"
-        },
-        {
-          name: "Pizzatime",
-          imgUrl: "imgs/itsapizza.jpg"
-        },
-        {
-          name: "Sausages",
-          imgUrl: "imgs/Sausages_large.jpg"
-        },
-        {
-          name: "Lasagna",
-          imgUrl: "imgs/lasagna.jpg"
-        },
-        {
-          name: "Mondays",
-          imgUrl: "imgs/lasagna.jpg"
-        },
-        {
-          name: "Taco Tuesday!",
-          imgUrl: "imgs/tacos.jpg"
-        },
-        {
-          name: "Mmmmmm, Ramen!",
-          imgUrl: "imgs/ramen.jpg"
-        },
-        {
-          name: "Sushi",
-          imgUrl: "imgs/makisushi.jpg"
-        },
-        {
-          name: "Not pho",
-          imgUrl: "imgs/ramen.jpg"
-        },
-        {
-          name: "Sushi",
-          imgUrl: "imgs/makisushi.jpg"
-        },
-        {
-          name: "Give me the sauce",
-          imgUrl: "imgs/Sausages_large.jpg"
-        },
-        {
-          name: "Pizza",
-          imgUrl: "imgs/itsapizza.jpg"
-        },
-        {
-          name: "Taco Tuesday!",
-          imgUrl: "imgs/tacos.jpg"
-        },
-        {
-          name: "Mmmmmm, Ramen!",
-          imgUrl: "imgs/ramen.jpg"
-        },
-        {
-          name: "Sushi",
-          imgUrl: "imgs/makisushi.jpg"
-        },
-        {
-          name: "Not pho",
-          imgUrl: "imgs/ramen.jpg"
-        }
-      ]
+      selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
+      foodItems: []
     };
   }
 
@@ -104,6 +44,12 @@ class App extends Component {
           sortOptions={this.sortOptions}
           onClick={this.handleSortOptionChange}
         />
+        <AddListingForm
+          mealNameInput={this.mealNameInput}
+          mealPriceInput={this.mealPriceInput}
+          mealImagePathInput={this.mealImagePathInput}
+          onClick={this.handleAddMeal}
+        />
       </div>
     );
   }
@@ -117,9 +63,35 @@ class App extends Component {
     this.callBackendAPI(request)
       .then(response =>
         this.setState({
-          foodItems: this.state.selectedSortOption.function(response)
+          foodItems: this.state.selectedSortOption.sort(response)
         })
       )
+      .catch(err => console.log(err));
+  };
+
+  handleAddMeal = async () => {
+    const url = "/listings";
+    const request = new Request(url, {
+      method: "POST",
+      /* Important to serialize data before sending the request */
+      body: JSON.stringify({
+        mealName: this.mealNameInput.current.value,
+        mealPrice: this.mealPriceInput.current.value,
+        mealImagePath: this.mealImagePathInput.current.value
+      }),
+      /* Need to specify what data is stored in the body. In this case it's a JSON */
+      headers: { "Content-Type": "application/json" }
+    });
+    console.log(request);
+    this.callBackendAPI(request)
+      .then(res => {
+        this.setState({
+          foodItems: this.state.selectedSortOption.function([
+            ...this.state.foodItems,
+            res
+          ])
+        });
+      })
       .catch(err => console.log(err));
   };
 

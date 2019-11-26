@@ -19,11 +19,6 @@ app.listen(port, () => console.log(`Listening on port ${port}...`));
 /* This middleware is used to deserialize incoming JSON objects ONLY when the POST and PUT requests are called */
 app.use(express.json());
 
-/*** Read requests ***/
-app.get("/welcome", (request, response) => {
-  response.send({ express: "Welcome to our Food Network!" });
-});
-
 /*** Read/Create requests ***/
 app
   .route("/listings")

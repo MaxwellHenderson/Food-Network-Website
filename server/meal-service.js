@@ -18,7 +18,7 @@ displayListings = (request, response) => {
 createListing = async (request, response) => {
   validateMeal(request, response);
 
-  /* Create meal object and insert into listings*/
+  /* Create meal object */
   const listings = await getMeals();
   const meal = {
     mealID: listings.length ? listings.length + 1 : 1,
@@ -28,7 +28,7 @@ createListing = async (request, response) => {
     mealImagePath: request.body.mealImagePath
   };
 
-  // createMeal(meal).then(() => displayListings(request, response));
+  /* Execute query to insert into DynamoDB */
   createMeal(meal).then(() => {
     return response.send(meal);
   });

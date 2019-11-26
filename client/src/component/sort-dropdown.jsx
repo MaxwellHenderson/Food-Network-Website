@@ -5,10 +5,7 @@ class SortDropdown extends Component {
   render() {
     const { selectedSortOption, sortOptions, onClick } = this.props;
     return (
-      <DropdownButton
-        id="dropdown-basic-button"
-        title={selectedSortOption.option}
-      >
+      <DropdownButton id="dropdown-basic-button" title="Sort by">
         {sortOptions.map(sortOption => (
           <Dropdown.Item onClick={() => onClick(sortOption)}>
             {sortOption.option}
