@@ -5,11 +5,11 @@ import ListGroup from "react-bootstrap/ListGroup";
 
 class CardList extends Component {
   render() {
-    console.log(this.props.foodItems);
     let foodCards = this.props.foodItems.map((foodItem, index) => {
       let card = (
         <FoodCard
           key={foodItem.mealID}
+          id={foodItem.mealID}
           name={foodItem.mealName}
           price={foodItem.mealPrice}
           description={foodItem.mealDescription}
@@ -40,7 +40,7 @@ class CardList extends Component {
 
 class FoodCard extends Component {
   render() {
-    const { name, price, description, imgUrl, imgAlt } = this.props;
+    const { id, name, price, description, imgUrl, imgAlt } = this.props;
     return (
       <span className="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">
         <img
@@ -50,6 +50,7 @@ class FoodCard extends Component {
         />
         {/* <p className="listingText">{name}</p> */}
         <ListGroup>
+          <ListGroup.Item>ID: {id}</ListGroup.Item>
           <ListGroup.Item>Name: {name}</ListGroup.Item>
           <ListGroup.Item>Price: {price}</ListGroup.Item>
         </ListGroup>
