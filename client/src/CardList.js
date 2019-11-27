@@ -44,11 +44,11 @@ class FoodCard extends Component {
   render() {
     const { id, name, price, description, imgUrl, imgAlt } = this.props;
     return (
-      <span className="mr-3 ml-3 mt-3 col-md-4 col-sm-6 col-xl-2 listing">
+      <span className="mx-3 mt-1 col-md-4 col-sm-6 col-xl-2 listing">
         <img
           src={imgUrl}
           alt={imgAlt}
-          style={{ width: "200px", height: "200px" }}
+          style={{ width: "175px", height: "175px" }}
           
           onClick = {() => this.props.getMealById(this.props.id)}
           data-toggle="modal"

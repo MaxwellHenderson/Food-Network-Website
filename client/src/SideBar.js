@@ -32,7 +32,7 @@ class SideBar extends Component {
                         </div>
                     </div>
                 </div>
-                <div id="sidebar-list" class="container px-0" style={{color: 'white'}}>
+                <div id="sidebar-list" class="container px-0 listings" style={{color: 'white'}}>
                     <div class="text-center font-weight-bold mt-2 py-1">My Listings</div>
                     
                     <hr class="mt-2 mb-0" style={{'background-color': '#D8D8D8', opacity: '15%'}} />
