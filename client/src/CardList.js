@@ -15,6 +15,8 @@ class CardList extends Component {
           description={foodItem.mealDescription}
           imgUrl={foodItem.mealImagePath}
           imgAlt={foodItem.imgAlt}
+
+          getMealById={this.props.getMealById}
         />
       );
 
@@ -47,13 +49,26 @@ class FoodCard extends Component {
           src={imgUrl}
           alt={imgAlt}
           style={{ width: "200px", height: "200px" }}
+          
+          onClick = {() => this.props.getMealById(this.props.id)}
+          data-toggle="modal"
+          data-target="#exampleModalCenter"
         />
-        {/* <p className="listingText">{name}</p> */}
-        <ListGroup>
-          <ListGroup.Item>ID: {id}</ListGroup.Item>
-          <ListGroup.Item>Name: {name}</ListGroup.Item>
+        <div id="card-text" className="listingText pl-2 pt-1">
+          <div className="text-left">
+            <div className="">
+              {name}
+            </div>
+            <div className="font-weight-bold pt-1 pl-1">
+              ${price}
+            </div>
+          </div>
+        </div>
+        {/* <ListGroup> */}
+          {/* <ListGroup.Item>ID: {id}</ListGroup.Item> */}
+          {/* <ListGroup.Item>Name: {name}</ListGroup.Item>
           <ListGroup.Item>Price: {price}</ListGroup.Item>
-        </ListGroup>
+        </ListGroup> */}
       </span>
     );
   }

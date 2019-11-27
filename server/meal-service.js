@@ -21,7 +21,7 @@ createListing = async (request, response) => {
   /* Create meal object */
   const listings = await getMeals();
   const meal = {
-    mealID: listings.length ? listings.length + 1 : 1,
+    mealID: listings.length ? listings.length + 2 : 1,
     mealName: request.body.mealName,
     mealPrice: request.body.mealPrice,
     mealDescription: request.body.mealDescription,

@@ -24,7 +24,14 @@ class App extends Component {
 
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
-      foodItems: []
+      foodItems: [],
+      currMeal: {mealId: 0,
+                mealName: 'apple',
+                mealPrice:'',
+                mealDescription:'',
+                mealImagePath:'',
+                imgAlt:''
+                } 
     };
   }
 
@@ -33,12 +40,17 @@ class App extends Component {
     this.handleGetMeal();
   }
 
+
+
   render() {
+    let meal = this.state.currMeal;
+
     return (
       <div className="App">
         <NavBar />
         <SideBar />
-        <CardList foodItems={this.state.foodItems} />
+        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
+        
         <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
@@ -50,8 +62,47 @@ class App extends Component {
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         />
+
+        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content" style={{'background-image':  'url(' + meal.mealImagePath + ')', 'background-size': '120%'}}>
+              <div className="modal-body text-white px-0 py-0 w-100" style={{height: '500px', width: '500px'}} >
+                <div className="modal-text mx-0 pl-3 pt-3 row d-flex align-content-between">
+                  <div class="col-6">
+                    <div id="modal-name" className="font-weight-light mb-1" style={{'font-size': "20px"}}>
+                      {meal.mealName}
+                    </div>
+                    <div id="modal-location" className="row mx-0">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <div className="row mx-0">
+                        <div class="ml-2">Seattle, WA</div> <div className="ml-2">0.8 miles</div>
+                      </div>
+                    </div>
+                    <div id="modal-price" className="font-weight-bold">
+                      Price: ${meal.mealPrice}
+                    </div>
+                  </div>
+                  <div className="col-6 text-right">
+                    <div className="mb-2">
+                      Description: {meal.mealDescription}
+                    </div>
+                    <button className="btn btn-info">
+                      View Listing
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
+  }
+
+  getMealById(id) {
+    let foodArr = this.state.foodItems;
+    let meal = foodArr.find((item) => {return item.mealID === id});
+    this.setState({currMeal: meal});
   }
 
   handleGetMeal = async () => {

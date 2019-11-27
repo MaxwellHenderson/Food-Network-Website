@@ -12,6 +12,21 @@ img{
     margin: 5px;
 }
 
+/* .App {
+    -webkit-filter: blur(5px) grayscale(90%);
+} */
+
+.modal {
+    padding-top:20vh;
+}
+
+.modal-text{
+    position: relative;
+    top: 78%;
+    height: 22%;
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
 header{
     display: flex;
     flex-flow: row;
@@ -69,11 +84,13 @@ button {
 .listingText{
     /* display: inline-flex; */
     /* box-sizing: content-box; */
-    background: rgba(256, 256, 256, 0.5);
-    bottom: 10px;
-    left: 26px;
-    position: absolute;
- 
+    color: white;
+    background: rgba(0, 0, 0, 0.45);
+    bottom: 70px;
+    left: 5px;
+    height: 65px;
+    width: 200px;
+    position: relative;
 }
 
 .sidebar{
