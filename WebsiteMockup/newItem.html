@@ -16,18 +16,15 @@
 
 </head>
 <body>
-    <div class="app">
-        <div class="navbar navbar-expand-lg top-menu">
-            <a class="btn btn-dark" href="index.html">Home Button</a class="btn btn-dark" href="index.html">    <a class="btn btn-dark" href="index.html">Search</a class="btn btn-dark" href="index.html">     <a class="btn btn-dark" href="index.html">Inbox</a class="btn btn-dark" href="index.html">  <a class="btn btn-dark" href="index.html">Friends</a class="btn btn-dark" href="index.html">    <a class="btn btn-dark" href="index.html" class="btn btn-primary" data-toggle="collapse"data-target="#sidebar">Hamburger Menu</a class="btn btn-dark" href="index.html">
-        </div>
+    <div class="app p-4">
         <div class="form-group">
-            <label for="title-input">Title</label>
+            <label for="title-input" style="font-size:x-large;">What is your meal?</label>
             <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi...">
         </div>
 
-        <div class="flex-container" id="photo-and-description">
+        <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
             <!-- Insert photo of food -->
-            <form class="md-form">
+            <form class="md-form w-50 p-4">
                 <div class="file-field">
                     <div class="z-depth-1-half mb-4">
                         <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
@@ -39,11 +36,40 @@
                             <input type="file">
                         </div>
                     </div>
+                    <div label="food-tags">
+                        <label for="foodTagsBox">Tags:</label>
+                        <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish...">
+                    </div>
+                    <div label="ingredients">
+                        <label for="ingredientsField">Ingredients:</label>
+                        <input type="text" class="form-control" id="ingredientsField" placeholder="">
+                    </div>
+                    <div label="allergy-info">
+                        <label for="allergyBox">Tags:</label>
+                        <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk...">
+                    </div>
                 </div>
             </form>
             
-            <label for="exampleFormControlTextarea1">Large textarea</label>
-            <textarea class="form-control rounded-0" id="exampleFormControlTextarea1" rows="10"></textarea>
+            <div label="right column" class="w-50 p-4">
+                <div label="food-description">
+                    <label for="foodDescriptionBox">Food Description</label>
+                    <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10"></textarea>
+                </div>
+
+                <label for="price">Price:</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Amount">
+                </div>
+                <label for="quantity">Quantity:</label>
+                <input type="text" class="form-control">
+
+                <button class="btn btn-success mt-4" type="button">Submit Listing</button>
+
+            </div>
         </div>
         
     </div>
