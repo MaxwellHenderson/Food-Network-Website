@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import NewItemPage from "./NewItemPage.js";
 import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
@@ -50,7 +51,6 @@ class App extends Component {
         <NavBar />
         <SideBar />
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
-        
         <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
