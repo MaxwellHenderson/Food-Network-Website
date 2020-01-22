@@ -110,23 +110,34 @@ class App extends Component {
   }
 
   handleGetMeal = async () => {
-    const url = "/listings";
-    let request = new Request(url, {
-      method: "GET",
-      headers: new Headers()
-    });
-    this.callBackendAPI(request)
-      .then(response =>
-        this.setState({
-          foodItems: this.state.selectedSortOption.sort(response)
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    const Http = new XMLHttpRequest();
+
+    Http.open("GET", Url);
+    Http.onreadystatechange = (e) => {
+      console.log(Http.responseText)
+    }
+
+    var that = this;
+    $.ajax({
+      url: Url,
+      type: 'GET',
+      success: function(result){
+        console.log(result)
+        that.setState({
+          foodItems: that.state.selectedSortOption.sort(result)
         })
-      ) .catch(err => console.log(err)); 
+      },
+      error: function(error){
+        console.log(`Error ${error}`)
+      }
+    })
     };
  
   handleAddMeal = async () => { 
-    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/7238";
+    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
     const _data={
-      mealID:7238,
+      mealID:2700,
       mealDescription:"A pile of sprouts",
       mealImagePath:"google.com",
       mealName:"Hello",
