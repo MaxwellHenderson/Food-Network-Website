@@ -9,9 +9,9 @@ class SideBar extends Component {
                 <div id="sidebar-header" class="py-3" style={{color: 'white', height: '130px', 'background-color': '#282A2C'}} >
                     <div id="user_info" class="row ml-0 mr-0">
                         <img src="imgs/profile_default.jpg" class="rounded-circle ml-2 my-1 column" style={{height: '40px'}} alt="profile picture"/>
-                        <div class="column" id="" style={{'font-size': '16px'}}>
+                        <div class="column" id="" style={{'fontSize': '16px'}}>
                             <div id="username" class="row ml-3 mr-0">GermanSausageMan</div>
-                            <div  id="location" class="row ml-3 mr-0" style={{'font-size': '14px'}}>
+                            <div  id="location" class="row ml-3 mr-0" style={{'fontSize': '14px'}}>
                                 <i class="fas fa-map-marker-alt"></i>
                                 <div class="ml-2">Seattle, WA</div>
                             </div>

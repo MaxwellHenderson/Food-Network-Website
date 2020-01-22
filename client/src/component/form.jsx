@@ -21,7 +21,7 @@ class AddListingForm extends Component {
         <Form.Group>
           <Form.Control placeholder="Url" ref={mealImagePathInput} />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={() => onClick()}>
+        <Button variant="primary" type="button" onClick={() => onClick()}>
           Post meal listing
         </Button>
       </Form>

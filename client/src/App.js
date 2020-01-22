@@ -1,11 +1,15 @@
 import React, { Component } from "react";
-import NewItemPage from "./NewItemPage.js";
+// import NewItemPage from "./NewItemPage.js";
 import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
 import AddListingForm from "./component/form";
-
+/*
+import ajax from 'ajax';
+import axios from 'axios';
+import jquery from 'jquery'; */
+import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 
@@ -38,7 +42,7 @@ class App extends Component {
 
   /* Lifecycle hooks */
   componentDidMount() {
-    this.handleGetMeal();
+//    this.handleGetMeal();
   }
 
 
@@ -116,35 +120,37 @@ class App extends Component {
         this.setState({
           foodItems: this.state.selectedSortOption.sort(response)
         })
-      )
-      .catch(err => console.log(err));
-  };
-
-  handleAddMeal = async () => {
-    const url = "/listings";
-    const request = new Request(url, {
-      method: "POST",
-      /* Important to serialize data before sending the request */
-      body: JSON.stringify({
-        mealName: this.mealNameInput.current.value,
-        mealPrice: this.mealPriceInput.current.value,
-        mealImagePath: this.mealImagePathInput.current.value
-      }),
-      /* Need to specify what data is stored in the body. In this case it's a JSON */
-      headers: { "Content-Type": "application/json" }
+      ) .catch(err => console.log(err)); 
+    };
+ 
+  handleAddMeal = async () => { 
+    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/7238";
+    const _data={
+      mealID:7238,
+      mealDescription:"A pile of sprouts",
+      mealImagePath:"google.com",
+      mealName:"Hello",
+      mealPrice:"60.00"
+    };
+    
+    $.ajax({
+      url: Url,
+      type: 'POST',
+      dataType: 'jsonp',
+      headers: {
+        "accept" : "application/json"
+      }, 
+      data: JSON.stringify(_data), dataType: "json",
+      contentType: 'application/json; charset=utf-8',
+      success: function(result) {
+        console.log(result);
+      }, 
+      error:function(xhr, status, error) {
+        console.log(JSON.stringify(xhr)); 
+      }
     });
-    console.log(request);
-    this.callBackendAPI(request)
-      .then(res => {
-        this.setState({
-          foodItems: this.state.selectedSortOption.function([
-            ...this.state.foodItems,
-            res
-          ])
-        });
-      })
-      .catch(err => console.log(err));
-  };
+    return false;
+  }
 
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });
@@ -181,4 +187,4 @@ class App extends Component {
   };
 }
 
-export default App;
+  export default App;

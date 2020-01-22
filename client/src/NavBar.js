@@ -14,7 +14,7 @@ class NavBar extends Component {
                         <a className="nav-link" href=""><i className="fas fa-envelope"></i></a>  
                         <a className="nav-link" href=""><i className="fas fa-user-friends"></i></a>    
                     </div>
-                    <a className="nav-link" href="" data-toggle="collapse"data-target="#sidebar"><i class="fas fa-bars"></i></a>
+                    <a className="nav-link" href="" data-toggle="collapse"data-target="#sidebar"><i className="fas fa-bars"></i></a>
                 </div>
             </div>
         );
