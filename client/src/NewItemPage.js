@@ -11,7 +11,7 @@ class NewItemPage extends Component{
 
     render() {
         return(
-            <div class="app p-4">
+            <div class=" p-4">
                 <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
                     <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..."></input>
@@ -44,7 +44,6 @@ class NewItemPage extends Component{
                             <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..."></input>
                         </div>
                     </form>
-                </div>
                 
                 <div label="right column" class="w-50 p-4">
                     <div label="food-description">
@@ -63,9 +62,9 @@ class NewItemPage extends Component{
                     <input type="text" class="form-control"></input>
 
                     <button class="btn btn-success mt-4" type="button">Submit Listing</button>
-
                 </div>
             </div>
+                </div>
         );
     }
 }

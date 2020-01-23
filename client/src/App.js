@@ -12,6 +12,7 @@ import jquery from 'jquery'; */
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
+import NewItemPage from "./NewItemPage.js";
 
 class App extends Component {
   constructor(props) {
@@ -60,14 +61,16 @@ class App extends Component {
           sortOptions={this.sortOptions}
           onClick={this.handleSortOptionChange}
         />
-        <AddListingForm
+        {/* <AddListingForm
           mealNameInput={this.mealNameInput}
           mealPriceInput={this.mealPriceInput}
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
-        />
+        /> */}
 
-        <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <NewItemPage />
+
+        {/* <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content" style={{'background-image':  'url(' + meal.mealImagePath + ')', 'background-size': '120%'}}>
               <div className="modal-body text-white px-0 py-0 w-100" style={{height: '500px', width: '500px'}} >
@@ -98,7 +101,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -137,10 +140,10 @@ class App extends Component {
   handleAddMeal = async () => { 
     const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
     const _data={
-      mealID:2700,
-      mealDescription:"A pile of sprouts",
+      mealID:2800,
+      mealDescription:"Caserole",
       mealImagePath:"google.com",
-      mealName:"Hello",
+      mealName:"test",
       mealPrice:"60.00"
     };
     
