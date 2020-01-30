@@ -139,12 +139,13 @@ class App extends Component {
  
   handleAddMeal = async () => { 
     const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+    
     const _data={
       mealID:2800,
-      mealDescription:"Caserole",
+      mealDescription: NewItemPage.state.foodDescription,
       mealImagePath:"google.com",
-      mealName:"test",
-      mealPrice:"60.00"
+      mealName: NewItemPage.state.mealName,
+      mealPrice: NewItemPage.state.price
     };
     
     $.ajax({
