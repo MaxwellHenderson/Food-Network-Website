@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import InputField from "./component/input-field";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
@@ -20,10 +21,11 @@ class NewItemPage extends Component {
     render() {
         return (
             <div class=" p-4">
-                <div class="form-group">
+                {/* <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
                     <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
-                </div>
+                </div> */}
+                <InputField labelName="What is your meal?" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} />
 
                 <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
 
@@ -40,7 +42,11 @@ class NewItemPage extends Component {
                                 <input type="file"></input>
                             </div>
                         </div>
-                        <div label="food-tags">
+
+                        <InputField labelName="Tags" placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
+                        <InputField labelName="Ingredients" placeHolder="" input={this.mealIngredientsInput} />
+                        <InputField labelName="Allergy" placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
+                        {/* <div label="food-tags">
                             <label for="foodTagsBox">Tags:</label>
                             <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
                         </div>
@@ -51,7 +57,7 @@ class NewItemPage extends Component {
                         <div label="allergy-info">
                             <label for="allergyBox">Allergy:</label>
                             <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
-                        </div>
+                        </div> */}
                     </form>
 
                     <div label="right column" class="w-50 p-4">
@@ -67,8 +73,9 @@ class NewItemPage extends Component {
                             </div>
                             <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
                         </div>
-                        <label for="quantity">Quantity:</label>
-                        <input type="text" class="form-control" ref={this.mealQuantityInput}></input>
+                        {/* <label for="quantity">Quantity:</label>
+                        <input type="text" class="form-control" ref={this.mealQuantityInput}></input> */}
+                        <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
 
                         <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
                     </div>
@@ -82,7 +89,7 @@ class NewItemPage extends Component {
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
-            mealID: 2829,
+            mealID: 2833,
             mealDescription: this.mealDescriptionInput.current.value,
             mealImagePath: "google.com",
             mealName: this.mealNameInput.current.value,
