@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
@@ -11,6 +10,10 @@ class NewItemPage extends Component {
         this.mealNameInput = React.createRef();
         this.mealPriceInput = React.createRef();
         this.mealDescriptionInput = React.createRef();
+        this.mealQuantityInput = React.createRef();
+        this.mealTagsInput = React.createRef();
+        this.mealIngredientsInput = React.createRef();
+        this.mealAllergyInput = React.createRef();
 
     }
 
@@ -23,6 +26,7 @@ class NewItemPage extends Component {
                 </div>
 
                 <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
+
                     <form class="md-form w-50 p-4">
                         <div class="file-field">
                             <div class="z-depth-1-half mb-4">
@@ -38,15 +42,15 @@ class NewItemPage extends Component {
                         </div>
                         <div label="food-tags">
                             <label for="foodTagsBox">Tags:</label>
-                            <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..."></input>
+                            <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
                         </div>
                         <div label="ingredients">
                             <label for="ingredientsField">Ingredients:</label>
-                            <input type="text" class="form-control" id="ingredientsField" placeholder=""></input>
+                            <input type="text" class="form-control" id="ingredientsField" placeholder="" ref={this.mealIngredientsInput}></input>
                         </div>
                         <div label="allergy-info">
-                            <label for="allergyBox">Tags:</label>
-                            <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..."></input>
+                            <label for="allergyBox">Allergy:</label>
+                            <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
                         </div>
                     </form>
 
@@ -64,12 +68,9 @@ class NewItemPage extends Component {
                             <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
                         </div>
                         <label for="quantity">Quantity:</label>
-                        <input type="text" class="form-control"></input>
+                        <input type="text" class="form-control" ref={this.mealQuantityInput}></input>
 
-                        {/* <button class="btn btn-success mt-4" type="button">Submit Listing</button> */}
-                        <Button variant="primary" type="button" onClick={() => this.handleAddMeal()}>
-                            Submit Listing
-                        </Button>
+                        <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
                     </div>
                 </div>
             </div>
@@ -81,11 +82,15 @@ class NewItemPage extends Component {
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
-            mealID: 2824,
+            mealID: 2829,
             mealDescription: this.mealDescriptionInput.current.value,
             mealImagePath: "google.com",
             mealName: this.mealNameInput.current.value,
-            mealPrice: this.mealPriceInput.current.value
+            mealPrice: this.mealPriceInput.current.value,
+            mealQuantity: this.mealQuantityInput.current.value,
+            mealTags: this.mealTagsInput.current.value,
+            mealIngredients: this.mealIngredientsInput.current.value,
+            mealAllergy: this.mealAllergyInput.current.value
         };
 
         $.ajax({
