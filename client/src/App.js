@@ -1,18 +1,15 @@
 import React, { Component } from "react";
-// import NewItemPage from "./NewItemPage.js";
+import NewItemPage from "./NewItemPage.js";
+import ListingPage from './ViewListingPage.js';
 import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
 import AddListingForm from "./component/form";
-/*
-import ajax from 'ajax';
-import axios from 'axios';
-import jquery from 'jquery'; */
+
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-import NewItemPage from "./NewItemPage.js";
 
 class App extends Component {
   constructor(props) {
@@ -56,11 +53,11 @@ class App extends Component {
         <NavBar />
         <SideBar />
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
-        <SortDropdown
+        {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
           onClick={this.handleSortOptionChange}
-        />
+        /> */}
         {/* <AddListingForm
           mealNameInput={this.mealNameInput}
           mealPriceInput={this.mealPriceInput}
