@@ -32,8 +32,6 @@ header{
     flex-flow: row;
     background: #393D3F;
     border: 1px solid black;
-    /* margin: 5px; */
-    justify-content: right;
 }
 
 .navbar {
@@ -62,28 +60,22 @@ button {
 
 .listings {
     flex: 1;
-    /* flex-flow: wrap; */
     background-image: linear-gradient( #3d3d3d, rgb(26, 24, 24));
-    /* border: 1px solid black; */
-    /* margin: 5px; */
 }
 
 .listing{
-    /* display: block; */
-    /* position: relative; */
     position: relative;
-    text-align: center;
     color: black;
+    height: 120px;
+    width: 120px;
+    margin-right: 12px;
 }
 
 .listingImage{
     width: 100%;
-    /* position: absolute; */
 }
 
-.listingText{
-    /* display: inline-flex; */
-    /* box-sizing: content-box; */
+.cardText{
     color: white;
     background: rgba(0, 0, 0, 0.45);
     bottom: 65px;

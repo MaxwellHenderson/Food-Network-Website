@@ -18,21 +18,12 @@ class CardList extends Component {
         />
       );
 
-      if (index % 4 === 0) {
-        return (
-          <React.Fragment>
-            <div class="w-100"></div>
-            {card}
-          </React.Fragment>
-        );
-      } else {
-        return card;
-      }
+      return card;
     });
 
     return (
-      <div className="container mt-5 py-3">
-        <div className="row justify-content-center">{foodCards}</div>
+      <div className="container mt-5 py-3 px-0">
+        <div className="row justify-content-center mx-0 listing-group">{foodCards}</div>
       </div>
     );
   }
@@ -43,17 +34,17 @@ class FoodCard extends Component {
     // const { id, name, price, description, imgUrl, imgAlt } = this.props;
     const { name, price, imgUrl, imgAlt } = this.props;
     return (
-      <span className="mx-3 mt-1 col-md-4 col-sm-6 col-xl-2 listing">
+      <span className="mt-3 px-0 listing">
         <img
           src={imgUrl}
           alt={imgAlt}
-          style={{ width: "175px", height: "175px" }}
+          className="w-100 h-100"
           
           onClick = {() => this.props.getMealById(this.props.id)}
           data-toggle="modal"
           data-target="#exampleModalCenter"
         />
-        <div id="card-text" className="listingText pl-2 pt-1">
+        <div id="card-text" className="cardText pl-2 pt-1 w-100">
           <div className="text-left">
             <div className="">
               {name}
@@ -63,11 +54,6 @@ class FoodCard extends Component {
             </div>
           </div>
         </div>
-        {/* <ListGroup> */}
-          {/* <ListGroup.Item>ID: {id}</ListGroup.Item> */}
-          {/* <ListGroup.Item>Name: {name}</ListGroup.Item>
-          <ListGroup.Item>Price: {price}</ListGroup.Item>
-        </ListGroup> */}
       </span>
     );
   }

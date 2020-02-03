@@ -44,7 +44,7 @@ class App extends Component {
 
   /* Lifecycle hooks */
   componentDidMount() {
-//    this.handleGetMeal();
+   this.handleGetMeal();
   }
 
 
