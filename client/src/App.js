@@ -4,15 +4,16 @@ import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
-import AddListingForm from "./component/form";
+// import AddListingForm from "./component/form";
+
+import $ from 'jquery';
 /*
 import ajax from 'ajax';
 import axios from 'axios';
 import jquery from 'jquery'; */
-import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-import NewItemPage from "./NewItemPage.js";
+// import NewItemPage from "./NewItemPage.js";
 
 class App extends Component {
   constructor(props) {
@@ -68,21 +69,21 @@ class App extends Component {
           onClick={this.handleAddMeal}
         /> */}
 
-        <NewItemPage />
+        {/* <NewItemPage /> */}
 
-        {/* <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div className="modal-dialog" role="document">
-            <div className="modal-content" style={{'background-image':  'url(' + meal.mealImagePath + ')', 'background-size': '120%'}}>
+            <div className="modal-content" style={{'backgroundImage':  'url(' + meal.mealImagePath + ')', 'backgroundSize': '120%'}}>
               <div className="modal-body text-white px-0 py-0 w-100" style={{height: '500px', width: '500px'}} >
                 <div className="modal-text mx-0 pl-3 pt-3 row d-flex align-content-between">
-                  <div class="col-6">
-                    <div id="modal-name" className="font-weight-light mb-1" style={{'font-size': "20px"}}>
+                  <div className="col-6">
+                    <div id="modal-name" className="font-weight-light mb-1" style={{'fontSize': "20px"}}>
                       {meal.mealName}
                     </div>
                     <div id="modal-location" className="row mx-0">
-                      <i class="fas fa-map-marker-alt"></i>
+                      <i className="fas fa-map-marker-alt"></i>
                       <div className="row mx-0">
-                        <div class="ml-2">Seattle, WA</div> <div className="ml-2">0.8 miles</div>
+                        <div className="ml-2">Seattle, WA</div> <div className="ml-2">0.8 miles</div>
                       </div>
                     </div>
                     <div id="modal-price" className="font-weight-bold">
@@ -101,7 +102,7 @@ class App extends Component {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     );
   }

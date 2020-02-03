@@ -1,7 +1,5 @@
-"use strict";
-
 import React, { Component } from "react";
-import ListGroup from "react-bootstrap/ListGroup";
+// import ListGroup from "react-bootstrap/ListGroup";
 
 class CardList extends Component {
   render() {
@@ -20,7 +18,7 @@ class CardList extends Component {
         />
       );
 
-      if (index % 4 == 0) {
+      if (index % 4 === 0) {
         return (
           <React.Fragment>
             <div class="w-100"></div>
@@ -33,8 +31,8 @@ class CardList extends Component {
     });
 
     return (
-      <div class="container mt-5 py-3">
-        <div class="row justify-content-center">{foodCards}</div>
+      <div className="container mt-5 py-3">
+        <div className="row justify-content-center">{foodCards}</div>
       </div>
     );
   }
@@ -42,7 +40,8 @@ class CardList extends Component {
 
 class FoodCard extends Component {
   render() {
-    const { id, name, price, description, imgUrl, imgAlt } = this.props;
+    // const { id, name, price, description, imgUrl, imgAlt } = this.props;
+    const { name, price, imgUrl, imgAlt } = this.props;
     return (
       <span className="mx-3 mt-1 col-md-4 col-sm-6 col-xl-2 listing">
         <img

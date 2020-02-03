@@ -99,7 +99,7 @@ button {
     flex-direction: column;
     background-image: linear-gradient(#393D3F, rgb(44, 43, 43));
     border: 1px solid black;
-    margin: 5px;
+    height: 95%;
 }
 
 
