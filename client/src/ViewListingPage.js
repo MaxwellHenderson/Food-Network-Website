@@ -21,65 +21,73 @@ class ListingPage extends Component {
 
     render() {
         return (
-            <div class="p-4 h-100">
-                {/* <div class="form-group">
-                    <label for="title-input" >What is your meal?</label>
-                    <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
-                </div> */}
-                {/* <InputField labelName="What is your meal?" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} /> */}
-
-                <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
-
-                    <form class="md-form w-50 p-4">
-                        <div class="file-field">
-                            <div class="z-depth-1-half mb-4">
-                                <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
-                                    alt="example placeholder"></img>
+            <div id="viewListing" className="h-100" style={{'margin': '25px 200px'}}>
+                {/* <div className="row justify-content-center border bg-light flex-column pt-2" id="photo-and-description"> */}
+                <div className="column border bg-light pt-2" id="photo-and-description">
+                        <h2 id="title" className="pl-5">Shrimp Rice</h2>
+                        <form className="border-top row">
+                            <div className="column">
+                                <div className="file-field">
+                                    <div className="z-depth-1-half mb-4">
+                                        <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
+                                            alt="example placeholder" />
+                                    </div>
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <div className="btn btn-mdb-color btn-rounded float-left">
+                                        <span>Choose file</span>
+                                        <input type="file"></input>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-center">
-                            <div class="btn btn-mdb-color btn-rounded float-left">
-                                <span>Choose file</span>
-                                <input type="file"></input>
+                            <div className="column">
+                                <div>Description</div>
+
                             </div>
+                        </form>
+                        <div>
+                           
+                            <InputField labelName="Tags" placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
+                            <InputField labelName="Ingredients" placeHolder="" input={this.mealIngredientsInput} />
+                            <InputField labelName="Allergy" placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
                         </div>
-
-                        <InputField labelName="Tags" placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
-                        <InputField labelName="Ingredients" placeHolder="" input={this.mealIngredientsInput} />
-                        <InputField labelName="Allergy" placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
-                        {/* <div label="food-tags">
-                            <label for="foodTagsBox">Tags:</label>
-                            <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
-                        </div>
-                        <div label="ingredients">
-                            <label for="ingredientsField">Ingredients:</label>
-                            <input type="text" class="form-control" id="ingredientsField" placeholder="" ref={this.mealIngredientsInput}></input>
-                        </div>
-                        <div label="allergy-info">
-                            <label for="allergyBox">Allergy:</label>
-                            <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
-                        </div> */}
-                    </form>
-
-                    <div label="right column" class="w-50 p-4">
-                        <div label="food-description">
-                            <label for="foodDescriptionBox">Food Description</label>
-                            <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput}></textarea>
-                        </div>
-
-                        <label for="price">Price:</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
+                            {/* <div label="food-tags">
+    </form>                                            {/* <label for="foodTagsBox">Tags:</label>
+                                <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
                             </div>
-                            <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
-                        </div>
-                        {/* <label for="quantity">Quantity:</label>
-                        <input type="text" class="form-control" ref={this.mealQuantityInput}></input> */}
-                        <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
+                            <div label="ingredients">
+                                <label for="ingredientsField">Ingredients:</label>
+                                <input type="text" class="form-control" id="ingredientsField" placeholder="" ref={this.mealIngredientsInput}></input>
+                            </div>
+                            <div label="allergy-info">
+                                <label for="allergyBox">Allergy:</label>
+                                <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
+                            </div> */}
 
-                        <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
-                    </div>
+
+    {/* 
+                            <div label="food-description">
+                                <label for="foodDescriptionBox">Food Description</label>
+                                <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput}></textarea>
+                            </div>
+
+                            <label for="price">Price:</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
+                            </div>
+
+                            <label for="quantity">Quantity:</label>
+                            <input type="text" class="form-control" ref={this.mealQuantityInput}></input>
+
+                            <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
+
+                            <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
+                    </div> */}
+
+
                 </div>
             </div>
         );

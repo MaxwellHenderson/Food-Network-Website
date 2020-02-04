@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NewItemPage from "./NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
-import NavBar from "./NavBar.js";
+import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
@@ -10,6 +10,7 @@ import AddListingForm from "./component/form";
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
+// import { List } from "react-bootstrap/lib/Media";
 
 class App extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar />
-        <SideBar />
+        {/* <SideBar /> */}
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
         {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
@@ -64,8 +65,7 @@ class App extends Component {
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         /> */}
-
-        <NewItemPage />
+        <ListingPage />
 
         {/* <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div className="modal-dialog" role="document">
