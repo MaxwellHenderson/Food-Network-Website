@@ -21,73 +21,70 @@ class ListingPage extends Component {
 
     render() {
         return (
-            <div id="viewListing" className="h-100" style={{'margin': '25px 200px'}}>
-                {/* <div className="row justify-content-center border bg-light flex-column pt-2" id="photo-and-description"> */}
+            <div id="viewListing" className="container h-100" style={{'margin': '100px 10%'}}>
                 <div className="column border bg-light pt-2" id="photo-and-description">
-                        <h2 id="title" className="pl-5">Shrimp Rice</h2>
-                        <form className="border-top row">
-                            <div className="column">
-                                <div className="file-field">
-                                    <div className="z-depth-1-half mb-4">
-                                        <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
-                                            alt="example placeholder" />
-                                    </div>
-                                </div>
-                                <div className="d-flex justify-content-center">
-                                    <div className="btn btn-mdb-color btn-rounded float-left">
-                                        <span>Choose file</span>
-                                        <input type="file"></input>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="column">
-                                <div>Description</div>
-
-                            </div>
-                        </form>
-                        <div>
-                           
-                            <InputField labelName="Tags" placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
-                            <InputField labelName="Ingredients" placeHolder="" input={this.mealIngredientsInput} />
-                            <InputField labelName="Allergy" placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
+                    <h2 id="title" className="mt-4 mb-2 pl-5">Shrimp Rice</h2>
+                    <div className="border-top row mx-0"> 
+                        <div id="image" className="column w-50 file-field">
+                            <img src="https://www.lecremedelacrumb.com/wp-content/uploads/2019/05/one-pan-spanish-shrimp-rice-1.jpg" 
+                                    className="my-0 mx-auto d-block" style={{'max-width': '50%'}} alt="example placeholder" />
                         </div>
-                            {/* <div label="food-tags">
-    </form>                                            {/* <label for="foodTagsBox">Tags:</label>
-                                <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
-                            </div>
-                            <div label="ingredients">
-                                <label for="ingredientsField">Ingredients:</label>
-                                <input type="text" class="form-control" id="ingredientsField" placeholder="" ref={this.mealIngredientsInput}></input>
-                            </div>
-                            <div label="allergy-info">
-                                <label for="allergyBox">Allergy:</label>
-                                <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
-                            </div> */}
-
-
-    {/* 
-                            <div label="food-description">
-                                <label for="foodDescriptionBox">Food Description</label>
-                                <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput}></textarea>
-                            </div>
-
-                            <label for="price">Price:</label>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
+                        <div id="description" className="column w-50 p-4">
+                            <div className="border p-2">
+                                <h3>Description</h3>
+                                <div>
+                                    Lorem ipsum dolor sit amet, consectetur 
+                                    adipiscing elit, sed do eiusmod tempor 
+                                    incididunt ut labore et dolore magna aliqua. Ut
+                                    enim ad minim veniam, quis nostrud 
+                                    exercitation ullamco laboris nisi ut 
                                 </div>
-                                <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
                             </div>
+                        </div>
+                    </div>
+                    <div id="tags" className="border-top px-4 row mx-0">
+                        <div className="w-50">
+                            <div className="my-4">
+                                <InputField labelName="Tags" 
+                                    placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
+                            </div>
+                            <div className="my-4">
+                                <InputField labelName="Ingredients" 
+                                    placeHolder="" input={this.mealIngredientsInput} />
+                            </div>
+                            <div className="my-4">
+                                <InputField labelName="Allergy" 
+                                    placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
+                            </div>
+                        </div>
+                        <div className="w-50 py-4">
+                            <div id="purchase-form" className="border w-50 mx-auto py-3">
+                                <div className="row mt-1 mx-0">
+                                    <div className="column">
+                                        <img src=""></img>
+                                        <div>John Doe</div>
+                                    </div>
+                                    <div className="column">
 
-                            <label for="quantity">Quantity:</label>
-                            <input type="text" class="form-control" ref={this.mealQuantityInput}></input>
-
-                            <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
-
-                            <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
-                    </div> */}
-
-
+                                    </div>
+                                </div>
+                                <div className="border-top column pt-2 px-2">
+                                    <div className="row mx-0 justify-content-end px-4">
+                                        <div className="border">
+                                            <div>Quantity</div>
+                                            <div>2</div>
+                                        </div>
+                                    </div>
+                                    <div className="row mx-0 mt-2">
+                                        <button className="btn btn-secondary mx-auto w-75">Message Seller</button>
+                                    </div>
+                                    <div className="row mx-0 mt-2">
+                                        <button className="btn btn-primary mx-auto w-75">Request Purchase</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );

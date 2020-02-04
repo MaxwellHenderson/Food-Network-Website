@@ -41,7 +41,7 @@ class App extends Component {
 
   /* Lifecycle hooks */
   componentDidMount() {
-   this.handleGetMeal();
+  //  this.handleGetMeal();
   }
 
 
@@ -53,7 +53,7 @@ class App extends Component {
       <div className="App">
         <NavBar />
         {/* <SideBar /> */}
-        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
+        {/* <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/> */}
         {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
@@ -65,12 +65,7 @@ class App extends Component {
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         /> */}
-<<<<<<< HEAD
-
-        {/* <NewItemPage /> */}
-=======
         <ListingPage />
->>>>>>> f6fa41b82c1c85f05afa574aca40b2b9cd4586eb
 
         <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div className="modal-dialog" role="document">
