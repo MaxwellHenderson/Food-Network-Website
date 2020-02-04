@@ -1,19 +1,16 @@
 import React, { Component } from "react";
-// import NewItemPage from "./NewItemPage.js";
-import NavBar from "./NavBar.js";
+import NewItemPage from "./NewItemPage.js";
+import ListingPage from './ViewListingPage.js';
+import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import SortDropdown from "./component/sort-dropdown";
-// import AddListingForm from "./component/form";
+import AddListingForm from "./component/form";
 
 import $ from 'jquery';
-/*
-import ajax from 'ajax';
-import axios from 'axios';
-import jquery from 'jquery'; */
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-// import NewItemPage from "./NewItemPage.js";
+// import { List } from "react-bootstrap/lib/Media";
 
 class App extends Component {
   constructor(props) {
@@ -55,21 +52,25 @@ class App extends Component {
     return (
       <div className="App">
         <NavBar />
-        <SideBar />
+        {/* <SideBar /> */}
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
-        <SortDropdown
+        {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
           onClick={this.handleSortOptionChange}
-        />
+        /> */}
         {/* <AddListingForm
           mealNameInput={this.mealNameInput}
           mealPriceInput={this.mealPriceInput}
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         /> */}
+<<<<<<< HEAD
 
         {/* <NewItemPage /> */}
+=======
+        <ListingPage />
+>>>>>>> f6fa41b82c1c85f05afa574aca40b2b9cd4586eb
 
         <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div className="modal-dialog" role="document">
@@ -140,12 +141,13 @@ class App extends Component {
  
   handleAddMeal = async () => { 
     const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+    
     const _data={
       mealID:2800,
-      mealDescription:"Caserole",
+      mealDescription: NewItemPage.state.foodDescription,
       mealImagePath:"google.com",
-      mealName:"test",
-      mealPrice:"60.00"
+      mealName: NewItemPage.state.mealName,
+      mealPrice: NewItemPage.state.price
     };
     
     $.ajax({
