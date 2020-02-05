@@ -14,7 +14,7 @@ class CardList extends Component {
           imgUrl={foodItem.mealImagePath}
           imgAlt={foodItem.imgAlt}
 
-          getMealById={this.props.getMealById}
+          getMealFunc={this.props.getMealById}
         />
       );
 
@@ -31,7 +31,6 @@ class CardList extends Component {
 
 class FoodCard extends Component {
   render() {
-    // const { id, name, price, description, imgUrl, imgAlt } = this.props;
     const { name, price, imgUrl, imgAlt } = this.props;
     return (
       <span className="mt-3 px-0 listing">
@@ -40,7 +39,7 @@ class FoodCard extends Component {
           alt={imgAlt}
           className="w-100 h-100"
           
-          onClick = {() => this.props.getMealById(this.props.id)}
+          onClick = {() => this.props.getMealFunc(this.props.id)}
           data-toggle="modal"
           data-target="#exampleModalCenter"
         />

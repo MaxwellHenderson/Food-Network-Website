@@ -1,6 +1,9 @@
+'use strict';
+
 import React, { Component } from "react";
 import NewItemPage from "./NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
+import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
@@ -10,6 +13,8 @@ import AddListingForm from "./component/form";
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
 class App extends Component {
@@ -29,31 +34,50 @@ class App extends Component {
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
       foodItems: [],
-      currMeal: {mealId: 0,
-                mealName: 'apple',
-                mealPrice:'',
-                mealDescription:'',
-                mealImagePath:'',
-                imgAlt:''
+      currMeal: {
+                  mealId: 0,
+                  mealName: 'apple',
+                  mealPrice:'',
+                  mealDescription:'',
+                  mealImagePath:'',
+                  imgAlt:''
                 } 
     };
   }
 
   /* Lifecycle hooks */
   componentDidMount() {
-  //  this.handleGetMeal();
+   this.handleGetMeal();
   }
 
 
-
   render() {
-    let meal = this.state.currMeal;
+    let renderListingsView = () => {
+      return (
+        <React.Fragment>
+            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)}/>
+            <ListingModal meal={this.state.currMeal}/>
+        </React.Fragment>
+      );
+    };
+
+    let renderIndividualListing = () => {
+      return (
+        <ListingPage meal={this.state.currMeal}/>
+      );
+    }
 
     return (
       <div className="App">
-        <NavBar />
-        {/* <SideBar /> */}
-        {/* <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/> */}
+        <Router>
+          <NavBar />
+          {/* <SideBar /> */}
+          <Switch>
+            <Route exact path='/' render={renderListingsView} />
+            <Route path='/listing' render={renderIndividualListing} />
+
+          </Switch>
+        </Router>
         {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
@@ -65,48 +89,15 @@ class App extends Component {
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         /> */}
-        <ListingPage />
-
-        <div className="modal fade" id="exampleModalCenter" tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content" style={{'backgroundImage':  'url(' + meal.mealImagePath + ')', 'backgroundSize': '120%'}}>
-              <div className="modal-body text-white px-0 py-0 w-100" style={{height: '500px', width: '500px'}} >
-                <div className="modal-text mx-0 pl-3 pt-3 row d-flex align-content-between">
-                  <div className="col-6">
-                    <div id="modal-name" className="font-weight-light mb-1" style={{'fontSize': "20px"}}>
-                      {meal.mealName}
-                    </div>
-                    <div id="modal-location" className="row mx-0">
-                      <i className="fas fa-map-marker-alt"></i>
-                      <div className="row mx-0">
-                        <div className="ml-2">Seattle, WA</div> <div className="ml-2">0.8 miles</div>
-                      </div>
-                    </div>
-                    <div id="modal-price" className="font-weight-bold">
-                      Price: ${meal.mealPrice}
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="mb-2">
-                      Description: {meal.mealDescription}
-                    </div>
-                    <button className="btn btn-info">
-                      View Listing
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   }
 
-  getMealById(id) {
+  setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
+    console.log(this.state.currMeal);
   }
 
   handleGetMeal = async () => {

@@ -20,25 +20,22 @@ class ListingPage extends Component {
     }
 
     render() {
+        let meal = this.props.meal;
+        console.log(meal);
         return (
-            // <div id="viewListing" className="container w-75" style={{'margin':'100px 10%'}}>
             <div id="viewListing" className="container w-100" style={{'margin':'10vh auto'}}>
                 <div className="column border bg-light pt-2" id="photo-and-description">
-                    <h2 id="title" className="mt-4 mb-2 pl-5">Shrimp Rice</h2>
+                    <h2 id="title" className="mt-4 mb-2 pl-5"></h2>
                     <div className="border-top row mx-0"> 
                         <div id="image" className="column w-50 file-field">
-                            <img src="https://www.lecremedelacrumb.com/wp-content/uploads/2019/05/one-pan-spanish-shrimp-rice-1.jpg" 
+                            <img src={meal.mealImagePath} alt={meal.imgAlt}
                                     className="my-0 mx-auto d-block" style={{'max-width': '50%'}} alt="example placeholder" />
                         </div>
                         <div id="description" className="column w-50 p-4">
                             <div className="border p-2">
-                                <h3>Description</h3>
+                                <h3>{meal.mealName}</h3>
                                 <div>
-                                    Lorem ipsum dolor sit amet, consectetur 
-                                    adipiscing elit, sed do eiusmod tempor 
-                                    incididunt ut labore et dolore magna aliqua. Ut
-                                    enim ad minim veniam, quis nostrud 
-                                    exercitation ullamco laboris nisi ut 
+                                    {meal.mealDescription}
                                 </div>
                             </div>
                         </div>
@@ -73,7 +70,7 @@ class ListingPage extends Component {
                                         <div>John Doe</div>
                                     </div>
                                     <div className="column w-50 align-self-center">
-                                        <div id="price" className="align-self-center">$4.20 per item</div>
+                                        <div id="price" className="align-self-center">${meal.mealPrice} per item</div>
                                     </div>
                                 </div>
                                 <div className="border-top column pt-2 px-2">
@@ -97,43 +94,6 @@ class ListingPage extends Component {
             </div>
         );
     }
-
-
-    handleAddMeal = async () => {
-        const Url =
-            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
-        const _data = {
-            mealID: 2833,
-            mealDescription: this.mealDescriptionInput.current.value,
-            mealImagePath: "google.com",
-            mealName: this.mealNameInput.current.value,
-            mealPrice: this.mealPriceInput.current.value,
-            mealQuantity: this.mealQuantityInput.current.value,
-            mealTags: this.mealTagsInput.current.value,
-            mealIngredients: this.mealIngredientsInput.current.value,
-            mealAllergy: this.mealAllergyInput.current.value
-        };
-
-        $.ajax({
-            url: Url,
-            type: "POST",
-            dataType: "jsonp",
-            headers: {
-                accept: "application/json"
-            },
-            data: JSON.stringify(_data),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                console.log(result);
-            },
-            error: function (xhr, status, error) {
-                console.log(JSON.stringify(xhr));
-            }
-        });
-        return false;
-    };
-
 }
 
 export default ListingPage;
