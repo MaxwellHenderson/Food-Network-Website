@@ -3,10 +3,29 @@ import InputField from "./component/input-field";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-import $ from 'jquery';
 
+var AWS = require("aws-sdk");
+
+var bucketName = "foodimagebucket";
+var bucketRegion = "us-west-2";
+var IdentityPoolId = "us-west-2:b8d920b2-21d8-4843-80a3-9dadec543d92";
+
+AWS.config.update({
+    region: bucketRegion,
+    credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: IdentityPoolId
+        })
+});
+
+var s3 = new AWS.S3({
+    apiVersion: "2006-03-01",
+    params: {Bucket: bucketName}
+});
 
 class NewItemPage extends Component {
+    
+
+
     constructor(props) {
         super(props);
 
@@ -34,14 +53,14 @@ class NewItemPage extends Component {
                     <form class="md-form w-50 p-4">
                         <div class="file-field">
                             <div class="z-depth-1-half mb-4">
-                                <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
+                                <img id="FoodImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
                                     alt="example placeholder"></img>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-mdb-color btn-rounded float-left">
                                 <span>Choose file</span>
-                                <input type="file"></input>
+                                <input type="file" id="photoFile" onChange="updatePhoto"></input>
                             </div>
                         </div>
 
@@ -86,12 +105,60 @@ class NewItemPage extends Component {
         );
     }
 
+    addPhoto(){
+        const key = "foodimagebucket";
+        const url = await s3.getSignedUrl('putObject', {
+            Bucket: bucketName,
+            Key: key,
+            ContentType: 'image/*',
+            Expires: 300,
+        }).promise();
 
+        
+        
+        var files = document.getElementById("photoFile").files;
+        if (!files.length){
+            return alert("Please choose a file to upload first.");
+        }
+        var file = files[0];
+        document.getElementById("FoodImage").src = URL.createObjectURL(file);
+        var fileName = file.name;
+
+        console.log("File name: "+fileName);
+
+        var photoKey = encodeURIComponent(fileName);
+
+        console.log("photoKey "+photoKey);
+
+        var upload = new AWS.S3.ManagedUpload({
+            params: {
+                Bucket: "foodimagebucket",
+                Key: photoKey,
+                Body: file,
+                ACL: "public-read"
+            }
+        });
+
+        var promise = upload.promise();
+
+        promise.then(
+            function(data) {
+              alert("Successfully uploaded photo.");
+            },
+            function(err) {
+              return alert("There was an error uploading your photo: ", err.message);
+            }
+          );
+        
+    }
     handleAddMeal = async () => {
+        
+        this.addPhoto();
+        
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
-            mealID: 2833,
+            mealID: 7384,
             mealDescription: this.mealDescriptionInput.current.value,
             mealImagePath: "google.com",
             mealName: this.mealNameInput.current.value,
