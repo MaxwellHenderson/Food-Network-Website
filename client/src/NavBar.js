@@ -1,3 +1,5 @@
+"use strict";
+
 import React, {Component} from 'react';
 
 
@@ -8,11 +10,11 @@ class NavBar extends Component {
                 <div className="font-weight-light">Food Network</div>
                 <div className="navbar-nav">
                     <div className="collapse navbar-collapse"  id="navbarNav">
-                        <div className="nav-link" ><i className="fas fa-search"></i></div>     
-                        <div className="nav-link" ><i className="fas fa-envelope"></i></div>  
-                        <div className="nav-link" ><i className="fas fa-user-friends"></i></div>    
+                        <a className="nav-link" href=""><i className="fas fa-search"></i></a>     
+                        <a className="nav-link" href=""><i className="fas fa-envelope"></i></a>  
+                        <a className="nav-link" href=""><i className="fas fa-user-friends"></i></a>    
                     </div>
-                    <div className="nav-link"  data-toggle="collapse" data-target="#sidebar"><i className="fas fa-bars"></i></div>
+                    <a className="nav-link" href="" data-toggle="collapse"data-target="#sidebar"><i className="fas fa-bars"></i></a>
                 </div>
             </div>
         );

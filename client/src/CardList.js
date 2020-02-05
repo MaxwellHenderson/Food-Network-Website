@@ -1,5 +1,7 @@
+"use strict";
+
 import React, { Component } from "react";
-// import ListGroup from "react-bootstrap/ListGroup";
+import ListGroup from "react-bootstrap/ListGroup";
 
 class CardList extends Component {
   render() {
@@ -14,16 +16,25 @@ class CardList extends Component {
           imgUrl={foodItem.mealImagePath}
           imgAlt={foodItem.imgAlt}
 
-          getMealFunc={this.props.getMealById}
+          getMealById={this.props.getMealById}
         />
       );
 
-      return card;
+      if (index % 4 == 0) {
+        return (
+          <React.Fragment>
+            <div class="w-100"></div>
+            {card}
+          </React.Fragment>
+        );
+      } else {
+        return card;
+      }
     });
 
     return (
-      <div className="container mt-5 py-3 px-0">
-        <div className="row justify-content-center mx-0 listing-group">{foodCards}</div>
+      <div class="container mt-5 py-3">
+        <div class="row justify-content-center">{foodCards}</div>
       </div>
     );
   }
@@ -31,19 +42,19 @@ class CardList extends Component {
 
 class FoodCard extends Component {
   render() {
-    const { name, price, imgUrl, imgAlt } = this.props;
+    const { id, name, price, description, imgUrl, imgAlt } = this.props;
     return (
-      <span className="mt-3 px-0 listing">
+      <span className="mx-3 mt-1 col-md-4 col-sm-6 col-xl-2 listing">
         <img
           src={imgUrl}
           alt={imgAlt}
-          className="w-100 h-100"
+          style={{ width: "175px", height: "175px" }}
           
-          onClick = {() => this.props.getMealFunc(this.props.id)}
+          onClick = {() => this.props.getMealById(this.props.id)}
           data-toggle="modal"
           data-target="#exampleModalCenter"
         />
-        <div id="card-text" className="cardText pl-2 pt-1 w-100">
+        <div id="card-text" className="listingText pl-2 pt-1">
           <div className="text-left">
             <div className="">
               {name}
@@ -53,6 +64,11 @@ class FoodCard extends Component {
             </div>
           </div>
         </div>
+        {/* <ListGroup> */}
+          {/* <ListGroup.Item>ID: {id}</ListGroup.Item> */}
+          {/* <ListGroup.Item>Name: {name}</ListGroup.Item>
+          <ListGroup.Item>Price: {price}</ListGroup.Item>
+        </ListGroup> */}
       </span>
     );
   }
