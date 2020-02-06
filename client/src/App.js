@@ -114,12 +114,16 @@ class App extends Component {
 
   handleGetMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    
+    //Old no longer used method?
+    /*
     const Http = new XMLHttpRequest();
 
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
       console.log(Http.responseText)
     }
+    */
 
     var that = this;
     $.ajax({
@@ -135,7 +139,7 @@ class App extends Component {
         console.log(`Error ${error}`)
       }
     })
-    };
+  };
  
   handleAddMeal = async () => { 
     const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";

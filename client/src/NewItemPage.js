@@ -24,8 +24,7 @@ var s3 = new AWS.S3({
 
 class NewItemPage extends Component {
     
-
-
+    
     constructor(props) {
         super(props);
 
@@ -36,6 +35,8 @@ class NewItemPage extends Component {
         this.mealTagsInput = React.createRef();
         this.mealIngredientsInput = React.createRef();
         this.mealAllergyInput = React.createRef();
+
+        this.s3Url = '';
 
     }
 
@@ -105,25 +106,66 @@ class NewItemPage extends Component {
         );
     }
 
-    addPhoto(){
-        const key = "foodimagebucket";
-        const url = await s3.getSignedUrl('putObject', {
-            Bucket: bucketName,
-            Key: key,
-            ContentType: 'image/*',
-            Expires: 300,
-        }).promise();
+    handleGetUnsignedUrl = async () => {
+        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage";
+        console.log("Trying to get unsigned url");
+        var that = this;
+        $.ajax({
+            url: Url,
+            type: 'GET',
+            dataType: 'jsonp',
+            headers: {
+                "accept" : "application/json",
+                "Access-Control-Origin-Allow":"*"
+            }, 
+            success: function(result){
+                console.log("GetUnsignedUrl result: "+result)
+                that.s3Url = result;
+            },
+            error: function(error){
+                console.log(`Error ${error}`)
+            }
+        })
+    };
 
-        
+
+    addPhoto = async() => {
+        // const key = "foodimagebucket";
+        // const url = await s3.getSignedUrl('putObject', {
+        //     Bucket: bucketName,
+        //     Key: key,
+        //     ContentType: 'image/*',
+        //     Expires: 300,
+        // }).promise();
+
+        this.handleGetUnsignedUrl();
         
         var files = document.getElementById("photoFile").files;
         if (!files.length){
             return alert("Please choose a file to upload first.");
         }
         var file = files[0];
-        document.getElementById("FoodImage").src = URL.createObjectURL(file);
         var fileName = file.name;
 
+        //Upload with presigned URL following https://www.koan.co/blog/uploading-images-to-s3-from-a-react-spa
+
+        const response = await fetch(
+            new Request(this.s3Url, {
+                method: 'PUT',
+                body: file,
+                headers: new Headers({
+                    'Content-Type': 'image/*',
+                }),
+            }),
+        );
+
+        if (response.status != 200) {
+            //The upload failed
+            alert("Failed to upload");
+        }
+
+        //Upload method straight from site, following Amazon tutorial at https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
+       /*
         console.log("File name: "+fileName);
 
         var photoKey = encodeURIComponent(fileName);
@@ -148,9 +190,11 @@ class NewItemPage extends Component {
             function(err) {
               return alert("There was an error uploading your photo: ", err.message);
             }
-          );
-        
-    }
+          ); 
+          */  
+    };
+
+
     handleAddMeal = async () => {
         
         this.addPhoto();
