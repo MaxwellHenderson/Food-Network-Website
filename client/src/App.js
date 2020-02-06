@@ -7,8 +7,7 @@ import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
-import SortDropdown from "./component/sort-dropdown";
-import AddListingForm from "./component/form";
+import Login from "./components/Login/Login.js";
 
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -67,13 +66,29 @@ class App extends Component {
       );
     }
 
+    let renderRoot = () => {
+      if (this.state.user) {
+        return (
+          <React.Fragment>
+            <CardList foodItems={this.satate.foodItems} getMealByID={(id) => this.setCurrentMeal(id)} />
+            <ListingModal meal={this.state.currMeal} />
+          </React.Fragment>
+        );
+      } else {
+        return (
+          <Login />
+        );
+      }
+    }
+
     return (
       <div className="App">
         <Router>
           <NavBar />
           {/* <SideBar /> */}
           <Switch>
-            <Route exact path='/' render={renderListingsView} />
+            {/* <Route exact path='/' render={renderListingsView} /> */}
+            <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
 
           </Switch>
