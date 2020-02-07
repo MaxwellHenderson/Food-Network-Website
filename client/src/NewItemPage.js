@@ -114,12 +114,14 @@ class NewItemPage extends Component {
             url: Url,
             type: 'GET',
             dataType: 'json',
+            crossDomain: true,
             headers: {
-                "accept" : "application/json",
-                "Access-Control-Origin-Allow":"*"
+                "Accept" : "application/json"
+                // "Access-Control-Origin-Allow":"*"
             }, 
             success: function(result){
                 console.log(result);
+                console.log(result.body);
                 //console.log("GetUnsignedUrl result: "+result)
                 //that.s3Url = result;
             },
