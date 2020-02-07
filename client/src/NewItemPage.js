@@ -107,23 +107,26 @@ class NewItemPage extends Component {
     }
 
     handleGetUnsignedUrl = async () => {
-        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage";
+        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3";
         console.log("Trying to get unsigned url");
         var that = this;
         $.ajax({
             url: Url,
             type: 'GET',
-            dataType: 'jsonp',
+            dataType: 'json',
             headers: {
                 "accept" : "application/json",
                 "Access-Control-Origin-Allow":"*"
             }, 
             success: function(result){
-                console.log("GetUnsignedUrl result: "+result)
-                that.s3Url = result;
+                console.log(result);
+                //console.log("GetUnsignedUrl result: "+result)
+                //that.s3Url = result;
             },
             error: function(error){
-                console.log(`Error ${error}`)
+                //console.log("BUTTTTTTS with a body")
+               // console.log(error.body)
+               console.log(error);
             }
         })
     };
@@ -139,6 +142,7 @@ class NewItemPage extends Component {
         // }).promise();
 
         this.handleGetUnsignedUrl();
+        console.log("After handleGetUnsignedUrl()");
         
         var files = document.getElementById("photoFile").files;
         if (!files.length){
