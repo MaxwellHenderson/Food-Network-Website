@@ -106,8 +106,8 @@ class NewItemPage extends Component {
         );
     }
 
-    handleGetUnsignedUrl = async () => {
-        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3";
+    handleGetUnsignedUrl = async (fileName) => {
+        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3/?filename="+fileName;
         console.log("Trying to get unsigned url");
         var that = this;
         $.ajax({
@@ -119,15 +119,12 @@ class NewItemPage extends Component {
                 "Accept" : "application/json"
                 // "Access-Control-Origin-Allow":"*"
             }, 
+
             success: function(result){
-                console.log(result);
-                console.log(result.body);
-                //console.log("GetUnsignedUrl result: "+result)
-                //that.s3Url = result;
+                console.log("GetUnsignedUrl result: "+result.body)
+                that.s3Url = result.body;
             },
             error: function(error){
-                //console.log("BUTTTTTTS with a body")
-               // console.log(error.body)
                console.log(error);
             }
         })
@@ -135,16 +132,8 @@ class NewItemPage extends Component {
 
 
     addPhoto = async() => {
-        // const key = "foodimagebucket";
-        // const url = await s3.getSignedUrl('putObject', {
-        //     Bucket: bucketName,
-        //     Key: key,
-        //     ContentType: 'image/*',
-        //     Expires: 300,
-        // }).promise();
 
-        this.handleGetUnsignedUrl();
-        console.log("After handleGetUnsignedUrl()");
+
         
         var files = document.getElementById("photoFile").files;
         if (!files.length){
@@ -152,6 +141,11 @@ class NewItemPage extends Component {
         }
         var file = files[0];
         var fileName = file.name;
+
+        this.handleGetUnsignedUrl(fileName);
+        console.log("After handleGetUnsignedUrl()");
+
+        console.log("File name: "+fileName);
 
         //Upload with presigned URL following https://www.koan.co/blog/uploading-images-to-s3-from-a-react-spa
 
