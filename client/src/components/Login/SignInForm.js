@@ -18,7 +18,7 @@ class SignInForm extends Component{
 
     handleChange(event){
         let target = event.target; //select target element
-        let value = target.type === 'checkbox' ? target.checked : target.value;//value of the input eg. "pj@gmail.com"
+        let value = target.type === 'checkbox' ? target.checked : target.value; //value of the input eg. "pj@gmail.com"
         let name = target.name; //name attribute of the inputs eg. "email"
 
         this.setState({
@@ -98,7 +98,6 @@ class SignInForm extends Component{
             dataType: 'json',
             headers:{
                 "accept": "application/json",
-                "Access-Control-Allow-Origin": '*'
             },
             
             success: function(result){
@@ -114,4 +113,4 @@ class SignInForm extends Component{
  
 
 }
-export default SignInForm;;
+export default SignInForm;

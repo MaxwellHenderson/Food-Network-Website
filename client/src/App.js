@@ -76,7 +76,7 @@ class App extends Component {
         );
       } else {
         return (
-          <Login />
+          <Login login={this.state.user}/>
         );
       }
     }
