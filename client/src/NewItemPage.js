@@ -107,8 +107,8 @@ class NewItemPage extends Component {
     }
 
     handleGetUnsignedUrl = async (fileName) => {
-        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3/?filename="+fileName;
-        console.log("Trying to get unsigned url");
+        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3/?filename=PinchyDom.jpg";
+        console.log("Trying to get unsigned url using url "+Url);
         var that = this;
         $.ajax({
             url: Url,
@@ -117,24 +117,20 @@ class NewItemPage extends Component {
             crossDomain: true,
             headers: {
                 "Accept" : "application/json"
-                // "Access-Control-Origin-Allow":"*"
             }, 
-
             success: function(result){
                 console.log("GetUnsignedUrl result: "+result.body)
                 that.s3Url = result.body;
             },
             error: function(error){
-               console.log(error);
+                console.log("Failed to get url: "+error);
             }
         })
+        console.log("S3URL FROM THE S3 FUNCTION: "+that.s3Url);
     };
 
 
     addPhoto = async() => {
-
-
-        
         var files = document.getElementById("photoFile").files;
         if (!files.length){
             return alert("Please choose a file to upload first.");
@@ -149,6 +145,7 @@ class NewItemPage extends Component {
 
         //Upload with presigned URL following https://www.koan.co/blog/uploading-images-to-s3-from-a-react-spa
 
+        console.log("Upload url: "+this.s3Url);
         const response = await fetch(
             new Request(this.s3Url, {
                 method: 'PUT',
@@ -163,35 +160,6 @@ class NewItemPage extends Component {
             //The upload failed
             alert("Failed to upload");
         }
-
-        //Upload method straight from site, following Amazon tutorial at https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
-       /*
-        console.log("File name: "+fileName);
-
-        var photoKey = encodeURIComponent(fileName);
-
-        console.log("photoKey "+photoKey);
-
-        var upload = new AWS.S3.ManagedUpload({
-            params: {
-                Bucket: "foodimagebucket",
-                Key: photoKey,
-                Body: file,
-                ACL: "public-read"
-            }
-        });
-
-        var promise = upload.promise();
-
-        promise.then(
-            function(data) {
-              alert("Successfully uploaded photo.");
-            },
-            function(err) {
-              return alert("There was an error uploading your photo: ", err.message);
-            }
-          ); 
-          */  
     };
 
 
