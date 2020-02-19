@@ -72,17 +72,17 @@ class App extends Component {
     };
   }
 
+
+  componentDidMount() {
+   this.handleGetMeal();
+  }
+
   logIn(auth) {
     this.setState({
       currentAuth : auth
     });
   }
-
-  /* Lifecycle hooks */
-  componentDidMount() {
-   this.handleGetMeal();
-  }
-
+  
 
   render() {
     let renderListingsView = () => {
@@ -104,7 +104,7 @@ class App extends Component {
       if (this.state.currentAuth) {
         return (
           <React.Fragment>
-            <CardList foodItems={this.state.foodItems} getMealByID={(id) => this.setCurrentMeal(id)} />
+            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
           </React.Fragment>
         );
@@ -141,13 +141,14 @@ class App extends Component {
       </div>
     );
   }
-
+ 
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
     console.log(this.state.currMeal);
   }
+  
 
   handleGetMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
