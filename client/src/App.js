@@ -16,6 +16,31 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
+import Amplify, { Auth } from 'aws-amplify';
+
+// Manual Amplify configuration
+// See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
+// for other configuration options.
+Amplify.configure({
+  Auth: {
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      // identityPoolId: 'us-west-2_89J8r5C88',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
+
+      // OPTIONAL - Amazon Cognito User Pool ID
+      userPoolId: 'us-west-2_89J8r5C88',
+
+      // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+      userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
+  }
+});
+
+// You can get the current config object
+const currentConfig = Auth.configure();
+
+
 class App extends Component {
   constructor(props) {
     super(props);
