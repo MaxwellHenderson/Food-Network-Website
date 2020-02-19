@@ -84,7 +84,7 @@ class App extends Component {
     return (
       <div className="App">
         <Router>
-          <NavBar />
+          {/* <NavBar /> */}
           {/* <SideBar /> */}
           <Switch>
             {/* <Route exact path='/' render={renderListingsView} /> */}
@@ -129,7 +129,7 @@ class App extends Component {
       url: Url,
       type: 'GET',
       success: function(result){
-        console.log(result)
+        // console.log(result)
         that.setState({
           foodItems: that.state.selectedSortOption.sort(result)
         })

@@ -73,7 +73,6 @@ class SignUpForm extends Component{
         dataType: 'json',
         headers:{
             "accept": "application/json",
-            "Access-Control-Allow-Origin": '*'
         },
         data: JSON.stringify(_data),
   

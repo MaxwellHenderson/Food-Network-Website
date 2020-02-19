@@ -26,15 +26,6 @@ class SignInForm extends Component{
             [name]: value //eg. "email": "pj@gmail.com"
         });
     }
-
-    // handleSubmit(event){
-    //     event.preventDefault();
-
-    //     console.log("The form was submitted with the following data:");
-    //     console.log(this.state);
-    //     this.handleGetLoginEmail();
-    // }
-
     async handleSubmit(event){
         event.preventDefault();
 
@@ -49,47 +40,44 @@ class SignInForm extends Component{
 
     
     render() {
-    return (
-        <div className="FormCenter">
-              <form className="FormFields" onSubmit={this.handleSubmit}>
-                
-              <div className="FormField">
-                  <label className="FormField__Label" htmlFor="email">Email Address</label>
-                  <input 
-                    type="email"
-                    id="email"
-                    className="FormField__Input"
-                    placeholder="Enter your Email Address"
-                    name="email"
-                    required="required"
-                    value={this.state.email}
-                    onChange={this.handleChange}/>
-                </div>
-
+        return (
+            <div className="FormCenter">
+                <form className="FormFields" onSubmit={this.handleSubmit}>
+                    
                 <div className="FormField">
-                  <label className="FormField__Label" htmlFor="password">Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    className="FormField__Input"
-                    placeholder="Enter your password"
-                    name="password"
-                    required="required"
-                    value={this.state.password}
-                    onChange={this.handleChange}/>
-                </div>
+                    <label className="FormField__Label" htmlFor="email">Email Address</label>
+                    <input 
+                        type="email"
+                        id="email"
+                        className="FormField__Input"
+                        placeholder="Enter your Email Address"
+                        name="email"
+                        required="required"
+                        value={this.state.email}
+                        onChange={this.handleChange}/>
+                    </div>
 
-                <div className="FormField">
-                  <button className="FormField__Button mr-20"> Sign In</button>
-                  <Link to="/"className="FormField__Link">Create an account</Link>
-                </div>
+                    <div className="FormField">
+                    <label className="FormField__Label" htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        className="FormField__Input"
+                        placeholder="Enter your password"
+                        name="password"
+                        required="required"
+                        value={this.state.password}
+                        onChange={this.handleChange}/>
+                    </div>
 
-              </form>
-          </div>
-    );}
+                    <div className="FormField">
+                    <button className="FormField__Button mr-20"> Sign In</button>
+                    <Link to="/"className="FormField__Link">Create an account</Link>
+                    </div>
 
-    componentDidMount() {
-        // this.handleGetLoginEmail();
+                </form>
+            </div>
+        );
     }
 
     handleGetLoginEmail = async () => {
@@ -121,8 +109,5 @@ class SignInForm extends Component{
             }
         })
     };
-
- 
-
 }
 export default SignInForm;
