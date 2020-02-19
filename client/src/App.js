@@ -104,6 +104,8 @@ class App extends Component {
       if (this.state.currentAuth) {
         return (
           <React.Fragment>
+            <NavBar />
+          {/* <SideBar /> */}
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
           </React.Fragment>
@@ -118,15 +120,12 @@ class App extends Component {
     return (
       <div className="App">
         <Router>
-          {/* <NavBar /> */}
-          {/* <SideBar /> */}
           <Switch>
-            {/* <Route exact path='/' render={renderListingsView} /> */}
             <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
-
           </Switch>
         </Router>
+        
         {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
