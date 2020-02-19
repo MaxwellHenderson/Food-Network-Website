@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import NewItemPage from "./NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
@@ -39,11 +39,14 @@ Amplify.configure({
 
 // You can get the current config object
 const currentConfig = Auth.configure();
+// let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
 
 
 class App extends Component {
   constructor(props) {
     super(props);
+
+    // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
     this.mealPriceInput = React.createRef();
@@ -69,6 +72,12 @@ class App extends Component {
     };
   }
 
+  logIn(auth) {
+    this.setState({
+      currentAuth : auth
+    });
+  }
+
   /* Lifecycle hooks */
   componentDidMount() {
    this.handleGetMeal();
@@ -92,16 +101,16 @@ class App extends Component {
     }
 
     let renderRoot = () => {
-      if (this.state.user) {
+      if (this.state.currentAuth) {
         return (
           <React.Fragment>
-            <CardList foodItems={this.satate.foodItems} getMealByID={(id) => this.setCurrentMeal(id)} />
+            <CardList foodItems={this.state.foodItems} getMealByID={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
           </React.Fragment>
         );
       } else {
         return (
-          <Login login={this.state.user}/>
+          <Login loginFunc={this.logIn.bind(this)}/>
         );
       }
     }

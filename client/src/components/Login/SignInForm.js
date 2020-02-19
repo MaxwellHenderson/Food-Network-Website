@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Amplify, { Auth } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
@@ -34,10 +34,16 @@ class SignInForm extends Component{
             console.log(this.state.email);
             console.log(this.state.password);
             const user = await Auth.signIn(this.state.email, this.state.password);
+            this.props.loginFunc(user);
             console.log(user);
-          }catch(error) {
-              console.log(error);
-          }
+        } catch(error) {
+            console.log(error);
+        }
+        console.log(Auth.currentUserInfo());
+
+        Auth.currentSession()
+            .then(data => console.log("..." + data))
+            .catch(error => console.log(error));
     }
      
     render() {
