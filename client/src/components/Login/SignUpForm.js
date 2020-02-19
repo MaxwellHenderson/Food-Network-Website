@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Auth } from "aws-amplify";
 import $ from 'jquery';
 
 
@@ -17,8 +18,10 @@ class SignUpForm extends Component{
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleGetEmail = this.handleGetEmail.bind(this);
-    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
+    //this.handleGetEmail = this.handleGetEmail.bind(this);
+    //this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
+    this.updateUserName = this.updateUserName.bind(this);
+    this.updateLocation = this.updateLocation.bind(this);
   }
 
     updateUserName(event){
@@ -42,84 +45,110 @@ class SignUpForm extends Component{
         });
     }
 
-    handleSubmit(event){
-        event.preventDefault();
+    async handleSubmit(event){
+      event.preventDefault();
 
-        console.log("The form was submitted with the following data:");
-        console.log(this.state);
-
-        this.handleGetEmail();
-    }
-
-    handleCreateNewUser = async () => { 
-      const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/user";
-      const _data={
-        "username": this.state.username,
-        "email": this.state.email,
-        "password": this.state.password,
-        "location": this.state.location,
-        "hasAgreedToTerms": this.state.hasAgreedToTerms
+      var email = this.state.email;
+      var password = this.state.password;
+      try {
+        const signUpResponse = await Auth.signUp(
+         email,
+          password
+        );
+        console.log(signUpResponse);
+      } catch (error) {
+        console.log(error);
+        // let err = null;
+        // !error.message ? err = { "message": error } : err = error;
+        // this.setState({
+        //   errors: {
+        //     ...this.state.errors,
+        //     cognito: err
+        //   }
+        // });
       }
-      console.log(JSON.stringify(_data));
+    }
+
+    // handleSubmit(event){
+    //     event.preventDefault();
+
+    //     console.log("The form was submitted with the following data:");
+    //     console.log(this.state);
+
+    //     this.handleGetEmail();
+    // }
+
+    // handleCreateNewUser = async () => { 
+    //   const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/user";
+    //   const _data={
+    //     "username": this.state.username,
+    //     "email": this.state.email,
+    //     "password": this.state.password,
+    //     "location": this.state.location,
+    //     "hasAgreedToTerms": this.state.hasAgreedToTerms
+    //   }
+    //   console.log(JSON.stringify(_data));
       
-      const Http = new XMLHttpRequest();
-      Http.open("POST", Url);
+    //   const Http = new XMLHttpRequest();
+    //   Http.open("POST", Url);
   
-      $.ajax({
-        url: Url,
-        type: 'POST',
-        crossDomain: true, 
-        contentType: 'application/json',
-        dataType: 'json',
-        headers:{
-            "accept": "application/json",
-        },
-        data: JSON.stringify(_data),
+    //   $.ajax({
+    //     url: Url,
+    //     type: 'POST',
+    //     crossDomain: true, 
+    //     contentType: 'application/json',
+    //     dataType: 'json',
+    //     headers:{
+    //         "accept": "application/json",
+    //         "Access-Control-Allow-Origin": '*'
+    //     },
+    //     data: JSON.stringify(_data),
   
-        success: function(result) {
-          console.log(result);
-        }, 
-        error:function(error) {
-          console.log(error); 
-        }
-      });
-      return false;
-    }
+    //     success: function(result) {
+    //       console.log(result);
+    //     }, 
+    //     error:function(error) {
+    //       console.log(error); 
+    //     }
+    //   });
+    //   return false;
+    // }
 
-    handleGetEmail = async () => {                 
-      var queryString = "/email/?email=" + String(this.state.email);
-      var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2"
-      Url = Url.concat(queryString);
+    // handleGetEmail = async () => {                 
+    //   var queryString = "/email/?email=" + String(this.state.email);
+    //   var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2"
+    //   Url = Url.concat(queryString);
 
-      console.log(Url);
-      const Http = new XMLHttpRequest();
-      Http.open("GET", Url);
+    //   console.log(Url);
+    //   const Http = new XMLHttpRequest();
+    //   Http.open("GET", Url);
 
-      var that = this;
-      $.ajax({
-          url: Url,
-          type: 'GET',
-          crossDomain: true, 
-          contentType: 'application/json',
-          dataType: 'json',
-          header:{
-              "accept": "application/json",
-               "Access-Control-Allow-Origin": '*'
-          },
+    //   var that = this;
+    //   $.ajax({
+    //       url: Url,
+    //       type: 'GET',
+    //       crossDomain: true, 
+    //       contentType: 'application/json',
+    //       dataType: 'json',
+    //       header:{
+    //           "accept": "application/json",
+    //            "Access-Control-Allow-Origin": '*'
+    //       },
           
-          success: function(result){
-              if(result.Count === 0){
-                console.log("Email does not exist proceed to signup");
-                that.handleCreateNewUser();
-              }else{
-                console.log("Email exists");
-              }
-          },
-          error: function(error){
-              console.log(error);
-          }
-      })
-    }
+    //       success: function(result){
+    //           if(result.Count === 0){
+    //             console.log("Email does not exist proceed to signup");
+    //             that.handleCreateNewUser();
+    //            // window.location.reload();
+    //           }else{
+    //             console.log("Email exists");
+    //           }
+    //       },
+    //       error: function(error){
+    //           console.log(error);
+    //       }
+    //   })
+    // }
 
 
 
