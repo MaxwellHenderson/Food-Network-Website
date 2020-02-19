@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Auth } from "aws-amplify";
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
 
@@ -26,12 +27,23 @@ class SignInForm extends Component{
         });
     }
 
-    handleSubmit(event){
+    // handleSubmit(event){
+    //     event.preventDefault();
+
+    //     console.log("The form was submitted with the following data:");
+    //     console.log(this.state);
+    //     this.handleGetLoginEmail();
+    // }
+
+    async handleSubmit(event){
         event.preventDefault();
 
-        console.log("The form was submitted with the following data:");
-        console.log(this.state);
-        this.handleGetLoginEmail();
+        try {
+            const user = await Auth.signIn(this.state.email, this.state.password);
+            console.log(user);
+          }catch(error) {
+              console.log(error);
+          }
     }
 
 
