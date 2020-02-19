@@ -85,6 +85,10 @@ class SignUpForm extends Component{
       try{
          await Auth.confirmSignUp(email, code);
         console.log("Successfully confirmed signup!");
+
+        //putting the rest of the user information into db
+        this.handleGetEmail();
+
         this.setState({ step: 0 });
       }catch(err){
         console.log("Error signing up: ", err);
