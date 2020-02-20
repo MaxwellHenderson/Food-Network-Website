@@ -4,9 +4,16 @@ import { NavLink } from 'react-router-dom';
 // TODO: Make modal more responsive/robust for inputs 
 
 class ListingModal extends Component {
+<<<<<<< HEAD
     constructor(props) {
         super(props);
     }
+=======
+    // constructor(props) {
+    //     super(props);
+        
+    // }
+>>>>>>> parent of ead23b2... Fix bug
 
     render() {
         let meal = this.props.meal;
