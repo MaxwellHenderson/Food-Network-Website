@@ -16,7 +16,11 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
-import Amplify, { Auth } from 'aws-amplify';
+// fuck pj
+var pj = 3;
+
+
+import Amplify, { Auth, Cache } from 'aws-amplify';
 
 // Manual Amplify configuration
 // See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
@@ -49,7 +53,7 @@ class App extends Component {
     // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
-    this.mealPriceInput = React.createRef();
+    this.mealPriceInput = React.createRef()aaaaaa;
     this.mealImagePathInput = React.createRef();
 
     this.sortOptions = [
@@ -74,8 +78,25 @@ class App extends Component {
 
 
   componentDidMount() {
-   this.handleGetMeal();
+    this.handleGetMeal();
+    // this.getToken();
   }
+
+  // async getToken() {
+  //   try {
+  //       const user = await Auth.signIn(this.state.email, this.state.password);
+  //       // console.log(user);
+  //       console.log("Hurray, I am successfully authenticated~!");
+        
+  //       const auth = await Auth.currentSession();
+  //       // const auth = await Auth.currentAuthenticatedUser();
+  //       console.log(auth.idToken.jwtToken);
+  //       this.props.loginFunc(auth);
+  //   } catch(error) {
+  //       console.log(error);
+  //       // prompt user to try again
+  //   }
+  // }
 
   logIn(auth) {
     this.setState({
@@ -101,11 +122,11 @@ class App extends Component {
     }
 
     let renderRoot = () => {
-      if (this.state.currentAuth) {
+       if (this.state.currentAuth) {
         return (
           <React.Fragment>
             <NavBar />
-          {/* <SideBar /> */}
+            {/* <SideBar /> */}
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
           </React.Fragment>

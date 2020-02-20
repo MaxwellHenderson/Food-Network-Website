@@ -2,9 +2,6 @@ import React, { Component } from "react";
 // import ListGroup from "react-bootstrap/ListGroup";
 
 class CardList extends Component {
-  componentDidMount() {
-    console.log(this.props.getMealById);
-  }
   render() {
     let foodCards = this.props.foodItems.map((foodItem, index) => {
       let card = (

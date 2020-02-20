@@ -48,13 +48,17 @@ class SignInForm extends Component{
 
         try {
             const user = await Auth.signIn(this.state.email, this.state.password);
-            console.log(user);
+            // console.log(user);
             console.log("Hurray, I am successfully authenticated~!");
-            this.props.loginFunc(user);
-          }catch(error) {
-              console.log(error);
-              //prompt user to try again
-          }
+            
+            const auth = await Auth.currentSession();
+            // const auth = await Auth.currentAuthenticatedUser();
+            console.log(auth.idToken.jwtToken);
+            this.props.loginFunc(auth);
+        } catch(error) {
+            console.log(error);
+            // prompt user to try again
+        }
     }
 
     
