@@ -16,11 +16,10 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
-// fuck pj
-var pj = 3;
+//HI FROM PAZUZU
+var pj = 2;
 
-
-import Amplify, { Auth, Cache } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 
 // Manual Amplify configuration
 // See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
@@ -53,7 +52,7 @@ class App extends Component {
     // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
-    this.mealPriceInput = React.createRef()aaaaaa;
+    this.mealnputhfalhfahl = React.createRef();
     this.mealImagePathInput = React.createRef();
 
     this.sortOptions = [
