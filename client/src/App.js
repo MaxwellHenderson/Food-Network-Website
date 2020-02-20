@@ -124,11 +124,8 @@ class App extends Component {
        if (this.state.currentAuth) {
         return (
           <React.Fragment>
-<<<<<<< HEAD
             <NavBar />
             {/* <SideBar /> */}
-=======
->>>>>>> parent of ead23b2... Fix bug
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
           </React.Fragment>

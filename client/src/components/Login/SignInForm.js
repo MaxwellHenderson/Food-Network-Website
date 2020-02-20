@@ -51,6 +51,7 @@ class SignInForm extends Component{
             // console.log(user);
             console.log("Hurray, I am successfully authenticated~!");
 <<<<<<< HEAD
+<<<<<<< HEAD
             
             const auth = await Auth.currentSession();
             // const auth = await Auth.currentAuthenticatedUser();
@@ -61,6 +62,8 @@ class SignInForm extends Component{
             // prompt user to try again
         }
 =======
+=======
+>>>>>>> parent of ead23b2... Fix bug
           }catch(error) {
               console.log(error);
               //prompt user to try again

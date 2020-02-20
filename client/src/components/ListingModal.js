@@ -5,14 +5,20 @@ import { NavLink } from 'react-router-dom';
 
 class ListingModal extends Component {
 <<<<<<< HEAD
+<<<<<<< HEAD
     constructor(props) {
         super(props);
     }
 =======
+=======
+>>>>>>> parent of ead23b2... Fix bug
     // constructor(props) {
     //     super(props);
         
     // }
+<<<<<<< HEAD
+>>>>>>> parent of ead23b2... Fix bug
+=======
 >>>>>>> parent of ead23b2... Fix bug
 
     render() {
