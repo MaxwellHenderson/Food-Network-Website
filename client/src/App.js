@@ -1,14 +1,13 @@
 'use strict';
 
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import NewItemPage from "./NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
-import SortDropdown from "./component/sort-dropdown";
-import AddListingForm from "./component/form";
+import Login from "./components/Login/Login.js";
 
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,9 +16,37 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
+import Amplify, { Auth } from 'aws-amplify';
+
+// Manual Amplify configuration
+// See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
+// for other configuration options.
+Amplify.configure({
+  Auth: {
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      // identityPoolId: 'us-west-2_89J8r5C88',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
+
+      // OPTIONAL - Amazon Cognito User Pool ID
+      userPoolId: 'us-west-2_89J8r5C88',
+
+      // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+      userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
+  }
+});
+
+// You can get the current config object
+const currentConfig = Auth.configure();
+// let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
+
+
 class App extends Component {
   constructor(props) {
     super(props);
+
+    // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
     this.mealPriceInput = React.createRef();
@@ -45,11 +72,17 @@ class App extends Component {
     };
   }
 
-  /* Lifecycle hooks */
+
   componentDidMount() {
    this.handleGetMeal();
   }
 
+  logIn(auth) {
+    this.setState({
+      currentAuth : auth
+    });
+  }
+  
 
   render() {
     let renderListingsView = () => {
@@ -67,17 +100,32 @@ class App extends Component {
       );
     }
 
+    let renderRoot = () => {
+      if (this.state.currentAuth) {
+        return (
+          <React.Fragment>
+            <NavBar />
+          {/* <SideBar /> */}
+            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
+            <ListingModal meal={this.state.currMeal} />
+          </React.Fragment>
+        );
+      } else {
+        return (
+          <Login loginFunc={this.logIn.bind(this)}/>
+        );
+      }
+    }
+
     return (
       <div className="App">
         <Router>
-          <NavBar />
-          {/* <SideBar /> */}
           <Switch>
-            <Route exact path='/' render={renderListingsView} />
+            <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
-
           </Switch>
         </Router>
+        
         {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
@@ -92,13 +140,14 @@ class App extends Component {
       </div>
     );
   }
-
+ 
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
     console.log(this.state.currMeal);
   }
+  
 
   handleGetMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
@@ -114,7 +163,7 @@ class App extends Component {
       url: Url,
       type: 'GET',
       success: function(result){
-        console.log(result)
+        // console.log(result)
         that.setState({
           foodItems: that.state.selectedSortOption.sort(result)
         })
