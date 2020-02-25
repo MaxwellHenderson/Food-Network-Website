@@ -3,8 +3,14 @@ import InputField from "./component/input-field";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
+import AWS from 'aws-sdk';
 
-var AWS = require("aws-sdk");
+// var AWS = require("aws-sdk");
+
+AWS.config.region = 'us-west-2';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-west-2:cb1b59d8-6d8b-4d56-a187-5b91922f84d7',
+});
 
 var bucketName = "foodimagebucket";
 var bucketRegion = "us-west-2";
@@ -17,7 +23,7 @@ AWS.config.update({
         })
 });
 
-var s3 = new AWS.S3({
+const s3 = new AWS.S3({
     apiVersion: "2006-03-01",
     params: {Bucket: bucketName}
 });
@@ -106,30 +112,6 @@ class NewItemPage extends Component {
         );
     }
 
-    handleGetUnsignedUrl = async (fileName) => {
-        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/s3/?filename=PinchyDom.jpg";
-        console.log("Trying to get unsigned url using url "+Url);
-        var that = this;
-        $.ajax({
-            url: Url,
-            type: 'GET',
-            dataType: 'json',
-            crossDomain: true,
-            headers: {
-                "Accept" : "application/json"
-            }, 
-            success: function(result){
-                console.log("GetUnsignedUrl result: "+result.body)
-                that.s3Url = result.body;
-            },
-            error: function(error){
-                console.log("Failed to get url: "+error);
-            }
-        })
-        console.log("S3URL FROM THE S3 FUNCTION: "+that.s3Url);
-    };
-
-
     addPhoto = async() => {
         var files = document.getElementById("photoFile").files;
         if (!files.length){
@@ -138,28 +120,17 @@ class NewItemPage extends Component {
         var file = files[0];
         var fileName = file.name;
 
-        this.handleGetUnsignedUrl(fileName);
-        console.log("After handleGetUnsignedUrl()");
-
-        console.log("File name: "+fileName);
-
-        //Upload with presigned URL following https://www.koan.co/blog/uploading-images-to-s3-from-a-react-spa
-
-        console.log("Upload url: "+this.s3Url);
-        const response = await fetch(
-            new Request(this.s3Url, {
-                method: 'PUT',
-                body: file,
-                headers: new Headers({
-                    'Content-Type': 'image/*',
-                }),
-            }),
-        );
-
-        if (response.status != 200) {
-            //The upload failed
-            alert("Failed to upload");
+        var params = {
+            Body: file,
+            Bucket: bucketName,
+            Key: fileName,
         }
+
+        s3.putObject(params, function(err, data) {
+            if(err) console.log(err, err.stack); //An error occured
+            else console.log(data); //Succesful upload
+        })
+
     };
 
 
