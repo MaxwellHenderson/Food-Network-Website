@@ -1,25 +1,55 @@
-import React, { Component } from "react";
-// import NewItemPage from "./NewItemPage.js";
-import NavBar from "./NavBar.js";
+'use strict';
+
+import React, { Component, useState } from "react";
+import NewItemPage from "./NewItemPage.js";
+import ListingPage from './ViewListingPage.js';
+import ListingModal from './components/ListingModal.js';
+import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
-import SortDropdown from "./component/sort-dropdown";
-import AddListingForm from "./component/form";
-/*
-import ajax from 'ajax';
-import axios from 'axios';
-import jquery from 'jquery'; */
+import Login from "./components/Login/Login.js";
+
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
-import NewItemPage from "./NewItemPage.js";
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// import { List } from "react-bootstrap/lib/Media";
+
+import Amplify, { Auth } from 'aws-amplify';
+
+// Manual Amplify configuration
+// See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
+// for other configuration options.
+Amplify.configure({
+  Auth: {
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      // identityPoolId: 'us-west-2_89J8r5C88',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
+
+      // OPTIONAL - Amazon Cognito User Pool ID
+      userPoolId: 'us-west-2_89J8r5C88',
+
+      // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+      userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
+  }
+});
+
+// You can get the current config object
+const currentConfig = Auth.configure();
+// let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
+
 
 class App extends Component {
   constructor(props) {
     super(props);
 
+    // const [isAuthenticated, userHasAuthenticated] = useState(false);
+
     this.mealNameInput = React.createRef();
-    this.mealPriceInput = React.createRef();
+    this.mealnputhfalhfahl = React.createRef();
     this.mealImagePathInput = React.createRef();
 
     this.sortOptions = [
@@ -31,86 +61,108 @@ class App extends Component {
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
       foodItems: [],
-      currMeal: {mealId: 0,
-                mealName: 'apple',
-                mealPrice:'',
-                mealDescription:'',
-                mealImagePath:'',
-                imgAlt:''
+      currMeal: {
+                  mealId: 0,
+                  mealName: 'apple',
+                  mealPrice:'',
+                  mealDescription:'',
+                  mealImagePath:'',
+                  imgAlt:''
                 } 
     };
   }
 
-  /* Lifecycle hooks */
+
   componentDidMount() {
-//    this.handleGetMeal();
+    this.handleGetMeal();
+    // this.getToken();
   }
 
+  // async getToken() {
+  //   try {
+  //       const user = await Auth.signIn(this.state.email, this.state.password);
+  //       // console.log(user);
+  //       console.log("Hurray, I am successfully authenticated~!");
+        
+  //       const auth = await Auth.currentSession();
+  //       // const auth = await Auth.currentAuthenticatedUser();
+  //       console.log(auth.idToken.jwtToken);
+  //       this.props.loginFunc(auth);
+  //   } catch(error) {
+  //       console.log(error);
+  //       // prompt user to try again
+  //   }
+  // }
+// REEE
+  logIn(auth) {
+    this.setState({
+      currentAuth : auth
+    });
+  }
 
+  logOut() {
+    localStorage.setItem("token", null);
+    console.log(localStorage.getItem("token"));
+    console.log("LOG OUT");
+  }
+  
 
   render() {
-    let meal = this.state.currMeal;
+    let renderIndividualListing = () => {
+      return (
+        <ListingPage meal={this.state.currMeal}/>
+      );
+    }
+
+    let renderRoot = () => {
+      //  if (this.state.currentAuth) {
+       if (localStorage.getItem("token") !== null) {
+        return (
+          <React.Fragment>
+            <NavBar />
+            {/* <SideBar /> */}
+            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
+            <ListingModal meal={this.state.currMeal} />
+            <button onClick={this.logOut.bind(this)}>Log Out</button>
+          </React.Fragment>
+        );
+      } else {
+        return (
+          <Login loginFunc={this.logIn.bind(this)}/>
+        );
+      }
+    }
 
     return (
       <div className="App">
-        <NavBar />
-        <SideBar />
-        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.getMealById(id)}/>
-        <SortDropdown
+        <Router>
+          <Switch>
+            <Route exact path='/' component={renderRoot} />
+            <Route path='/listing' render={renderIndividualListing} />
+          </Switch>
+        </Router>
+        {/* <SortDropdown
           selectedSortOption={this.state.selectedSortOption}
           sortOptions={this.sortOptions}
           onClick={this.handleSortOptionChange}
-        />
+        /> */}
         {/* <AddListingForm
           mealNameInput={this.mealNameInput}
           mealPriceInput={this.mealPriceInput}
           mealImagePathInput={this.mealImagePathInput}
           onClick={this.handleAddMeal}
         /> */}
-
-        <NewItemPage />
-
-        {/* <div className="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content" style={{'background-image':  'url(' + meal.mealImagePath + ')', 'background-size': '120%'}}>
-              <div className="modal-body text-white px-0 py-0 w-100" style={{height: '500px', width: '500px'}} >
-                <div className="modal-text mx-0 pl-3 pt-3 row d-flex align-content-between">
-                  <div class="col-6">
-                    <div id="modal-name" className="font-weight-light mb-1" style={{'font-size': "20px"}}>
-                      {meal.mealName}
-                    </div>
-                    <div id="modal-location" className="row mx-0">
-                      <i class="fas fa-map-marker-alt"></i>
-                      <div className="row mx-0">
-                        <div class="ml-2">Seattle, WA</div> <div className="ml-2">0.8 miles</div>
-                      </div>
-                    </div>
-                    <div id="modal-price" className="font-weight-bold">
-                      Price: ${meal.mealPrice}
-                    </div>
-                  </div>
-                  <div className="col-6 text-right">
-                    <div className="mb-2">
-                      Description: {meal.mealDescription}
-                    </div>
-                    <button className="btn btn-info">
-                      View Listing
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     );
   }
-
-  getMealById(id) {
+ 
+  setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
+    // console.log(this.state.currMeal);
   }
+  
 
   handleGetMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
@@ -130,7 +182,7 @@ class App extends Component {
       url: Url,
       type: 'GET',
       success: function(result){
-        console.log(result)
+        // console.log(result)
         that.setState({
           foodItems: that.state.selectedSortOption.sort(result)
         })

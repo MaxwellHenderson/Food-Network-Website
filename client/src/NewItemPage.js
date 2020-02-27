@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import InputField from "./component/input-field";
-import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 import AWS from 'aws-sdk';
