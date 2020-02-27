@@ -16,9 +16,6 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
-//HI FROM PAZUZU
-var pj = 2;
-
 import Amplify, { Auth } from 'aws-amplify';
 
 // Manual Amplify configuration
@@ -102,18 +99,15 @@ class App extends Component {
       currentAuth : auth
     });
   }
+
+  logOut() {
+    localStorage.setItem("token", null);
+    console.log(localStorage.getItem("token"));
+    console.log("LOG OUT");
+  }
   
 
   render() {
-    let renderListingsView = () => {
-      return (
-        <React.Fragment>
-            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)}/>
-            <ListingModal meal={this.state.currMeal}/>
-        </React.Fragment>
-      );
-    };
-
     let renderIndividualListing = () => {
       return (
         <ListingPage meal={this.state.currMeal}/>
@@ -121,13 +115,15 @@ class App extends Component {
     }
 
     let renderRoot = () => {
-       if (this.state.currentAuth) {
+      //  if (this.state.currentAuth) {
+       if (localStorage.getItem("token") !== null) {
         return (
           <React.Fragment>
             <NavBar />
             {/* <SideBar /> */}
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
+            <button onClick={this.logOut.bind(this)}>Log Out</button>
           </React.Fragment>
         );
       } else {
@@ -140,13 +136,9 @@ class App extends Component {
     return (
       <div className="App">
         <Router>
-          {/* <NavBar /> */}
-          {/* <SideBar /> */}
           <Switch>
-            {/* <Route exact path='/' render={renderListingsView} /> */}
             <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
-
           </Switch>
         </Router>
         {/* <SortDropdown
@@ -168,7 +160,7 @@ class App extends Component {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
-    console.log(this.state.currMeal);
+    // console.log(this.state.currMeal);
   }
   
 
