@@ -10,8 +10,7 @@ class SignInForm extends Component{
         this.state = {
             email:'',
             password:'',
-            isAuthenticated: false,
-            userHasAuthenticated: false
+            jwt: ''
         };
 
         
