@@ -125,7 +125,7 @@ class NewItemPage extends Component {
             Bucket: bucketName,
             Key: fileName,
         }
-//TEST
+//TEST w/ PJ
         s3.putObject(params, function(err, data) {
             if(err) console.log(err, err.stack); //An error occured
             else console.log(data); //Succesful upload
