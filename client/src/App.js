@@ -8,6 +8,7 @@ import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import Login from "./components/Login/Login.js";
+import SearchForm from "./component/search-form.jsx"
 
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -23,17 +24,17 @@ import Amplify, { Auth } from 'aws-amplify';
 // for other configuration options.
 Amplify.configure({
   Auth: {
-      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-      // identityPoolId: 'us-west-2_89J8r5C88',
-      
-      // REQUIRED - Amazon Cognito Region
-      region: 'us-west-2',
+    // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+    // identityPoolId: 'us-west-2_89J8r5C88',
 
-      // OPTIONAL - Amazon Cognito User Pool ID
-      userPoolId: 'us-west-2_89J8r5C88',
+    // REQUIRED - Amazon Cognito Region
+    region: 'us-west-2',
 
-      // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-      userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
+    // OPTIONAL - Amazon Cognito User Pool ID
+    userPoolId: 'us-west-2_89J8r5C88',
+
+    // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+    userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
   }
 });
 
@@ -49,8 +50,8 @@ class App extends Component {
     // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
-    this.mealnputhfalhfahl = React.createRef();
-    this.mealImagePathInput = React.createRef();
+    this.ratingInput = React.createRef();
+    this.cityInput = React.createRef();
 
     this.sortOptions = [
       { option: "ID", sort: this.sortMealByID },
@@ -61,20 +62,21 @@ class App extends Component {
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
       foodItems: [],
+      mealIDs: [],
       currMeal: {
-                  mealId: 0,
-                  mealName: 'apple',
-                  mealPrice:'',
-                  mealDescription:'',
-                  mealImagePath:'',
-                  imgAlt:''
-                } 
+        mealId: 0,
+        mealName: 'apple',
+        mealPrice: '',
+        mealDescription: '',
+        mealImagePath: '',
+        imgAlt: ''
+      }
     };
   }
 
 
   componentDidMount() {
-    this.handleGetMeal();
+    this.getMealIDs();
     // this.getToken();
   }
 
@@ -83,7 +85,7 @@ class App extends Component {
   //       const user = await Auth.signIn(this.state.email, this.state.password);
   //       // console.log(user);
   //       console.log("Hurray, I am successfully authenticated~!");
-        
+
   //       const auth = await Auth.currentSession();
   //       // const auth = await Auth.currentAuthenticatedUser();
   //       console.log(auth.idToken.jwtToken);
@@ -93,10 +95,10 @@ class App extends Component {
   //       // prompt user to try again
   //   }
   // }
-// REEE
+  // REEE
   logIn(auth) {
     this.setState({
-      currentAuth : auth
+      currentAuth: auth
     });
   }
 
@@ -105,22 +107,23 @@ class App extends Component {
     console.log(localStorage.getItem("token"));
     console.log("LOG OUT");
   }
-  
+
 
   render() {
     let renderIndividualListing = () => {
       return (
-        <ListingPage meal={this.state.currMeal}/>
+        <ListingPage meal={this.state.currMeal} />
       );
     }
 
     let renderRoot = () => {
       //  if (this.state.currentAuth) {
-       if (localStorage.getItem("token") !== null) {
+      if (localStorage.getItem("token") !== null) {
         return (
           <React.Fragment>
-            <NavBar />
+            {/* <NavBar /> */}
             {/* <SideBar /> */}
+            <SearchForm mealNameInput={this.mealNameInput} ratingInput={this.ratingInput} cityInput={this.cityInput} onClick={this.getMealIDs} />
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
             <button onClick={this.logOut.bind(this)}>Log Out</button>
@@ -128,7 +131,7 @@ class App extends Component {
         );
       } else {
         return (
-          <Login loginFunc={this.logIn.bind(this)}/>
+          <Login loginFunc={this.logIn.bind(this)} />
         );
       }
     }
@@ -141,33 +144,39 @@ class App extends Component {
             <Route path='/listing' render={renderIndividualListing} />
           </Switch>
         </Router>
-        {/* <SortDropdown
-          selectedSortOption={this.state.selectedSortOption}
-          sortOptions={this.sortOptions}
-          onClick={this.handleSortOptionChange}
-        /> */}
-        {/* <AddListingForm
-          mealNameInput={this.mealNameInput}
-          mealPriceInput={this.mealPriceInput}
-          mealImagePathInput={this.mealImagePathInput}
-          onClick={this.handleAddMeal}
-        /> */}
       </div>
     );
   }
- 
+
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
-    let meal = foodArr.find((item) => {return item.mealID === id});
-    this.setState({currMeal: meal});
-    // console.log(this.state.currMeal);
+    let meal = foodArr.find((item) => { return item.mealID === id });
+    this.setState({ currMeal: meal });
+    console.log(this.state.mealIDs);
   }
-  
 
-  handleGetMeal = async () => {
-    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+  getMealIDs = async () => {
+    /* If input fields are empty, set to default values */
+    const city = (this.cityInput.current.value != "") ? this.cityInput.current.value : "Renton";
+    const rating = (this.ratingInput.current.value != "") ? this.ratingInput.current.value : "1";
+    // const url = "/users/filter?city=" + city + "&minRating=" + rating;
+    // let request = new Request(url, {
+    //   method: "GET",
+    //   headers: new Headers()
+    // });
+
+    // this.callBackendAPI(request)
+    //   .then(result => {
+    //     const mealIDs = [].concat.apply([], result.map(user => user.mealIDs))
+    //     this.setState({
+    //       mealIDs: mealIDs
+    //     });
+    //   }).then(() => this.getMeals());
+
+
+    const QueryString = "?city=" + city + "&minRating=" + rating;
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" + QueryString;
     const Http = new XMLHttpRequest();
-
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
       console.log(Http.responseText)
@@ -177,43 +186,66 @@ class App extends Component {
     $.ajax({
       url: Url,
       type: 'GET',
-      success: function(result){
-        // console.log(result)
+      success: function (result) {
+        const mealIDs = [].concat.apply([], result.map(user => user.mealIDs))
         that.setState({
-          foodItems: that.state.selectedSortOption.sort(result)
+          mealIDs: mealIDs
         })
       },
-      error: function(error){
+      error: function (error) {
         console.log(`Error ${error}`)
       }
+    }).then(() => that.getMeals());
+
+  };
+
+  getMeals = async () => {
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    const Http = new XMLHttpRequest();
+    Http.open("GET", Url);
+    Http.onreadystatechange = (e) => {
+      console.log(Http.responseText)
+    }
+
+    var that = this;
+    $.ajax({
+      url: Url,
+      type: 'GET',
+    }).then(meals => {
+      let filteredMeals = meals.filter(meal => {
+        return that.state.mealIDs.includes(meal.mealID);
+      })
+      that.setState({ foodItems: filteredMeals })
     })
-    };
- 
-  handleAddMeal = async () => { 
-    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
-    
-    const _data={
-      mealID:2800,
+  };
+
+
+
+  handleAddMeal = async () => {
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+
+    const _data = {
+      mealID: 2800,
       mealDescription: NewItemPage.state.foodDescription,
-      mealImagePath:"google.com",
+      mealImagePath: "google.com",
       mealName: NewItemPage.state.mealName,
       mealPrice: NewItemPage.state.price
     };
-    
+
     $.ajax({
       url: Url,
       type: 'POST',
       dataType: 'jsonp',
       headers: {
-        "accept" : "application/json"
-      }, 
+        "accept": "application/json"
+      },
       data: JSON.stringify(_data), dataType: "json",
       contentType: 'application/json; charset=utf-8',
-      success: function(result) {
+      success: function (result) {
         console.log(result);
-      }, 
-      error:function(xhr, status, error) {
-        console.log(JSON.stringify(xhr)); 
+      },
+      error: function (xhr, status, error) {
+        console.log(JSON.stringify(xhr));
       }
     });
     return false;
@@ -221,7 +253,6 @@ class App extends Component {
 
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });
-    this.handleGetMeal();
   };
 
   /* Fetches our route from the Express server */
@@ -254,4 +285,4 @@ class App extends Component {
   };
 }
 
-  export default App;
+export default App;
