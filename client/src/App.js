@@ -1,14 +1,13 @@
 'use strict';
 
-import React, { Component } from "react";
-import NewItemPage from "./NewItemPage.js";
+import React, { Component, useState } from "react";
+import NewItemPage from "./components/NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
-import SortDropdown from "./component/sort-dropdown";
-import AddListingForm from "./component/form";
+import Login from "./components/Login/Login.js";
 
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,12 +16,40 @@ import "./styles/style.css";
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
+import Amplify, { Auth } from 'aws-amplify';
+
+// Manual Amplify configuration
+// See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
+// for other configuration options.
+Amplify.configure({
+  Auth: {
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      // identityPoolId: 'us-west-2_89J8r5C88',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
+
+      // OPTIONAL - Amazon Cognito User Pool ID
+      userPoolId: 'us-west-2_89J8r5C88',
+
+      // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
+      userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
+  }
+});
+//
+// You can get the current config object
+const currentConfig = Auth.configure();
+// let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
+
+
 class App extends Component {
   constructor(props) {
     super(props);
 
+    // const [isAuthenticated, userHasAuthenticated] = useState(false);
+
     this.mealNameInput = React.createRef();
-    this.mealPriceInput = React.createRef();
+    this.mealnputhfalhfahl = React.createRef();
     this.mealImagePathInput = React.createRef();
 
     this.sortOptions = [
@@ -45,37 +72,73 @@ class App extends Component {
     };
   }
 
-  /* Lifecycle hooks */
   componentDidMount() {
-   this.handleGetMeal();
+    this.handleGetMeal();
+    // this.getToken();
   }
 
+  // async getToken() {
+  //   try {
+  //       const user = await Auth.signIn(this.state.email, this.state.password);
+  //       // console.log(user);
+  //       console.log("Hurray, I am successfully authenticated~!");
+        
+  //       const auth = await Auth.currentSession();
+  //       // const auth = await Auth.currentAuthenticatedUser();
+  //       console.log(auth.idToken.jwtToken);
+  //       this.props.loginFunc(auth);
+  //   } catch(error) {
+  //       console.log(error);
+  //       // prompt user to try again
+  //   }
+  // }
+// REEE
+  logIn(auth) {
+    this.setState({
+      currentAuth : auth
+    });
+  }
+
+  logOut() {
+    localStorage.setItem("token", null);
+    console.log(localStorage.getItem("token"));
+    console.log("LOG OUT");
+  }
+  
 
   render() {
-    let renderListingsView = () => {
-      return (
-        <React.Fragment>
-            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)}/>
-            <ListingModal meal={this.state.currMeal}/>
-        </React.Fragment>
-      );
-    };
-
     let renderIndividualListing = () => {
       return (
         <ListingPage meal={this.state.currMeal}/>
       );
     }
 
+    let renderRoot = () => {
+      //  if (this.state.currentAuth) {
+       if (localStorage.getItem("token") !== null) {
+        return (
+          <React.Fragment>
+            <NavBar />
+            {/* <SideBar /> */}
+            <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
+            <ListingModal meal={this.state.currMeal} />
+            <button onClick={this.logOut.bind(this)}>Log Out</button>
+          </React.Fragment>
+        );
+      } else {
+        return (
+          <Login loginFunc={this.logIn.bind(this)}/>
+        );
+      }
+    }
+
     return (
       <div className="App">
         <Router>
-          <NavBar />
-          {/* <SideBar /> */}
           <Switch>
-            <Route exact path='/' render={renderListingsView} />
+            <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
-
+            <Route path='/newItem' component={NewItemPage} />
           </Switch>
         </Router>
         {/* <SortDropdown
@@ -92,29 +155,34 @@ class App extends Component {
       </div>
     );
   }
-
+ 
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
-    console.log(this.state.currMeal);
+    // console.log(this.state.currMeal);
   }
+  
 
   handleGetMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    
+    //Old no longer used method?
+    /*
     const Http = new XMLHttpRequest();
 
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
       console.log(Http.responseText)
     }
+    */
 
     var that = this;
     $.ajax({
       url: Url,
       type: 'GET',
       success: function(result){
-        console.log(result)
+        // console.log(result)
         that.setState({
           foodItems: that.state.selectedSortOption.sort(result)
         })
@@ -123,37 +191,37 @@ class App extends Component {
         console.log(`Error ${error}`)
       }
     })
-    };
+  };
  
-  handleAddMeal = async () => { 
-    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+  // handleAddMeal = async () => { 
+  //   const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
     
-    const _data={
-      mealID:2800,
-      mealDescription: NewItemPage.state.foodDescription,
-      mealImagePath:"google.com",
-      mealName: NewItemPage.state.mealName,
-      mealPrice: NewItemPage.state.price
-    };
+  //   const _data={
+  //     mealID:2800,
+  //     mealDescription: NewItemPage.state.foodDescription,
+  //     mealImagePath:"google.com",
+  //     mealName: NewItemPage.state.mealName,
+  //     mealPrice: NewItemPage.state.price
+  //   };
     
-    $.ajax({
-      url: Url,
-      type: 'POST',
-      dataType: 'jsonp',
-      headers: {
-        "accept" : "application/json"
-      }, 
-      data: JSON.stringify(_data), dataType: "json",
-      contentType: 'application/json; charset=utf-8',
-      success: function(result) {
-        console.log(result);
-      }, 
-      error:function(xhr, status, error) {
-        console.log(JSON.stringify(xhr)); 
-      }
-    });
-    return false;
-  }
+  //   $.ajax({
+  //     url: Url,
+  //     type: 'POST',
+  //     dataType: 'jsonp',
+  //     headers: {
+  //       "accept" : "application/json"
+  //     }, 
+  //     data: JSON.stringify(_data), dataType: "json",
+  //     contentType: 'application/json; charset=utf-8',
+  //     success: function(result) {
+  //       console.log(result);
+  //     }, 
+  //     error:function(xhr, status, error) {
+  //       console.log(JSON.stringify(xhr)); 
+  //     }
+  //   });
+  //   return false;
+  // }
 
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });

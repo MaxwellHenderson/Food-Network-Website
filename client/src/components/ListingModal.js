@@ -6,9 +6,7 @@ import { NavLink } from 'react-router-dom';
 class ListingModal extends Component {
     constructor(props) {
         super(props);
-        
     }
-
     render() {
         let meal = this.props.meal;
 
