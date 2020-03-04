@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, useState } from "react";
-import NewItemPage from "./NewItemPage.js";
+import NewItemPage from "./components/NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
@@ -36,7 +36,7 @@ Amplify.configure({
       userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
   }
 });
-
+//
 // You can get the current config object
 const currentConfig = Auth.configure();
 // let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
@@ -71,7 +71,6 @@ class App extends Component {
                 } 
     };
   }
-
 
   componentDidMount() {
     this.handleGetMeal();
@@ -139,6 +138,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={renderRoot} />
             <Route path='/listing' render={renderIndividualListing} />
+            <Route path='/newItem' component={NewItemPage} />
           </Switch>
         </Router>
         {/* <SortDropdown
@@ -193,35 +193,35 @@ class App extends Component {
     })
   };
  
-  handleAddMeal = async () => { 
-    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+  // handleAddMeal = async () => { 
+  //   const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
     
-    const _data={
-      mealID:2800,
-      mealDescription: NewItemPage.state.foodDescription,
-      mealImagePath:"google.com",
-      mealName: NewItemPage.state.mealName,
-      mealPrice: NewItemPage.state.price
-    };
+  //   const _data={
+  //     mealID:2800,
+  //     mealDescription: NewItemPage.state.foodDescription,
+  //     mealImagePath:"google.com",
+  //     mealName: NewItemPage.state.mealName,
+  //     mealPrice: NewItemPage.state.price
+  //   };
     
-    $.ajax({
-      url: Url,
-      type: 'POST',
-      dataType: 'jsonp',
-      headers: {
-        "accept" : "application/json"
-      }, 
-      data: JSON.stringify(_data), dataType: "json",
-      contentType: 'application/json; charset=utf-8',
-      success: function(result) {
-        console.log(result);
-      }, 
-      error:function(xhr, status, error) {
-        console.log(JSON.stringify(xhr)); 
-      }
-    });
-    return false;
-  }
+  //   $.ajax({
+  //     url: Url,
+  //     type: 'POST',
+  //     dataType: 'jsonp',
+  //     headers: {
+  //       "accept" : "application/json"
+  //     }, 
+  //     data: JSON.stringify(_data), dataType: "json",
+  //     contentType: 'application/json; charset=utf-8',
+  //     success: function(result) {
+  //       console.log(result);
+  //     }, 
+  //     error:function(xhr, status, error) {
+  //       console.log(JSON.stringify(xhr)); 
+  //     }
+  //   });
+  //   return false;
+  // }
 
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });

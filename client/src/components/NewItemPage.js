@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import InputField from "./component/input-field";
+import InputField from "../component/input-field";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/style.css";
+import "../styles/style.css";
+import NavBar from "./NavBar"
 import AWS from 'aws-sdk';
+import $ from 'jquery';
 
 // var AWS = require("aws-sdk");
 
@@ -14,6 +16,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 var bucketName = "foodimagebucket";
 var bucketRegion = "us-west-2";
 var IdentityPoolId = "us-west-2:b8d920b2-21d8-4843-80a3-9dadec543d92";
+var fileName = "";
 
 AWS.config.update({
     region: bucketRegion,
@@ -42,12 +45,13 @@ class NewItemPage extends Component {
         this.mealAllergyInput = React.createRef();
 
         this.s3Url = '';
-
+//
     }
 
     render() {
         return (
             <div class=" p-4">
+                <NavBar></NavBar>
                 {/* <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
                     <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
@@ -117,32 +121,32 @@ class NewItemPage extends Component {
             return alert("Please choose a file to upload first.");
         }
         var file = files[0];
-        var fileName = file.name;
+        fileName = file.name;
 
         var params = {
             Body: file,
             Bucket: bucketName,
             Key: fileName,
+            // ACL: 'public-read',
         }
-//TEST w/ PJ
+
         s3.putObject(params, function(err, data) {
             if(err) console.log(err, err.stack); //An error occured
             else console.log(data); //Succesful upload
         })
-
     };
 
 
     handleAddMeal = async () => {
         
-        this.addPhoto();
+        var fileUrl = this.addPhoto();
         
         const Url =
-            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/listings";
         const _data = {
             mealID: 7384,
             mealDescription: this.mealDescriptionInput.current.value,
-            mealImagePath: "google.com",
+            mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
             mealName: this.mealNameInput.current.value,
             mealPrice: this.mealPriceInput.current.value,
             mealQuantity: this.mealQuantityInput.current.value,
@@ -151,6 +155,7 @@ class NewItemPage extends Component {
             mealAllergy: this.mealAllergyInput.current.value
         };
 
+        //Puts the meal information into the database
         $.ajax({
             url: Url,
             type: "POST",
