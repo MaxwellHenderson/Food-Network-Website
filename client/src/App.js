@@ -13,7 +13,7 @@ import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
 // import { List } from "react-bootstrap/lib/Media";
 
 import Amplify, { Auth } from 'aws-amplify';
@@ -40,7 +40,6 @@ Amplify.configure({
 // You can get the current config object
 const currentConfig = Auth.configure();
 // let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
-
 
 class App extends Component {
   constructor(props) {
@@ -78,32 +77,17 @@ class App extends Component {
     // this.getToken();
   }
 
-  // async getToken() {
-  //   try {
-  //       const user = await Auth.signIn(this.state.email, this.state.password);
-  //       // console.log(user);
-  //       console.log("Hurray, I am successfully authenticated~!");
-        
-  //       const auth = await Auth.currentSession();
-  //       // const auth = await Auth.currentAuthenticatedUser();
-  //       console.log(auth.idToken.jwtToken);
-  //       this.props.loginFunc(auth);
-  //   } catch(error) {
-  //       console.log(error);
-  //       // prompt user to try again
-  //   }
-  // }
-// REEE
   logIn(auth) {
     this.setState({
       currentAuth : auth
     });
+    window.location.href = "/";
   }
 
   logOut() {
-    localStorage.setItem("token", null);
-    console.log(localStorage.getItem("token"));
+    localStorage.removeItem("token");
     console.log("LOG OUT");
+    window.location.reload();
   }
   
 
@@ -123,7 +107,9 @@ class App extends Component {
             {/* <SideBar /> */}
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
-            <button onClick={this.logOut.bind(this)}>Log Out</button>
+            <NavLink to='/'>
+              <button onClick={this.logOut.bind(this)}>Log Out</button>
+            </NavLink>
           </React.Fragment>
         );
       } else {
