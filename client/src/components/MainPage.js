@@ -197,7 +197,6 @@ class MainPage extends Component {
                 <React.Fragment>
                     {/* <NavBar /> */}
                     {/* <SideBar /> */}
-                    {/* <SearchForm mealNameInput={this.mealNameInput} ratingInput={this.ratingInput} cityInput={this.cityInput} onClick={this.getMealIDs} /> */}
                     <SearchForm
                         mealNameInput={this.mealNameInput}
                         minPriceInput={this.minPriceInput}
