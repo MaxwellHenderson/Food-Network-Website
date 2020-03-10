@@ -50,8 +50,9 @@ class App extends Component {
     // const [isAuthenticated, userHasAuthenticated] = useState(false);
 
     this.mealNameInput = React.createRef();
-    this.ratingInput = React.createRef();
-    this.cityInput = React.createRef();
+    this.minPriceInput = React.createRef();
+    this.maxPriceInput = React.createRef();
+    this.cities = ["Renton", "Issaquah", "Redmond"];
 
     this.sortOptions = [
       { option: "ID", sort: this.sortMealByID },
@@ -61,6 +62,7 @@ class App extends Component {
 
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
+      selectedCity: this.cities ? this.cities[0] : 'City',
       foodItems: [],
       mealIDs: [],
       currMeal: {
@@ -76,9 +78,11 @@ class App extends Component {
 
 
   componentDidMount() {
-    this.getMealIDs();
+    // this.getUserMeals();
+    this.getMeals();
     // this.getToken();
   }
+
 
   // async getToken() {
   //   try {
@@ -123,7 +127,14 @@ class App extends Component {
           <React.Fragment>
             {/* <NavBar /> */}
             {/* <SideBar /> */}
-            <SearchForm mealNameInput={this.mealNameInput} ratingInput={this.ratingInput} cityInput={this.cityInput} onClick={this.getMealIDs} />
+            <SearchForm
+              mealNameInput={this.mealNameInput}
+              minPriceInput={this.minPriceInput}
+              maxPriceInput={this.maxPriceInput}
+              cities={this.cities}
+              selectedCity={this.state.selectedCity}
+              onSelect={this.handleSelectCity}
+              onClick={this.getMeals} />
             <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
             <ListingModal meal={this.state.currMeal} />
             <button onClick={this.logOut.bind(this)}>Log Out</button>
@@ -152,29 +163,19 @@ class App extends Component {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => { return item.mealID === id });
     this.setState({ currMeal: meal });
-    console.log(this.state.mealIDs);
   }
 
+  getMeals = async () => {
+    this.getMealIDs()
+      .then(mealIDs => this.filterMeals(mealIDs))
+      .then(meals => this.setState({ foodItems: meals }))
+  }
+
+  /* Returns a promise of mealIDs that are in a specified city */
   getMealIDs = async () => {
-    /* If input fields are empty, set to default values */
-    const city = (this.cityInput.current.value != "") ? this.cityInput.current.value : "Renton";
-    const rating = (this.ratingInput.current.value != "") ? this.ratingInput.current.value : "1";
-    // const url = "/users/filter?city=" + city + "&minRating=" + rating;
-    // let request = new Request(url, {
-    //   method: "GET",
-    //   headers: new Headers()
-    // });
+    /* Construct query string */
+    const QueryString = "?city=" + this.state.selectedCity;
 
-    // this.callBackendAPI(request)
-    //   .then(result => {
-    //     const mealIDs = [].concat.apply([], result.map(user => user.mealIDs))
-    //     this.setState({
-    //       mealIDs: mealIDs
-    //     });
-    //   }).then(() => this.getMeals());
-
-
-    const QueryString = "?city=" + city + "&minRating=" + rating;
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
@@ -182,43 +183,53 @@ class App extends Component {
       console.log(Http.responseText)
     }
 
-    var that = this;
-    $.ajax({
+    /* Return promise of meal IDs */
+    return $.ajax({
       url: Url,
       type: 'GET',
       success: function (result) {
-        const mealIDs = [].concat.apply([], result.map(user => user.mealIDs))
-        that.setState({
-          mealIDs: mealIDs
-        })
+        console.log(result);
       },
       error: function (error) {
         console.log(`Error ${error}`)
       }
-    }).then(() => that.getMeals());
-
+    }).then(result => {
+      /* Flattens array of arrays to an array of mealIDs */
+      var mealIDs = [].concat.apply([], result.map(user => user.mealIDs));
+      return mealIDs;
+    }).promise();
   };
 
-  getMeals = async () => {
-    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+  /* Returns a promise of array of meal objects that meet certain criteria */
+  filterMeals = async (mealIDs) => {
+    /* Construct query string */
+    const QueryString = "?mealName=" + this.mealNameInput.current.value
+      + "&minPrice=" + this.minPriceInput.current.value
+      + "&maxPrice=" + this.maxPriceInput.current.value;
+
+    // const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
       console.log(Http.responseText)
     }
 
-    var that = this;
-    $.ajax({
+    return $.ajax({
       url: Url,
       type: 'GET',
+      success: function (result) {
+        console.log(result);
+      },
+      error: function (error) {
+        console.log(`Error ${error}`)
+      }
     }).then(meals => {
-      let filteredMeals = meals.filter(meal => {
-        return that.state.mealIDs.includes(meal.mealID);
+      return meals.filter(meal => {
+        return mealIDs.includes(meal.mealID);
       })
-      that.setState({ foodItems: filteredMeals })
-    })
+    }).promise();
   };
-
 
 
   handleAddMeal = async () => {
@@ -251,19 +262,12 @@ class App extends Component {
     return false;
   }
 
+  handleSelectCity = city => {
+    this.setState({ selectedCity: city });
+  }
+
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });
-  };
-
-  /* Fetches our route from the Express server */
-  callBackendAPI = async request => {
-    const response = await fetch(request);
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message);
-    }
-    return body;
   };
 
   sortMealByID = listings => {
