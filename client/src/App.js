@@ -74,11 +74,11 @@ class App extends Component {
 
 
  
-  handleAddMeal = async () => { 
-    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
-    
-    const _data={
-      mealID:2800,
+  handleAddMeal = async () => {
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+
+    const _data = {
+      mealID: 2800,
       mealDescription: NewItemPage.state.foodDescription,
       mealImagePath: "google.com",
       mealName: NewItemPage.state.mealName,
@@ -92,8 +92,7 @@ class App extends Component {
       headers: {
         "accept": "application/json"
       },
-      data: JSON.stringify(_data), 
-      // dataType: "json",
+      data: JSON.stringify(_data), dataType: "json",
       contentType: 'application/json; charset=utf-8',
       success: function (result) {
         console.log(result);
@@ -117,8 +116,6 @@ class App extends Component {
     }
     return body;
   };
-
-
 }
 
 export default App;
