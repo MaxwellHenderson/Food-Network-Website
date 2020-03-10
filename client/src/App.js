@@ -1,11 +1,9 @@
-'use strict';
-
 import React, { Component, useState } from "react";
 import NewItemPage from "./NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
-import SideBar from "./SideBar.js";
+// import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
 import Login from "./components/Login/Login.js";
 
@@ -14,9 +12,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 
 import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
-// import { List } from "react-bootstrap/lib/Media";
 
 import Amplify, { Auth } from 'aws-amplify';
+import aws4 from 'aws4';
 
 // Manual Amplify configuration
 // See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
@@ -24,7 +22,7 @@ import Amplify, { Auth } from 'aws-amplify';
 Amplify.configure({
   Auth: {
       // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-      // identityPoolId: 'us-west-2_89J8r5C88',
+      identityPoolId: 'us-west-2:4809a3a5-d7b3-436a-9030-4ec877205e7a',
       
       // REQUIRED - Amazon Cognito Region
       region: 'us-west-2',
@@ -146,12 +144,10 @@ class App extends Component {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {return item.mealID === id});
     this.setState({currMeal: meal});
-    // console.log(this.state.currMeal);
   }
-  
 
   handleGetMeal = async () => {
-    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/";
     const Http = new XMLHttpRequest();
 
     Http.open("GET", Url);
@@ -159,21 +155,36 @@ class App extends Component {
       console.log(Http.responseText)
     }
 
+    const opts = {
+      method: "GET",
+      service: "execute-api",
+      region: "us-west-2",
+      path: "/listings",
+      url: "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/"
+    };
+
+
     var that = this;
+    const credentials = await Auth.currentCredentials();
+    const { accessKeyId, secretAccessKey, sessionToken } = credentials;
+    const request = aws4.sign(opts.url, {
+      accessKeyId,
+      secretAccessKey,
+      sessionToken
+    });
     $.ajax({
-      url: Url,
-      type: 'GET',
+      url: opts.url,
+      headers: request.headers,
       success: function(result){
-        // console.log(result)
         that.setState({
           foodItems: that.state.selectedSortOption.sort(result)
         })
       },
       error: function(error){
-        console.log(`Error ${error}`)
+        console.log(`Error ${error.responseText}`)
       }
     })
-    };
+  };
  
   handleAddMeal = async () => { 
     const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";

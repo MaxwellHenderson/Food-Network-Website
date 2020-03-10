@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Auth } from "aws-amplify";
 import { Link } from 'react-router-dom';
-import $ from 'jquery';
 
 class SignInForm extends Component{
     constructor(props){
@@ -44,7 +43,7 @@ class SignInForm extends Component{
         //         //prompt user to register
 
         try {
-            const user = await Auth.signIn(this.state.email, this.state.password);
+            // const user = await Auth.signIn(this.state.email, this.state.password);
             console.log("Hurray, I am successfully authenticated~!");
             
             const auth = await Auth.currentSession();
