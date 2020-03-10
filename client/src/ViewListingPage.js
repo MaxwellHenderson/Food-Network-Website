@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import InputField from "./component/input-field";
-import $ from "jquery";
+// import InputField from "./component/input-field";
+// import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 
@@ -66,7 +66,7 @@ class ListingPage extends Component {
                             <div id="purchase-form" className="border w-75 mx-auto py-2 bg-light" style={{zIndex: 1, position: 'relative', top: '-10vh'}}>
                                 <div className="row mt-1 mx-0 px-3 pb-2 align-content-between">
                                     <div className="column w-50">
-                                        <img src="/imgs/profile_default.jpg" className="rounded-circle" style={{height: '40px'}}></img>
+                                        <img src="/imgs/profile_default.jpg" className="rounded-circle" style={{height: '40px'}} alt="profile"></img>
                                         <div>John Doe</div>
                                     </div>
                                     <div className="column w-50 align-self-center">

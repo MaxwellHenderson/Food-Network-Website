@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import NewItemPage from './NewItemPage';
 import { NavLink } from 'react-router-dom';
 
 

@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import ListingModal from './ListingModal.js';
 import CardList from "../CardList.js";
-import NavBar from "./NavBar.js";
-import SideBar from "./SideBar.js";
-import SearchForm from "../component/search-form.jsx";
+// import NavBar from "./NavBar.js";
+// import SideBar from "./SideBar.js";
+// import SearchForm from "../component/search-form.jsx";
 import ListingPage from "../ViewListingPage.js";
 
 import $ from 'jquery';
 import { Route, NavLink } from 'react-router-dom';
+import aws4 from 'aws4';
+import { Auth } from 'aws-amplify';
 
 
 class MainPage extends Component {
@@ -44,32 +46,87 @@ class MainPage extends Component {
         this.getMeals();
     }
 
+    handleSortOptionChange = sortOption => {
+        this.setState({ selectedSortOption: sortOption });
+    };
+
+    sortMealByID = listings => {
+        return listings.sort((meal, otherMeal) =>
+            meal.mealID > otherMeal.mealID ? 1 : -1
+        );
+    };
+    
+    sortMealByName = listings => {
+        return listings.sort((meal, otherMeal) =>
+            meal.mealName.toLowerCase() > otherMeal.mealName.toLowerCase() ? 1 : -1
+        );
+    };
+    
+    sortMealByPrice = listings => {
+        return listings.sort((meal, otherMeal) =>
+            parseInt(meal.mealPrice) > parseInt(otherMeal.mealPrice) ? 1 : -1
+        );
+    };
+
+
+    // getMeals = async () => {
+    //     const url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
+    //     const http = new XMLHttpRequest();
+    //     http.open("get", url);
+    //     http.onreadystatechange = (e) => {
+    //         console.log(http.responsetext)
+    //     }
+
+    //     var that = this;
+    //     $.ajax({
+    //         url: url,
+    //         type: 'get',
+    //     }).then(meals => {
+    //         let filteredmeals = meals.filter(meal => {
+    //             return that.state.mealids.includes(meal.mealid);
+    //         });
+    //         that.setstate({ fooditems: filteredmeals })
+    //     })
+    // };
+
     getMeals = async () => {
-        const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
-        const Http = new XMLHttpRequest();
-        Http.open("GET", Url);
-        Http.onreadystatechange = (e) => {
-            console.log(Http.responseText)
-        }
+        const opts = {
+            method: "GET",
+            service: "execute-api",
+            region: "us-west-2",
+            path: "/listings",
+            url: "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/"
+        };
 
         var that = this;
+        const credentials = await Auth.currentCredentials();
+        const { accessKeyId, secretAccessKey, sessionToken } = credentials;
+        const request = aws4.sign(opts.url, {
+            accessKeyId,
+            secretAccessKey,
+            sessionToken
+        });
+
         $.ajax({
-            url: Url,
-            type: 'GET',
-        }).then(meals => {
-            let filteredMeals = meals.filter(meal => {
-                return that.state.mealIDs.includes(meal.mealID);
-            });
-            that.setState({ foodItems: filteredMeals })
+            url: opts.url,
+            headers: request.headers,
+            success: function(result){
+                that.setState({
+                    foodItems: that.state.selectedSortOption.sort(result)
+                })
+            },
+            error: function(error){
+                console.log(`Error ${error.responseText}`)
+            }
         })
     };
 
     getMealIDs = async () => {
         /* If input fields are empty, set to default values */
-        let city = "";
-        let rating =  "";
-        // const city = (this.cityInput.current.value != "") ? this.cityInput.current.value : "Renton";
-        // const rating = (this.ratingInput.current.value != "") ? this.ratingInput.current.value : "1";
+        // let city = "";
+        // let rating =  "";
+        const city = (this.cityInput.current.value != "") ? this.cityInput.current.value : "Renton";
+        const rating = (this.ratingInput.current.value != "") ? this.ratingInput.current.value : "1";
         // const url = "/users/filter?city=" + city + "&minRating=" + rating;
         // let request = new Request(url, {
         //   method: "GET",

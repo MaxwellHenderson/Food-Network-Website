@@ -1,4 +1,3 @@
-"use strict";
 import React, {Component} from 'react';
 
 class SideBar extends Component {
@@ -8,7 +7,7 @@ class SideBar extends Component {
             <div id="sidebar" class="sidebar" style={{width: '230px', 'margin-top': '0px', 'background-color':'#393D3F', height: '95vh', position: 'fixed', right: '0px'}}>
                 <div id="sidebar-header" class="py-3" style={{color: 'white', height: '130px', 'background-color': '#282A2C'}} >
                     <div id="user_info" class="row ml-0 mr-0">
-                        <img src="imgs/profile_default.jpg" class="rounded-circle ml-2 my-1 column" style={{height: '40px'}} alt="profile picture"/>
+                        <img src="imgs/profile_default.jpg" class="rounded-circle ml-2 my-1 column" style={{height: '40px'}} alt="profile"/>
                         <div class="column" id="" style={{'font-size': '16px'}}>
                             <div id="username" class="row ml-3 mr-0">GermanSausageMan</div>
                             <div  id="location" class="row ml-3 mr-0" style={{'font-size': '14px'}}>

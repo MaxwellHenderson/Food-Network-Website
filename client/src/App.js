@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from "react";
 import NewItemPage from "./components/NewItemPage.js";
 import Login from "./components/Login/Login.js";
@@ -17,11 +15,11 @@ import Amplify, { Auth } from 'aws-amplify';
 // for other configuration options.
 Amplify.configure({
   Auth: {
-    // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-    // identityPoolId: 'us-west-2_89J8r5C88',
-
-    // REQUIRED - Amazon Cognito Region
-    region: 'us-west-2',
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      identityPoolId: 'us-west-2:4809a3a5-d7b3-436a-9030-4ec877205e7a',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
 
     // OPTIONAL - Amazon Cognito User Pool ID
     userPoolId: 'us-west-2_89J8r5C88',
@@ -32,7 +30,7 @@ Amplify.configure({
 });
 
 // You can get the current config object
-const currentConfig = Auth.configure();
+// const currentConfig = Auth.configure();
 // let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
 
 class App extends Component {
@@ -58,7 +56,7 @@ class App extends Component {
         );
       } else {
         return (
-          <Login loginFunc={this.logIn.bind(this)} />
+          <Login auth={Auth} loginFunc={this.logIn.bind(this)} />
         );
       }
     }
@@ -75,14 +73,12 @@ class App extends Component {
   }
 
 
-
-
-
-  handleAddMeal = async () => {
-    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
-
-    const _data = {
-      mealID: 2800,
+ 
+  handleAddMeal = async () => { 
+    const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+    
+    const _data={
+      mealID:2800,
       mealDescription: NewItemPage.state.foodDescription,
       mealImagePath: "google.com",
       mealName: NewItemPage.state.mealName,
@@ -96,7 +92,8 @@ class App extends Component {
       headers: {
         "accept": "application/json"
       },
-      data: JSON.stringify(_data), dataType: "json",
+      data: JSON.stringify(_data), 
+      // dataType: "json",
       contentType: 'application/json; charset=utf-8',
       success: function (result) {
         console.log(result);
@@ -108,9 +105,7 @@ class App extends Component {
     return false;
   }
 
-  handleSortOptionChange = sortOption => {
-    this.setState({ selectedSortOption: sortOption });
-  };
+ 
 
   /* Fetches our route from the Express server */
   callBackendAPI = async request => {
@@ -123,23 +118,7 @@ class App extends Component {
     return body;
   };
 
-  sortMealByID = listings => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealID > otherMeal.mealID ? 1 : -1
-    );
-  };
 
-  sortMealByName = listings => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealName.toLowerCase() > otherMeal.mealName.toLowerCase() ? 1 : -1
-    );
-  };
-
-  sortMealByPrice = listings => {
-    return listings.sort((meal, otherMeal) =>
-      parseInt(meal.mealPrice) > parseInt(otherMeal.mealPrice) ? 1 : -1
-    );
-  };
 }
 
 export default App;

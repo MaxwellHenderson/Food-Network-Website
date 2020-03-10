@@ -139,7 +139,7 @@ class NewItemPage extends Component {
 
     handleAddMeal = async () => {
         
-        var fileUrl = this.addPhoto();
+        // var fileUrl = this.addPhoto();
         
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/listings";
@@ -164,7 +164,7 @@ class NewItemPage extends Component {
                 accept: "application/json"
             },
             data: JSON.stringify(_data),
-            dataType: "json",
+            // dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (result) {
                 console.log(result);
