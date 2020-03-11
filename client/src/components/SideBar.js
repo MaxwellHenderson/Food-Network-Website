@@ -4,7 +4,7 @@ class SideBar extends Component {
 
     render() {
         return (
-            <div id="sidebar" className="sidebar" style={{width: '230px', 'marginTop': '0px', 'backgroundColor':'#393D3F', height: '95vh', position: 'fixed', right: '0px'}}>
+            <div id="sidebar" className="sidebar collapse" style={{width: '230px', 'marginTop': '0px', 'backgroundColor':'#393D3F', height: '95vh', position: 'fixed', right: '0px'}}>
                 <div id="sidebar-header" className="py-3" style={{color: 'white', height: '130px', 'backgroundColor': '#282A2C'}} >
                     <div id="user_info" className="row ml-0 mr-0">
                         <img src="imgs/profile_default.jpg" className="rounded-circle ml-2 my-1 column" style={{height: '40px'}} alt="profile"/>

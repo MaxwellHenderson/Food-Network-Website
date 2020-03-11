@@ -13,8 +13,12 @@ class SearchForm extends Component {
       onSelect,
       onClick
     } = this.props;
+
     return (
-      <div className="mx-auto" style={{'zIndex' : 10333, 'position' : 'absolute', 'left': '33%'}}>
+      <div id="searchbar" className="mx-auto p-3 border border-secondary rounded collapse" 
+      // <div id="searchbar" className="mx-auto p-3 border border-secondary rounded" 
+        style={{'zIndex' : 10333, 'position' : 'absolute', 'left': '33%',
+                 'backgroundColor': 'white'}}>
           <Form>
             <Form.Group>
               <Form.Control placeholder="Meal Name" ref={mealNameInput} />
@@ -30,14 +34,18 @@ class SearchForm extends Component {
               </Row>
             </Form.Group>
           </Form>
-          <DropdownButton id="dropdown-basic-button" title={selectedCity} onSelect={(event) => onSelect(event)}>
-            {cities.map(city => (
-              <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
-            ))}
-          </DropdownButton>
-          <Button variant="primary" type="button" onClick={() => onClick()}>
-            Search
-          </Button>
+          <Row className="px-3">
+            <DropdownButton id="dropdown-basic-button" className="mx-3"
+                  title={selectedCity} onSelect={(event) => onSelect(event)}>
+              {cities.map(city => (
+                <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
+              ))}
+            </DropdownButton>
+            <Button className="mx-3" variant="primary" type="button" onClick={() => onClick()}
+                data-toggle="collapse" data-target="#searchbar">
+              Search
+            </Button>
+          </Row>
         </div>
     );
   }

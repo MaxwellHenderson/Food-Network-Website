@@ -8,7 +8,7 @@ import NewItemPage from './NewItemPage.js';
 
 import React, { Component } from "react";
 import $ from 'jquery';
-import { Router, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
 
 class MainPage extends Component {
   constructor(props) {
@@ -191,7 +191,6 @@ class MainPage extends Component {
     }).promise();
   };
 
-<<<<<<< HEAD
     setCurrentMeal(id) {
         let foodArr = this.state.foodItems;
         let meal = foodArr.find((item) => { return item.mealID === id });
@@ -214,9 +213,9 @@ class MainPage extends Component {
                 <SideBar />
                 <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
                 <ListingModal meal={this.state.currMeal} />
-                <NavLink to='/'>
+                {/* <NavLink to='/'>
                     <button onClick={this.props.logOutFunc}>Log Out</button>
-                </NavLink>
+                </NavLink> */}
             </React.Fragment>
         );
     }
@@ -229,68 +228,19 @@ class MainPage extends Component {
         }
 
         let renderNewItem = () => {
-          console.log("newItem");
           return (
             <NewItemPage />
           );
         }
         
         return (
-            <React.Fragment>
-              <Router>
-
-                <Route exact path = '/' component={this.renderMain} />
-                {/* <Route path = '/listing' component={renderListing} /> */}
-                <Route path = '/newItem' render={renderNewItem} />
-
-              </Router>
-            </React.Fragment>
+            <Router>
+                <Route exact path='/' render={this.renderMain} />
+                <Route path = '/listing' component={renderListing} />
+                <Route path='/newItem' render={renderNewItem} />
+            </Router>
         );
-=======
-  setCurrentMeal(id) {
-    let foodArr = this.state.foodItems;
-    let meal = foodArr.find((item) => { return item.mealID === id });
-    this.setState({ currMeal: meal });
-    console.log(this.state.mealIDs);
-  }
-
-  renderMain = () => {
-    return (
-      <React.Fragment>
-        {/* <NavBar /> */}
-        {/* <SideBar /> */}
-        <SearchForm
-          mealNameInput={this.mealNameInput}
-          minPriceInput={this.minPriceInput}
-          maxPriceInput={this.maxPriceInput}
-          cities={this.cities}
-          selectedCity={this.state.selectedCity}
-          onSelect={this.handleSelectCity}
-          onClick={this.getMeals} />
-        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
-        <ListingModal meal={this.state.currMeal} />
-        <NavLink to='/'>
-          <button onClick={this.props.logOutFunc}>Log Out</button>
-        </NavLink>
-      </React.Fragment>
-    );
-  }
-
-  render() {
-    let renderListing = () => {
-      return (
-        <ListingPage meal={this.state.currMeal} />
-      );
->>>>>>> 161182a97fef8dcf0824554c9de9301a179e4aa0
     }
-
-    return (
-      <React.Fragment>
-        <Route exact path='/' component={this.renderMain} />
-        <Route path='/listing' component={renderListing} />
-      </React.Fragment>
-    );
-  }
 }
 
 export default MainPage;

@@ -66,6 +66,7 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={renderRoot} />
+            <Route path='/newItem' component={NewItemPage} />
           </Switch>
         </Router>
       </div>
@@ -92,7 +93,8 @@ class App extends Component {
       headers: {
         "accept": "application/json"
       },
-      data: JSON.stringify(_data), dataType: "json",
+      data: JSON.stringify(_data), 
+      // dataType: "json",
       contentType: 'application/json; charset=utf-8',
       success: function (result) {
         console.log(result);

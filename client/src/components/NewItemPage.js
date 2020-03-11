@@ -54,7 +54,7 @@ class NewItemPage extends Component {
 
     render() {
         return (
-            <div class=" p-4">
+            <div class="mt-2 p-4">
                 <NavBar></NavBar>
                 {/* <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
