@@ -14,31 +14,31 @@ class SearchForm extends Component {
       onClick
     } = this.props;
     return (
-      <React.Fragment>
-        <Form>
-          <Form.Group>
-            <Form.Control placeholder="Meal Name" ref={mealNameInput} />
-          </Form.Group>
-          <Form.Group>
-            <Row>
-              <Col>
-                <Form.Control placeholder="Minimum Price" ref={minPriceInput} />
-              </Col>
-              <Col>
-                <Form.Control placeholder="Maximum Price" ref={maxPriceInput} />
-              </Col>
-            </Row>
-          </Form.Group>
-        </Form>
-        <DropdownButton id="dropdown-basic-button" title={selectedCity} onSelect={(event) => onSelect(event)}>
-          {cities.map(city => (
-            <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
-          ))}
-        </DropdownButton>
-        <Button variant="primary" type="button" onClick={() => onClick()}>
-          Search
-        </Button>
-      </React.Fragment>
+      <div className="mx-auto" style={{'zIndex' : 10333, 'position' : 'absolute', 'left': '33%'}}>
+          <Form>
+            <Form.Group>
+              <Form.Control placeholder="Meal Name" ref={mealNameInput} />
+            </Form.Group>
+            <Form.Group>
+              <Row>
+                <Col>
+                  <Form.Control placeholder="Minimum Price" ref={minPriceInput} />
+                </Col>
+                <Col>
+                  <Form.Control placeholder="Maximum Price" ref={maxPriceInput} />
+                </Col>
+              </Row>
+            </Form.Group>
+          </Form>
+          <DropdownButton id="dropdown-basic-button" title={selectedCity} onSelect={(event) => onSelect(event)}>
+            {cities.map(city => (
+              <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
+            ))}
+          </DropdownButton>
+          <Button variant="primary" type="button" onClick={() => onClick()}>
+            Search
+          </Button>
+        </div>
     );
   }
 }

@@ -4,10 +4,11 @@ import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
 import SearchForm from "../component/search-form.jsx";
 import ListingPage from "../ViewListingPage.js";
+import NewItemPage from './NewItemPage.js';
 
 import React, {Component} from "react";
 import $ from 'jquery';
-import { Route, NavLink } from 'react-router-dom';
+import { Router, Switch, Route, NavLink } from 'react-router-dom';
 
 class MainPage extends Component {
     constructor(props) {
@@ -147,7 +148,7 @@ class MainPage extends Component {
       url: Url,
       type: 'GET',
       success: function (result) {
-        console.log(result);
+        // console.log(result);
       },
       error: function (error) {
         console.log(`Error ${error}`)
@@ -162,7 +163,6 @@ class MainPage extends Component {
   /* Returns a promise of array of meal objects that meet certain criteria */
   filterMeals = async (mealIDs) => {
     /* Construct query string */
-    console.log(this.mealNameInput.current.value);
     const QueryString = "?mealName=" + this.mealNameInput.current.value
       + "&minPrice=" + this.minPriceInput.current.value
       + "&maxPrice=" + this.maxPriceInput.current.value;
@@ -179,7 +179,7 @@ class MainPage extends Component {
       url: Url,
       type: 'GET',
       success: function (result) {
-        console.log(result);
+        // console.log(result);
       },
       error: function (error) {
         console.log(`Error ${error}`)
@@ -201,8 +201,6 @@ class MainPage extends Component {
     renderMain = () => {
         return (
             <React.Fragment>
-                <NavBar />
-                <SideBar />
                 <SearchForm
                     mealNameInput={this.mealNameInput}
                     minPriceInput={this.minPriceInput}
@@ -211,6 +209,8 @@ class MainPage extends Component {
                     selectedCity={this.state.selectedCity}
                     onSelect={this.handleSelectCity}
                     onClick={this.getMeals} />
+                <NavBar /> 
+                <SideBar />
                 <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
                 <ListingModal meal={this.state.currMeal} />
                 <NavLink to='/'>
@@ -227,10 +227,22 @@ class MainPage extends Component {
             );
         }
 
+        let renderNewItem = () => {
+          console.log("newItem");
+          return (
+            <NewItemPage />
+          );
+        }
+        
         return (
             <React.Fragment>
+              <Router>
+
                 <Route exact path = '/' component={this.renderMain} />
-                <Route path = '/listing' component={renderListing} />
+                {/* <Route path = '/listing' component={renderListing} /> */}
+                <Route path = '/newItem' render={renderNewItem} />
+
+              </Router>
             </React.Fragment>
         );
     }

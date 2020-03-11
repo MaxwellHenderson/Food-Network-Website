@@ -48,6 +48,10 @@ class NewItemPage extends Component {
 //
     }
 
+    componentDidMount() {
+        console.log("MOUNT");
+    }
+
     render() {
         return (
             <div class=" p-4">
