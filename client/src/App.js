@@ -34,29 +34,15 @@ Amplify.configure({
 // let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
 
 class App extends Component {
-  logIn(auth) {
-    this.setState({
-      currentAuth: auth
-    });
-    window.location.href = "/";
-  }
-
-  logOut() {
-    localStorage.removeItem("token");
-    console.log("LOG OUT");
-    window.location.reload();
-  }
-
-
   render() {
     let renderRoot = () => {
-      if (localStorage.getItem("token") !== null) {
+      if (localStorage.getItem("token")) {
         return (
-          <MainPage logOutFunc={this.logOut.bind(this)}/>
+          <MainPage />
         );
       } else {
         return (
-          <Login auth={Auth} loginFunc={this.logIn.bind(this)} />
+          <Login auth={Auth} />
         );
       }
     }

@@ -14,7 +14,6 @@ class SignInForm extends Component{
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.handleGetLoginEmail = this.handleGetLoginEmail.bind(this);   //obsolete 
     }
 
 
@@ -43,14 +42,17 @@ class SignInForm extends Component{
         //         //prompt user to register
 
         try {
-            // const user = await Auth.signIn(this.state.email, this.state.password);
-            console.log("Hurray, I am successfully authenticated~!");
+            const user = await Auth.signIn(this.state.email, this.state.password);
+            console.log("Auth");
             
             const auth = await Auth.currentSession();
             // const auth = await Auth.currentAuthenticatedUser();
             console.log(auth.idToken.jwtToken);
+            console.log(this.state.email);
             localStorage.setItem("token", auth.idToken.jwtToken);
-            this.props.loginFunc(auth);
+            localStorage.setItem("email", this.state.email);
+
+            window.location.href="/";
         } catch(error) {
             console.log(error);
             // TODO: prompt user to try again
@@ -90,7 +92,7 @@ class SignInForm extends Component{
                     </div>
 
                     <div className="FormField">
-                        <button className="FormField__Button mr-20"> Sign In</button>
+                        <button className="FormField__Button mr-20"> Sign In </button>
                         <Link to="/"className="FormField__Link">Create an account</Link>
                     </div>
                 </form>

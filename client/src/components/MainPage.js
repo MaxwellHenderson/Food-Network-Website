@@ -2,8 +2,8 @@ import ListingModal from './ListingModal.js';
 import CardList from "../CardList.js";
 import NavBar from "./NavBar.js";
 import SideBar from "./SideBar.js";
-import SearchForm from "../component/search-form.jsx";
-import ListingPage from "../ViewListingPage.js";
+import SearchForm from "../components/search-form.jsx";
+import ListingPage from "../components/ViewListingPage.js";
 import NewItemPage from './NewItemPage.js';
 
 import React, { Component } from "react";
@@ -197,6 +197,12 @@ class MainPage extends Component {
         this.setState({ currMeal: meal });
         console.log(this.state.mealIDs);
     }
+
+    logOut() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      window.location.reload();
+    }
     
     renderMain = () => {
         return (
@@ -213,9 +219,7 @@ class MainPage extends Component {
                 <SideBar />
                 <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
                 <ListingModal meal={this.state.currMeal} />
-                {/* <NavLink to='/'>
-                    <button onClick={this.props.logOutFunc}>Log Out</button>
-                </NavLink> */}
+                <button onClick={this.logOut}>Log Out</button>
             </React.Fragment>
         );
     }
@@ -226,18 +230,12 @@ class MainPage extends Component {
                 <ListingPage meal={this.state.currMeal} />
             );
         }
-
-        let renderNewItem = () => {
-          return (
-            <NewItemPage />
-          );
-        }
         
         return (
             <Router>
                 <Route exact path='/' render={this.renderMain} />
                 <Route path = '/listing' component={renderListing} />
-                <Route path='/newItem' render={renderNewItem} />
+                <Route path='/newItem' component={NewItemPage} />
             </Router>
         );
     }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import InputField from "../component/input-field";
+import InputField from "./input-field";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/style.css";
 import NavBar from "./NavBar"
@@ -31,8 +31,6 @@ const s3 = new AWS.S3({
 });
 
 class NewItemPage extends Component {
-    
-    
     constructor(props) {
         super(props);
 
