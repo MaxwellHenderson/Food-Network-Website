@@ -1,7 +1,7 @@
 'use strict';
 
 import React, { Component, useState } from "react";
-import NewItemPage from "./NewItemPage.js";
+import NewItemPage from "./components/NewItemPage.js";
 import ListingPage from './ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
