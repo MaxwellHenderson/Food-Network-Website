@@ -5,15 +5,7 @@ import SignInForm from "./SignInForm";
 import './App.css';
 
 class Login extends Component {
-
-
   render() {
-   let renderLogin = () => {
-      return (
-        <SignInForm loginFunc={this.props.loginFunc.bind(this)}/>
-      );
-    }
-    
    return (
         <Router>
           <div className="Appp">
@@ -40,9 +32,7 @@ class Login extends Component {
               </div>
 
               <Route exact path="/" component={SignUpForm}/>
-              {/* <Route path="/sign-in" component={SignInForm}/> */}
-              <Route path="/sign-in" render={renderLogin}/>
-
+              <Route path="/sign-in" component={SignInForm}/>
             </div>
           </div>
         </Router>
