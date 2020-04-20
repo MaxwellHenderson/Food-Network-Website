@@ -2,7 +2,7 @@
 
 import React, { Component, useState } from "react";
 import NewItemPage from "./components/NewItemPage.js";
-import ListingPage from './ViewListingPage.js';
+import ListingPage from './components/ViewListingPage.js';
 import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";

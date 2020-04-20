@@ -5,6 +5,7 @@ import "../styles/style.css";
 import NavBar from "./NavBar"
 import AWS from 'aws-sdk';
 import $ from 'jquery';
+import { v4 as uuidv4 } from 'uuid';
 
 // var AWS = require("aws-sdk");
 
@@ -141,10 +142,13 @@ class NewItemPage extends Component {
 
     handleAddMeal = async () => {
         
+        var testID = uuidv4();
+        console.log(testID);
+
         var fileUrl = this.addPhoto();
         
         const Url =
-            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/listings";
+            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
             mealID: 7384,
             mealDescription: this.mealDescriptionInput.current.value,
@@ -157,6 +161,8 @@ class NewItemPage extends Component {
             mealAllergy: this.mealAllergyInput.current.value
         };
 
+
+        console.log(JSON.stringify(_data));
         //Puts the meal information into the database
         $.ajax({
             url: Url,
