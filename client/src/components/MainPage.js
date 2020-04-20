@@ -8,7 +8,7 @@ import NewItemPage from './NewItemPage.js';
 
 import React, { Component } from "react";
 import $ from 'jquery';
-import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class MainPage extends Component {
   constructor(props) {
@@ -38,7 +38,8 @@ class MainPage extends Component {
         mealPrice: '',
         mealDescription: '',
         mealImagePath: '',
-        imgAlt: ''
+        imgAlt: '',
+        tags: [] 
       }
     };
   }
@@ -49,6 +50,7 @@ class MainPage extends Component {
 
   componentDidUpdate() {
     this.renderMain();
+    console.log(this.state.currMeal);
   }
 
 
@@ -191,54 +193,53 @@ class MainPage extends Component {
     }).promise();
   };
 
-    setCurrentMeal(id) {
-        let foodArr = this.state.foodItems;
-        let meal = foodArr.find((item) => { return item.mealID === id });
-        this.setState({ currMeal: meal });
-        console.log(this.state.mealIDs);
-    }
+  setCurrentMeal(id) {
+      let foodArr = this.state.foodItems;
+      let meal = foodArr.find((item) => { return item.mealID === id });
+      this.setState({ currMeal: meal });
+  }
 
-    logOut() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("email");
-      window.location.reload();
-    }
-    
-    renderMain = () => {
-        return (
-            <React.Fragment>
-                <SearchForm
-                    mealNameInput={this.mealNameInput}
-                    minPriceInput={this.minPriceInput}
-                    maxPriceInput={this.maxPriceInput}
-                    cities={this.cities}
-                    selectedCity={this.state.selectedCity}
-                    onSelect={this.handleSelectCity}
-                    onClick={this.getMeals} />
-                <NavBar /> 
-                <SideBar />
-                <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
-                <ListingModal meal={this.state.currMeal} />
-                <button onClick={this.logOut}>Log Out</button>
-            </React.Fragment>
-        );
-    }
+  logOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    window.location.reload();
+  }
+  
+  renderMain = () => {
+      return (
+          <React.Fragment>
+              <SearchForm
+                  mealNameInput={this.mealNameInput}
+                  minPriceInput={this.minPriceInput}
+                  maxPriceInput={this.maxPriceInput}
+                  cities={this.cities}
+                  selectedCity={this.state.selectedCity}
+                  onSelect={this.handleSelectCity}
+                  onClick={this.getMeals} />
+              <NavBar /> 
+              <SideBar />
+              <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
+              <ListingModal meal={this.state.currMeal} />
+              <button onClick={this.logOut}>Log Out</button>
+          </React.Fragment>
+      );
+  }
 
-    render() {
-        let renderListing = () => {
-            return (
-                <ListingPage meal={this.state.currMeal} />
-            );
-        }
-        
-        return (
-            <Router>
-                <Route exact path='/' render={this.renderMain} />
-                <Route path = '/listing' component={renderListing} />
-                <Route path='/newItem' component={NewItemPage} />
-            </Router>
-        );
-    }
+  render() {
+      let renderListing = () => {
+          return (
+              <ListingPage meal={this.state.currMeal} />
+          );
+      }
+      
+      return (
+          <Router>
+              <Route exact path='/' render={this.renderMain} />
+              <Route path = '/listing' component={renderListing} />
+              <Route path='/newItem' component={NewItemPage} />
+          </Router>
+      );
+  }
 }
 
 export default MainPage;

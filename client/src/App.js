@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from "react";
 import NewItemPage from "./components/NewItemPage.js";
 import Login from "./components/Login/Login.js";
