@@ -1,22 +1,17 @@
-'use strict';
-
-import React, { Component, useState } from "react";
-import NewItemPage from "./NewItemPage.js";
-import ListingPage from './ViewListingPage.js';
-import ListingModal from './components/ListingModal.js';
-import NavBar from "./components/NavBar.js";
-import SideBar from "./SideBar.js";
-import CardList from "./CardList.js";
+import React, { Component } from "react";
+import NewItemPage from "./components/NewItemPage.js";
 import Login from "./components/Login/Login.js";
+<<<<<<< HEAD
 import SearchForm from "./component/search-form.jsx"
+=======
+import MainPage from "./components/MainPage.js";
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
 
 import $ from 'jquery';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/style.css";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-// import { List } from "react-bootstrap/lib/Media";
-
 import Amplify, { Auth } from 'aws-amplify';
 
 // Manual Amplify configuration
@@ -24,6 +19,7 @@ import Amplify, { Auth } from 'aws-amplify';
 // for other configuration options.
 Amplify.configure({
   Auth: {
+<<<<<<< HEAD
     // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
     // identityPoolId: 'us-west-2_89J8r5C88',
 
@@ -33,17 +29,28 @@ Amplify.configure({
     // OPTIONAL - Amazon Cognito User Pool ID
     userPoolId: 'us-west-2_89J8r5C88',
 
+=======
+      // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
+      identityPoolId: 'us-west-2:4809a3a5-d7b3-436a-9030-4ec877205e7a',
+      
+      // REQUIRED - Amazon Cognito Region
+      region: 'us-west-2',
+
+    // OPTIONAL - Amazon Cognito User Pool ID
+    userPoolId: 'us-west-2_89J8r5C88',
+
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
     // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
     userPoolWebClientId: '6a9fkc41bp4j2r5ihu3vibm5a2',
   }
 });
 
 // You can get the current config object
-const currentConfig = Auth.configure();
+// const currentConfig = Auth.configure();
 // let auth = new AmazonCognitoIdentity(CognitoAuth(currentConfig))
 
-
 class App extends Component {
+<<<<<<< HEAD
   constructor(props) {
     super(props);
 
@@ -143,6 +150,17 @@ class App extends Component {
       } else {
         return (
           <Login loginFunc={this.logIn.bind(this)} />
+=======
+  render() {
+    let renderRoot = () => {
+      if (localStorage.getItem("token")) {
+        return (
+          <MainPage />
+        );
+      } else {
+        return (
+          <Login auth={Auth} />
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
         );
       }
     }
@@ -152,12 +170,13 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path='/' component={renderRoot} />
-            <Route path='/listing' render={renderIndividualListing} />
+            <Route path='/newItem' component={NewItemPage} />
           </Switch>
         </Router>
       </div>
     );
   }
+<<<<<<< HEAD
 
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
@@ -232,6 +251,11 @@ class App extends Component {
   };
 
 
+=======
+
+
+ 
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
   handleAddMeal = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
 
@@ -250,7 +274,12 @@ class App extends Component {
       headers: {
         "accept": "application/json"
       },
+<<<<<<< HEAD
       data: JSON.stringify(_data), dataType: "json",
+=======
+      data: JSON.stringify(_data), 
+      // dataType: "json",
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
       contentType: 'application/json; charset=utf-8',
       success: function (result) {
         console.log(result);
@@ -262,30 +291,26 @@ class App extends Component {
     return false;
   }
 
+<<<<<<< HEAD
   handleSelectCity = city => {
     this.setState({ selectedCity: city });
   }
 
   handleSortOptionChange = sortOption => {
     this.setState({ selectedSortOption: sortOption });
-  };
+=======
+ 
 
-  sortMealByID = listings => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealID > otherMeal.mealID ? 1 : -1
-    );
-  };
+  /* Fetches our route from the Express server */
+  callBackendAPI = async request => {
+    const response = await fetch(request);
+    const body = await response.json();
 
-  sortMealByName = listings => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealName.toLowerCase() > otherMeal.mealName.toLowerCase() ? 1 : -1
-    );
-  };
-
-  sortMealByPrice = listings => {
-    return listings.sort((meal, otherMeal) =>
-      parseInt(meal.mealPrice) > parseInt(otherMeal.mealPrice) ? 1 : -1
-    );
+    if (response.status !== 200) {
+      throw Error(body.message);
+    }
+    return body;
+>>>>>>> ad92a64ea17727293ce0e700fd8c8c22cd7716f7
   };
 }
 
