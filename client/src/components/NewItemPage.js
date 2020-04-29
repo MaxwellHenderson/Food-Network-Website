@@ -118,6 +118,7 @@ class NewItemPage extends Component {
         );
     }
 
+
     addPhoto = async() => {
         var files = document.getElementById("photoFile").files;
         if (!files.length){
@@ -147,6 +148,9 @@ class NewItemPage extends Component {
 
         var fileUrl = this.addPhoto();
         
+        var email = localStorage.getItem("email");
+        console.log(email);
+
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
@@ -158,7 +162,9 @@ class NewItemPage extends Component {
             mealQuantity: this.mealQuantityInput.current.value,
             mealTags: this.mealTagsInput.current.value,
             mealIngredients: this.mealIngredientsInput.current.value,
-            mealAllergy: this.mealAllergyInput.current.value
+            mealAllergy: this.mealAllergyInput.current.value,
+            // userEmail: "jerryzhu34@gmail.com"
+            userEmail: localStorage.getItem("email")
         };
 
 
