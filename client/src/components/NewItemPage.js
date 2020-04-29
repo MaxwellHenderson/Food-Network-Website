@@ -150,7 +150,7 @@ class NewItemPage extends Component {
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
-            mealID: 7384,
+            mealID: testID,
             mealDescription: this.mealDescriptionInput.current.value,
             mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
             mealName: this.mealNameInput.current.value,
@@ -169,8 +169,9 @@ class NewItemPage extends Component {
             type: "POST",
             dataType: "jsonp",
             headers: {
-                accept: "application/json"
+                accept: "application/json",
             },
+            crossDomain: true,
             data: JSON.stringify(_data),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
