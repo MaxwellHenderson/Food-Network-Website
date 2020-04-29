@@ -1,5 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import NewItemPage from "./components/NewItemPage.js";
+import ListingPage from './components/ViewListingPage.js';
+import ListingModal from './components/ListingModal.js';
+import NavBar from "./components/NavBar.js";
+import SideBar from "./SideBar.js";
+import CardList from "./CardList.js";
 import Login from "./components/Login/Login.js";
 import MainPage from "./components/MainPage.js";
 
@@ -9,6 +14,8 @@ import "./styles/style.css";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Amplify, { Auth } from 'aws-amplify';
+
+import { loadStripe } from '@stripe/stripe-js';
 
 // Manual Amplify configuration
 // See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup

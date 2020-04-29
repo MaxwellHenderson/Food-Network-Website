@@ -161,13 +161,13 @@ class NewItemPage extends Component {
         $.ajax({
             url: Url,
             type: "POST",
-            dataType: "jsonp",
-            headers: {
-                accept: "application/json"
-            },
+            // dataType: "jsonp",
+            // headers: {
+            //     accept: "application/json"
+            // },
             data: JSON.stringify(_data),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            // contentType: "application/json; charset=utf-8",
             success: function (result) {
                 console.log(result);
             },
