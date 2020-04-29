@@ -17,7 +17,8 @@ class MainPage extends Component {
     this.mealNameInput = React.createRef();
     this.minPriceInput = React.createRef();
     this.maxPriceInput = React.createRef();
-    this.ratingInput = React.createRef();
+    this.minRatingInput = React.createRef();
+    this.mealTagInput = React.createRef();
     this.cityInput = React.createRef();
     this.cities = ["All", "Renton", "Issaquah", "Redmond"];
 
@@ -134,7 +135,7 @@ class MainPage extends Component {
   /* Returns a promise of mealIDs that are in a specified city */
   getMealIDs = async () => {
     /* Construct query string */
-    const QueryString = "?city=" + this.state.selectedCity;
+    const QueryString = "?city=" + this.state.selectedCity + "&minRating=" + this.minRatingInput.current.value;
 
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" + QueryString;
     const Http = new XMLHttpRequest();
@@ -165,7 +166,8 @@ class MainPage extends Component {
     /* Construct query string */
     const QueryString = "?mealName=" + this.mealNameInput.current.value
       + "&minPrice=" + this.minPriceInput.current.value
-      + "&maxPrice=" + this.maxPriceInput.current.value;
+      + "&maxPrice=" + this.maxPriceInput.current.value
+      + "&mealTag=" + this.mealTagInput.current.value;
 
     /* Using filterMeals Lambda function */
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" + QueryString;
@@ -191,54 +193,56 @@ class MainPage extends Component {
     }).promise();
   };
 
-    setCurrentMeal(id) {
-        let foodArr = this.state.foodItems;
-        let meal = foodArr.find((item) => { return item.mealID === id });
-        this.setState({ currMeal: meal });
-        console.log(this.state.mealIDs);
+  setCurrentMeal(id) {
+    let foodArr = this.state.foodItems;
+    let meal = foodArr.find((item) => { return item.mealID === id });
+    this.setState({ currMeal: meal });
+    console.log(this.state.mealIDs);
+  }
+
+  logOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    window.location.reload();
+  }
+
+  renderMain = () => {
+    return (
+      <React.Fragment>
+        <SearchForm
+          mealNameInput={this.mealNameInput}
+          minPriceInput={this.minPriceInput}
+          maxPriceInput={this.maxPriceInput}
+          minRatingInput={this.minRatingInput}
+          mealTagInput={this.mealTagInput}
+          cities={this.cities}
+          selectedCity={this.state.selectedCity}
+          onSelect={this.handleSelectCity}
+          onClick={this.getMeals} />
+        <NavBar />
+        <SideBar />
+        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
+        <ListingModal meal={this.state.currMeal} />
+        <button onClick={this.logOut}>Log Out</button>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    let renderListing = () => {
+      return (
+        <ListingPage meal={this.state.currMeal} />
+      );
     }
 
-    logOut() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("email");
-      window.location.reload();
-    }
-    
-    renderMain = () => {
-        return (
-            <React.Fragment>
-                <SearchForm
-                    mealNameInput={this.mealNameInput}
-                    minPriceInput={this.minPriceInput}
-                    maxPriceInput={this.maxPriceInput}
-                    cities={this.cities}
-                    selectedCity={this.state.selectedCity}
-                    onSelect={this.handleSelectCity}
-                    onClick={this.getMeals} />
-                <NavBar /> 
-                <SideBar />
-                <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
-                <ListingModal meal={this.state.currMeal} />
-                <button onClick={this.logOut}>Log Out</button>
-            </React.Fragment>
-        );
-    }
-
-    render() {
-        let renderListing = () => {
-            return (
-                <ListingPage meal={this.state.currMeal} />
-            );
-        }
-        
-        return (
-            <Router>
-                <Route exact path='/' render={this.renderMain} />
-                <Route path = '/listing' component={renderListing} />
-                <Route path='/newItem' component={NewItemPage} />
-            </Router>
-        );
-    }
+    return (
+      <Router>
+        <Route exact path='/' render={this.renderMain} />
+        <Route path='/listing' component={renderListing} />
+        <Route path='/newItem' component={NewItemPage} />
+      </Router>
+    );
+  }
 }
 
 export default MainPage;

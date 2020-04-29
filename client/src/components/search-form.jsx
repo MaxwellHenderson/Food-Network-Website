@@ -8,6 +8,8 @@ class SearchForm extends Component {
       mealNameInput,
       minPriceInput,
       maxPriceInput,
+      minRatingInput,
+      mealTagInput,
       cities,
       selectedCity,
       onSelect,
@@ -15,38 +17,46 @@ class SearchForm extends Component {
     } = this.props;
 
     return (
-      <div id="searchbar" className="mx-auto p-3 border border-secondary rounded collapse" 
-      // <div id="searchbar" className="mx-auto p-3 border border-secondary rounded" 
-        style={{'zIndex' : 10333, 'position' : 'absolute', 'left': '33%',
-                 'backgroundColor': 'white'}}>
-          <Form>
-            <Form.Group>
-              <Form.Control placeholder="Meal Name" ref={mealNameInput} />
-            </Form.Group>
-            <Form.Group>
-              <Row>
-                <Col>
-                  <Form.Control placeholder="Minimum Price" ref={minPriceInput} />
-                </Col>
-                <Col>
-                  <Form.Control placeholder="Maximum Price" ref={maxPriceInput} />
-                </Col>
-              </Row>
-            </Form.Group>
-          </Form>
-          <Row className="px-3">
-            <DropdownButton id="dropdown-basic-button" className="mx-3"
-                  title={selectedCity} onSelect={(event) => onSelect(event)}>
-              {cities.map(city => (
-                <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
-              ))}
-            </DropdownButton>
-            <Button className="mx-3" variant="primary" type="button" onClick={() => onClick()}
-                data-toggle="collapse" data-target="#searchbar">
-              Search
+      <div id="searchbar" className="mx-auto p-3 border border-secondary rounded collapse"
+        // <div id="searchbar" className="mx-auto p-3 border border-secondary rounded" 
+        style={{
+          'zIndex': 10333, 'position': 'absolute', 'left': '33%',
+          'backgroundColor': 'white'
+        }}>
+        <Form>
+          <Form.Group>
+            <Form.Control placeholder="Meal Name" ref={mealNameInput} />
+          </Form.Group>
+          <Form.Group>
+            <Row>
+              <Col>
+                <Form.Control placeholder="Minimum Price" ref={minPriceInput} />
+              </Col>
+              <Col>
+                <Form.Control placeholder="Maximum Price" ref={maxPriceInput} />
+              </Col>
+            </Row>
+          </Form.Group>
+          <Form.Group>
+            <Form.Control placeholder="Minimum Rating" ref={minRatingInput} />
+          </Form.Group>
+          <Form.Group>
+            <Form.Control placeholder="Meal Tag" ref={mealTagInput} />
+          </Form.Group>
+        </Form>
+        <Row className="px-3">
+          <DropdownButton id="dropdown-basic-button" className="mx-3"
+            title={selectedCity} onSelect={(event) => onSelect(event)}>
+            {cities.map(city => (
+              <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
+            ))}
+          </DropdownButton>
+          <Button className="mx-3" variant="primary" type="button" onClick={() => onClick()}
+            data-toggle="collapse" data-target="#searchbar">
+            Search
             </Button>
-          </Row>
-        </div>
+        </Row>
+      </div >
     );
   }
 }
