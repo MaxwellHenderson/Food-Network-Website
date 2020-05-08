@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Form, Button, DropdownButton, Dropdown, Col, Row } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  DropdownButton,
+  Dropdown,
+  Col,
+  Row,
+} from "react-bootstrap";
+import StarRating from "./StarRating";
 
 class SearchForm extends Component {
   state = {};
@@ -8,21 +16,26 @@ class SearchForm extends Component {
       mealNameInput,
       minPriceInput,
       maxPriceInput,
-      minRatingInput,
       mealTagInput,
       cities,
       selectedCity,
       onSelect,
-      onClick
+      onClick,
+      handleSelectRating,
+      handleClearInputs,
     } = this.props;
-
     return (
-      <div id="searchbar" className="mx-auto p-3 border border-secondary rounded collapse"
-        // <div id="searchbar" className="mx-auto p-3 border border-secondary rounded" 
+      <div
+        id="searchbar"
+        className="mx-auto p-3 border border-secondary rounded collapse"
+        // <div id="searchbar" className="mx-auto p-3 border border-secondary rounded"
         style={{
-          'zIndex': 10333, 'position': 'absolute', 'left': '33%',
-          'backgroundColor': 'white'
-        }}>
+          zIndex: 10333,
+          position: "absolute",
+          left: "33%",
+          backgroundColor: "white",
+        }}
+      >
         <Form>
           <Form.Group>
             <Form.Control placeholder="Meal Name" ref={mealNameInput} />
@@ -38,25 +51,43 @@ class SearchForm extends Component {
             </Row>
           </Form.Group>
           <Form.Group>
-            <Form.Control placeholder="Minimum Rating" ref={minRatingInput} />
+            <StarRating handleSelectRating={handleSelectRating} />
           </Form.Group>
           <Form.Group>
             <Form.Control placeholder="Meal Tag" ref={mealTagInput} />
           </Form.Group>
         </Form>
         <Row className="px-3">
-          <DropdownButton id="dropdown-basic-button" className="mx-3"
-            title={selectedCity} onSelect={(event) => onSelect(event)}>
-            {cities.map(city => (
+          <DropdownButton
+            id="dropdown-basic-button"
+            className="mx-3"
+            title={selectedCity}
+            onSelect={(event) => onSelect(event)}
+          >
+            {cities.map((city) => (
               <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
             ))}
           </DropdownButton>
-          <Button className="mx-3" variant="primary" type="button" onClick={() => onClick()}
-            data-toggle="collapse" data-target="#searchbar">
+          <Button
+            className="mx-3"
+            variant="primary"
+            type="button"
+            onClick={() => handleClearInputs()}
+          >
+            Clear
+          </Button>
+          <Button
+            className="mx-3"
+            variant="primary"
+            type="button"
+            onClick={() => onClick()}
+            data-toggle="collapse"
+            data-target="#searchbar"
+          >
             Search
-            </Button>
+          </Button>
         </Row>
-      </div >
+      </div>
     );
   }
 }
