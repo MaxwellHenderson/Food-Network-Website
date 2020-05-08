@@ -31,7 +31,7 @@ class ProfilePage extends Component{
         this.promise_async = this.promise_async.bind(this);
         this.promise_setState = this.promise_setState.bind(this);
  
-    
+        this.deleteItem = this.deleteItem.bind(this);
     }
 
     callLog = async(item) =>{
@@ -39,7 +39,6 @@ class ProfilePage extends Component{
          if(result2 != null){
             var newState = this.state.userPostings.concat(result2.Item);
             await this.promise_setState({ userPostings: newState }) 
-            //console.log(" meal object saved: "  + this.state.userPostings[this.state.userPostings.length-1].mealName)
          }else{
             console.log("Empty result2")
          }
@@ -48,7 +47,6 @@ class ProfilePage extends Component{
     processArray = async(array) => {
         for(const item of array)
           await this.callLog(item);
-        //console.log('Done!');
     }
 
 
@@ -59,7 +57,6 @@ class ProfilePage extends Component{
         var Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
         Url = Url.concat(pathParam);
  
-        var that = this;
         return $.ajax({
             url: Url,
             type: 'GET',
@@ -68,8 +65,6 @@ class ProfilePage extends Component{
             dataType: 'json',
            
             success: function(data) {
-                //console.log("What is in meal object?: " + JSON.stringify(data));
-                //console.log("ajax request for loading meal info was successful")
             },   
             error:function(error) {
                 console.log(error); 
@@ -79,8 +74,8 @@ class ProfilePage extends Component{
     }
 
     /*get userObj from database*/
-    loadUserInfo(){
-        var queryString = "/user/domluu@gmail.com";
+    loadUserInfo(email){
+        var queryString = "/user/" + email;
         var Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
         Url = Url.concat(queryString);
 
@@ -90,9 +85,6 @@ class ProfilePage extends Component{
             crossDomain: true, 
             contentType: 'application/json',
             success: function(data) {
-                //console.log("whats in the data: " + JSON.stringify(data));
-                //console.log("Lets try and grab stuff: " + data.Item.email);
-                //console.log("ajax request for loading user info was successful");
             }, 
             error:function(error) {
                 console.log(error); 
@@ -109,11 +101,9 @@ class ProfilePage extends Component{
 
     /*save user object to state*/
     getUserObject = async() =>{       
-        let result = await this.loadUserInfo();
-        //console.log(result);   
+        let result = await this.loadUserInfo(this.props.email);  
         if(result  != null){
             await this.promise_setState({userObj:result.Item})
-            //console.log(" User object saved: "  + this.state.userObj.email) 
         }else{
             console.log("result is empty"); 
         }
@@ -131,16 +121,14 @@ class ProfilePage extends Component{
         console.log("DONE!")
         await this.sortActive(this.state.userPostings)
         console.log("Sort Active complete")
-        //await this.sortPending(this.state.userPostings)
-        //console.log("Sort Pending complete")
+        await this.sortPending(this.state.userPostings)
+        console.log("Sort Pending complete")
     }
   
-
     /*sort userPostings[] for active postings*/
     sortActive = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "Active"){
-                console.log("Active: " + element.mealName)
+            if(element.listingStatus === "active"){
                 var temp = this.state.userActivePostings.concat(element);
                 await this.promise_setState({userActivePostings:temp}) 
             }
@@ -150,18 +138,37 @@ class ProfilePage extends Component{
     /*sort userPostings[] for pending postings*/
     sortPending = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "Pending"){
-                console.log("Pending: " + element.mealName)
+            if(element.listingStatus === "pending"){
                 var temp = this.state.userPendingPostings.concat(element);
                 await this.promise_setState({userPendingPostings:temp}) 
             }
         });
     }
-    componentDidUpdate(){
-        //this.processArray(this.state.userObj.mealIDs);
+
+
+    //key value comes from Posts
+    deleteItem = async(mealId) =>{
+        //update all of the state arrays :(
+        var filteredItems = this.state.userPostings.filter(function(posting){
+            return(posting.mealID !== mealId);
+        });
+        await this.promise_setState({ userPostings: filteredItems }) 
+
+        filteredItems = this.state.userActivePostings.filter(function(posting){
+            return(posting.mealID !== mealId);
+        });
+        await this.promise_setState({ userActivePostings: filteredItems })
+
+        filteredItems = this.state.userPendingPostings.filter(function(posting){
+            return(posting.mealID !== mealId);
+        });
+        await this.promise_setState({ userPendingPostings: filteredItems }) 
+        console.log(this.state.userPostings);
+
+        
     }
+
     componentDidMount(){
-        //this.getUserObject();  
         this.promise_async()
     }
 
@@ -176,10 +183,12 @@ class ProfilePage extends Component{
                         <h1>My Listings</h1>
                     </div>
                     <div className="post-container">
-                        <h2>Pending</h2>
-                        <Posts posts={this.state.userPendingPostings}/>
                         <h2>Active</h2>
-                        <Posts posts={this.state.userActivePostings}/>
+                        <Posts posts={this.state.userActivePostings} userObj={this.state.userObj} userPostings={this.state.userPostings}
+                            deleteItem={this.deleteItem}/>
+                        <h2>Pending</h2>
+                        <Posts posts={this.state.userPendingPostings} userObj={this.state.userObj} userPostings={this.state.userPostings}
+                            deleteItem={this.deleteItem}/>
                     </div>     
                 </div>
             </div>
