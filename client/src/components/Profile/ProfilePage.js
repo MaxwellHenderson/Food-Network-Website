@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProfileCard from './ProfileCard';
 import Posts from './Post';
+import NavBar from "../NavBar"
 import $ from "jquery";
 import './Profile.css';
 
@@ -101,7 +102,7 @@ class ProfilePage extends Component{
 
     /*save user object to state*/
     getUserObject = async() =>{       
-        let result = await this.loadUserInfo(this.props.email);  
+        let result = await this.loadUserInfo(localStorage.getItem("email"));  
         if(result  != null){
             await this.promise_setState({userObj:result.Item})
         }else{
@@ -111,7 +112,7 @@ class ProfilePage extends Component{
 
     /*save user postings to state*/
     getUserPostings = async() =>{
-        await this.processArray(this.state.userObj);//.mealIDs);   
+        await this.processArray(this.state.userObj.mealIDs);   
     }
 
     promise_async = async() =>{
@@ -175,6 +176,7 @@ class ProfilePage extends Component{
     render(){
         return(
             <div className="profile-container">
+                {/* <NavBar></NavBar> */}
                 <div className="left-container">
                     <ProfileCard userObj={this.state.userObj}/>
                 </div>
