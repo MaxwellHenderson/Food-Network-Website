@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ProfileCard from './ProfileCard';
-import Posts from './Posts';
+import Posts from './Post';
 import $ from "jquery";
 import './Profile.css';
 
@@ -111,7 +111,7 @@ class ProfilePage extends Component{
 
     /*save user postings to state*/
     getUserPostings = async() =>{
-        await this.processArray(this.state.userObj.mealIDs);   
+        await this.processArray(this.state.userObj);//.mealIDs);   
     }
 
     promise_async = async() =>{

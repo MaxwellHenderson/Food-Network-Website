@@ -16,6 +16,7 @@ import "./styles/style.css";
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Amplify, { Auth } from 'aws-amplify';
+import ProfilePage from "./components/Profile/ProfilePage.js";
 
 // Manual Amplify configuration
 // See https://aws-amplify.github.io/docs/js/authentication#amplify-project-setup
@@ -60,6 +61,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={renderRoot} />
             <Route path='/newItem' component={NewItemPage} />
+            <Route path='/profile' component={ProfilePage} />
           </Switch>
         </Router>
       </div>
