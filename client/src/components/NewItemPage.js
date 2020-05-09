@@ -1,9 +1,35 @@
 import React, { Component } from "react";
-import InputField from "./component/input-field";
+import InputField from "./input-field";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/style.css";
+import "../styles/style.css";
+import NavBar from "./NavBar"
+import AWS from 'aws-sdk';
 import $ from 'jquery';
+import { v4 as uuidv4 } from 'uuid';
 
+// var AWS = require("aws-sdk");
+
+AWS.config.region = 'us-west-2';
+AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: 'us-west-2:cb1b59d8-6d8b-4d56-a187-5b91922f84d7',
+});
+
+var bucketName = "foodimagebucket";
+var bucketRegion = "us-west-2";
+var IdentityPoolId = "us-west-2:b8d920b2-21d8-4843-80a3-9dadec543d92";
+var fileName = "";
+
+AWS.config.update({
+    region: bucketRegion,
+    credentials: new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: IdentityPoolId
+        })
+});
+
+const s3 = new AWS.S3({
+    apiVersion: "2006-03-01",
+    params: {Bucket: bucketName}
+});
 
 class NewItemPage extends Component {
     constructor(props) {
@@ -17,11 +43,18 @@ class NewItemPage extends Component {
         this.mealIngredientsInput = React.createRef();
         this.mealAllergyInput = React.createRef();
 
+        this.s3Url = '';
+//
+    }
+
+    componentDidMount() {
+        console.log("MOUNT");
     }
 
     render() {
         return (
-            <div class=" p-4">
+            <div class="mt-2 p-4">
+                <NavBar></NavBar>
                 {/* <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
                     <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
@@ -33,14 +66,14 @@ class NewItemPage extends Component {
                     <form class="md-form w-50 p-4">
                         <div class="file-field">
                             <div class="z-depth-1-half mb-4">
-                                <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
+                                <img id="FoodImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
                                     alt="example placeholder"></img>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-mdb-color btn-rounded float-left">
                                 <span>Choose file</span>
-                                <input type="file"></input>
+                                <input type="file" id="photoFile" onChange="updatePhoto"></input>
                             </div>
                         </div>
 
@@ -86,28 +119,65 @@ class NewItemPage extends Component {
     }
 
 
+    addPhoto = async() => {
+        var files = document.getElementById("photoFile").files;
+        if (!files.length){
+            return alert("Please choose a file to upload first.");
+        }
+        var file = files[0];
+        fileName = file.name;
+
+        var params = {
+            Body: file,
+            Bucket: bucketName,
+            Key: fileName,
+            // ACL: 'public-read',
+        }
+
+        s3.putObject(params, function(err, data) {
+            if(err) console.log(err, err.stack); //An error occured
+            else console.log(data); //Succesful upload
+        })
+    };
+
+
     handleAddMeal = async () => {
+        
+        var testID = uuidv4();
+        console.log(testID);
+
+        var fileUrl = this.addPhoto();
+        
+        var email = localStorage.getItem("email");
+        console.log(email);
+
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
         const _data = {
-            mealID: 2833,
+            mealID: testID,
             mealDescription: this.mealDescriptionInput.current.value,
-            mealImagePath: "google.com",
+            mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
             mealName: this.mealNameInput.current.value,
             mealPrice: this.mealPriceInput.current.value,
             mealQuantity: this.mealQuantityInput.current.value,
             mealTags: this.mealTagsInput.current.value,
             mealIngredients: this.mealIngredientsInput.current.value,
-            mealAllergy: this.mealAllergyInput.current.value
+            mealAllergy: this.mealAllergyInput.current.value,
+            // userEmail: "jerryzhu34@gmail.com"
+            userEmail: localStorage.getItem("email")
         };
 
+
+        console.log(JSON.stringify(_data));
+        //Puts the meal information into the database
         $.ajax({
             url: Url,
             type: "POST",
             dataType: "jsonp",
             headers: {
-                accept: "application/json"
+                accept: "application/json",
             },
+            crossDomain: true,
             data: JSON.stringify(_data),
             dataType: "json",
             contentType: "application/json; charset=utf-8",
