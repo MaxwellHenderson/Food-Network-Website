@@ -50,7 +50,6 @@ class MainPage extends Component {
 
   componentDidUpdate() {
     this.renderMain();
-    console.log(this.state.currMeal);
   }
 
 

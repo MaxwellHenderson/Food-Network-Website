@@ -17,7 +17,7 @@ class CheckoutForm extends Component {
             return;
         }
 
-        const queryString = "?price=" + (this.props.price * 100);
+        const queryString = "?mealId=" + (this.props.mealId);
         const url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/payment/" + queryString;
 
         $.ajax({
