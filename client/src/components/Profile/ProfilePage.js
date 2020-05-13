@@ -101,8 +101,9 @@ class ProfilePage extends Component{
     
 
     /*save user object to state*/
-    getUserObject = async() =>{       
+    getUserObject = async() =>{ 
         let result = await this.loadUserInfo(localStorage.getItem("email"));  
+        // let result = await this.loadUserInfo(this.props.match.params);  
         if(result  != null){
             await this.promise_setState({userObj:result.Item})
         }else{
@@ -129,7 +130,7 @@ class ProfilePage extends Component{
     /*sort userPostings[] for active postings*/
     sortActive = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "active"){
+            if(element.listingStatus === "Active"){
                 var temp = this.state.userActivePostings.concat(element);
                 await this.promise_setState({userActivePostings:temp}) 
             }
@@ -176,7 +177,7 @@ class ProfilePage extends Component{
     render(){
         return(
             <div className="profile-container">
-                {/* <NavBar></NavBar> */}
+                <NavBar></NavBar>
                 <div className="left-container">
                     <ProfileCard userObj={this.state.userObj}/>
                 </div>

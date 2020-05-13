@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
 
+var email = localStorage.getItem("email");
+var profileLink = "/profile"+email;
 
 class NavBar extends Component {
+    
     render() {
         return (
             <div className="navbar bg-light navbar-expand-md fixed-top top-menu justify-content-between shadow">
@@ -18,7 +21,11 @@ class NavBar extends Component {
                             <i className="fas fa-search"></i>
                         </div>     
                         <div className="nav-link" ><i className="fas fa-envelope"></i></div>  
-                        <div className="nav-link" ><i className="fas fa-user-friends"></i></div>    
+                        <NavLink to={{
+                            pathname: `/profile/${this.email}`
+                            }}>
+                            <div className="nav-link" ><i className="fas fa-user-friends"></i></div>    
+                        </NavLink>
                     </div>
                     <div className="nav-link" data-toggle="collapse" data-target="#sidebar" aria-expanded="false">
                         <i className="fas fa-bars"></i>

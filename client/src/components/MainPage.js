@@ -9,6 +9,7 @@ import NewItemPage from './NewItemPage.js';
 import React, { Component } from "react";
 import $ from 'jquery';
 import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
+import ProfilePage from './Profile/ProfilePage.js';
 
 class MainPage extends Component {
   constructor(props) {
@@ -236,6 +237,7 @@ class MainPage extends Component {
                 <Route exact path='/' render={this.renderMain} />
                 <Route path = '/listing' component={renderListing} />
                 <Route path='/newItem' component={NewItemPage} />
+                <Route path='/profile/:user' component={ProfilePage} />
             </Router>
         );
     }
