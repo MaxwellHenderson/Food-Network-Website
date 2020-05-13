@@ -5,6 +5,7 @@ import SideBar from "./SideBar.js";
 import SearchForm from "../components/search-form.jsx";
 import ListingPage from "../components/ViewListingPage.js";
 import NewItemPage from "./NewItemPage.js";
+import sortMeals from "./SortMeals.js";
 
 import React, { Component } from "react";
 import $ from "jquery";
@@ -25,14 +26,10 @@ class MainPage extends Component {
     this.mealTagInput = React.createRef();
     this.cities = ["All", "Renton", "Issaquah", "Redmond"];
 
-    this.sortOptions = [
-      { option: "ID", sort: this.sortMealByID },
-      { option: "Name", sort: this.sortMealByName },
-      { option: "Price", sort: this.sortMealByPrice },
-    ];
+    this.sortOptions = ["Price", "Name", "Date Posted"];
 
     this.state = {
-      selectedSortOption: this.sortOptions ? this.sortOptions[0] : {},
+      selectedSortOption: this.sortOptions ? this.sortOptions[0] : "Price",
       selectedCity: this.cities ? this.cities[0] : "City",
       minRating: 0,
       foodItems: [],
@@ -60,26 +57,8 @@ class MainPage extends Component {
     this.setState({ selectedCity: city });
   };
 
-  handleSortOptionChange = (sortOption) => {
+  handleSelectSortOption = (sortOption) => {
     this.setState({ selectedSortOption: sortOption });
-  };
-
-  sortMealByID = (listings) => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealID > otherMeal.mealID ? 1 : -1
-    );
-  };
-
-  sortMealByName = (listings) => {
-    return listings.sort((meal, otherMeal) =>
-      meal.mealName.toLowerCase() > otherMeal.mealName.toLowerCase() ? 1 : -1
-    );
-  };
-
-  sortMealByPrice = (listings) => {
-    return listings.sort((meal, otherMeal) =>
-      parseInt(meal.mealPrice) > parseInt(otherMeal.mealPrice) ? 1 : -1
-    );
   };
 
   handleSelectRating = (rating) => {
@@ -142,7 +121,15 @@ class MainPage extends Component {
   getMeals = async () => {
     this.getMealIDs()
       .then((mealIDs) => this.filterMeals(mealIDs))
-      .then((meals) => this.setState({ foodItems: meals }));
+      .then((meals) => this.setState({ foodItems: meals }))
+      .then(() =>
+        this.setState({
+          foodItems: sortMeals(
+            this.state.selectedSortOption,
+            this.state.foodItems
+          ),
+        })
+      );
   };
 
   /* Returns a promise of mealIDs that are in a specified city */
@@ -248,7 +235,10 @@ class MainPage extends Component {
           mealTagInput={this.mealTagInput}
           cities={this.cities}
           selectedCity={this.state.selectedCity}
-          onSelect={this.handleSelectCity}
+          handleSelectCity={this.handleSelectCity}
+          sortOptions={this.sortOptions}
+          selectedSortOption={this.state.selectedSortOption}
+          handleSelectSortOption={this.handleSelectSortOption}
           onClick={this.getMeals}
           handleSelectRating={this.handleSelectRating}
           handleClearInputs={this.handleClearInputs}

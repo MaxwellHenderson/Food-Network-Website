@@ -19,7 +19,10 @@ class SearchForm extends Component {
       mealTagInput,
       cities,
       selectedCity,
-      onSelect,
+      handleSelectCity,
+      sortOptions,
+      selectedSortOption,
+      handleSelectSortOption,
       onClick,
       handleSelectRating,
       handleClearInputs,
@@ -62,10 +65,20 @@ class SearchForm extends Component {
             id="dropdown-basic-button"
             className="mx-3"
             title={selectedCity}
-            onSelect={(event) => onSelect(event)}
+            onSelect={(event) => handleSelectCity(event)}
           >
             {cities.map((city) => (
               <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
+            ))}
+          </DropdownButton>
+          <DropdownButton
+            id="dropdown-basic-button"
+            className="mx-3"
+            title={selectedSortOption}
+            onSelect={(event) => handleSelectSortOption(event)}
+          >
+            {sortOptions.map((sortOption) => (
+              <Dropdown.Item eventKey={sortOption}>{sortOption}</Dropdown.Item>
             ))}
           </DropdownButton>
           <Button
