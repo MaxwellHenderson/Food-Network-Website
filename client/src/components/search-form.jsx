@@ -1,13 +1,7 @@
 import React, { Component } from "react";
-import {
-  Form,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Col,
-  Row,
-} from "react-bootstrap";
+import { Form, Button, DropdownButton, Dropdown, Col, Row } from "react-bootstrap";
 import StarRating from "./StarRating";
+import MealTags from "./MealTags";
 
 class SearchForm extends Component {
   state = {};
@@ -16,7 +10,6 @@ class SearchForm extends Component {
       mealNameInput,
       minPriceInput,
       maxPriceInput,
-      mealTagInput,
       cities,
       selectedCity,
       handleSelectCity,
@@ -24,6 +17,7 @@ class SearchForm extends Component {
       selectedSortOption,
       handleSelectSortOption,
       onClick,
+      updateMealTags,
       handleSelectRating,
       handleClearInputs,
     } = this.props;
@@ -57,7 +51,7 @@ class SearchForm extends Component {
             <StarRating handleSelectRating={handleSelectRating} />
           </Form.Group>
           <Form.Group>
-            <Form.Control placeholder="Meal Tag" ref={mealTagInput} />
+            <MealTags updateMealTags={updateMealTags} />
           </Form.Group>
         </Form>
         <Row className="px-3">
@@ -81,12 +75,7 @@ class SearchForm extends Component {
               <Dropdown.Item eventKey={sortOption}>{sortOption}</Dropdown.Item>
             ))}
           </DropdownButton>
-          <Button
-            className="mx-3"
-            variant="primary"
-            type="button"
-            onClick={() => handleClearInputs()}
-          >
+          <Button className="mx-3" variant="primary" type="button" onClick={() => handleClearInputs()}>
             Clear
           </Button>
           <Button

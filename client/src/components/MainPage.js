@@ -9,12 +9,7 @@ import sortMeals from "./SortMeals.js";
 
 import React, { Component } from "react";
 import $ from "jquery";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 
 class MainPage extends Component {
   constructor(props) {
@@ -23,7 +18,6 @@ class MainPage extends Component {
     this.mealNameInput = React.createRef();
     this.minPriceInput = React.createRef();
     this.maxPriceInput = React.createRef();
-    this.mealTagInput = React.createRef();
     this.cities = ["All", "Renton", "Issaquah", "Redmond"];
 
     this.sortOptions = ["Price", "Name", "Date Posted"];
@@ -31,6 +25,7 @@ class MainPage extends Component {
     this.state = {
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : "Price",
       selectedCity: this.cities ? this.cities[0] : "City",
+      mealTags: [],
       minRating: 0,
       foodItems: [],
       mealIDs: [],
@@ -65,11 +60,14 @@ class MainPage extends Component {
     this.setState({ minRating: rating });
   };
 
+  updateMealTags = (tags) => {
+    this.setState({ mealTags: tags.map((tag) => tag.toLowerCase()) });
+  };
+
   handleClearInputs = () => {
     this.mealNameInput.current.value = "";
     this.minPriceInput.current.value = "";
     this.maxPriceInput.current.value = "";
-    this.mealTagInput.current.value = "";
   };
 
   // NEED IMPORT AUTH ANS AWS4 FROM AMPLIFY
@@ -124,10 +122,7 @@ class MainPage extends Component {
       .then((meals) => this.setState({ foodItems: meals }))
       .then(() =>
         this.setState({
-          foodItems: sortMeals(
-            this.state.selectedSortOption,
-            this.state.foodItems
-          ),
+          foodItems: sortMeals(this.state.selectedSortOption, this.state.foodItems),
         })
       );
   };
@@ -135,12 +130,9 @@ class MainPage extends Component {
   /* Returns a promise of mealIDs that are in a specified city */
   getMealIDs = async () => {
     /* Construct query string */
-    const QueryString =
-      "?city=" + this.state.selectedCity + "&minRating=" + this.state.minRating;
+    const QueryString = "?city=" + this.state.selectedCity + "&minRating=" + this.state.minRating;
 
-    const Url =
-      "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" +
-      QueryString;
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
@@ -172,20 +164,20 @@ class MainPage extends Component {
   /* Returns a promise of array of meal objects that meet certain criteria */
   filterMeals = async (mealIDs) => {
     /* Construct query string */
-    const QueryString =
+    let QueryString =
       "?mealName=" +
       this.mealNameInput.current.value.toLowerCase() +
       "&minPrice=" +
       this.minPriceInput.current.value +
       "&maxPrice=" +
-      this.maxPriceInput.current.value +
-      "&mealTag=" +
-      this.mealTagInput.current.value.toLowerCase();
+      this.maxPriceInput.current.value;
+
+    if (this.state.mealTags !== undefined && this.state.mealTags.length != 0) {
+      QueryString += "&mealTags=" + JSON.stringify(this.state.mealTags);
+    }
 
     /* Using filterMeals Lambda function */
-    const Url =
-      "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" +
-      QueryString;
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
@@ -232,7 +224,6 @@ class MainPage extends Component {
           mealNameInput={this.mealNameInput}
           minPriceInput={this.minPriceInput}
           maxPriceInput={this.maxPriceInput}
-          mealTagInput={this.mealTagInput}
           cities={this.cities}
           selectedCity={this.state.selectedCity}
           handleSelectCity={this.handleSelectCity}
@@ -240,15 +231,13 @@ class MainPage extends Component {
           selectedSortOption={this.state.selectedSortOption}
           handleSelectSortOption={this.handleSelectSortOption}
           onClick={this.getMeals}
+          updateMealTags={this.updateMealTags}
           handleSelectRating={this.handleSelectRating}
           handleClearInputs={this.handleClearInputs}
         />
         <NavBar />
         <SideBar />
-        <CardList
-          foodItems={this.state.foodItems}
-          getMealById={(id) => this.setCurrentMeal(id)}
-        />
+        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
         <ListingModal meal={this.state.currMeal} />
         <button onClick={this.logOut}>Log Out</button>
       </React.Fragment>
