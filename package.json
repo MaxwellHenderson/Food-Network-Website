@@ -8,6 +8,7 @@
 		"concurrently": "^5.0.0",
 		"jquery": "^3.4.1",
 		"nodemon": "^2.0.2",
+		"react-firebase": "^2.2.8",
 		"stripe": "^8.19.0"
 	}
 }
