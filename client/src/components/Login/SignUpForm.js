@@ -185,8 +185,9 @@ class SignUpForm extends Component{
                         placeholder="Enter your full name"
                         name="name"
                         required="required"
-                        value={this.state.username}
-                        onChange={this.updateUserName.bind(this)}/>
+                        // value={this.state.username}
+                        // onChange={this.updateUserName.bind(this)}
+                        />
                     </div>
 
                     <div className="FormField">
@@ -200,6 +201,20 @@ class SignUpForm extends Component{
                         required="required"
                         value={this.state.email}
                         onChange={this.handleChange}/>
+                    </div>
+
+                    
+                    <div className="FormField">
+                      <label className="FormField__Label" htmlFor="username">Username</label>
+                      <input
+                        type="username"
+                        id="username"
+                        className="FormField__Input"
+                        placeholder="Choose a username"
+                        name="username"
+                        required="required"
+                        value={this.state.username}
+                        onChange={this.updateUserName.bind(this)}/>
                     </div>
                     
                     <div className="FormField">

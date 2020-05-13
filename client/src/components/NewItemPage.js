@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import InputField from "./input-field";
+import CurrencyInput from 'react-currency-input';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/style.css";
 import NavBar from "./NavBar"
@@ -32,8 +33,16 @@ const s3 = new AWS.S3({
 });
 
 class NewItemPage extends Component {
+    
     constructor(props) {
+        
         super(props);
+
+        this.state = {
+            amount: 0.00
+        };
+        
+        this.handleChange = this.handleChange.bind(this);
 
         this.mealNameInput = React.createRef();
         this.mealPriceInput = React.createRef();
@@ -49,6 +58,10 @@ class NewItemPage extends Component {
 
     componentDidMount() {
         console.log("MOUNT");
+    }
+
+    handleChange(event, maskedvalue, floatvalue){
+        this.setState({amount: maskedvalue});
     }
 
     render() {
@@ -101,12 +114,18 @@ class NewItemPage extends Component {
                         </div>
 
                         <label for="price">Price:</label>
-                        <div class="input-group mb-3">
+
+                        <div>
+                            <CurrencyInput value={this.state.amount} onChangeEvent={this.handleChange}/>
+                        </div>
+
+                        {/* <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">$</span>
                             </div>
                             <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
-                        </div>
+                        </div> */}
+
                         {/* <label for="quantity">Quantity:</label>
                         <input type="text" class="form-control" ref={this.mealQuantityInput}></input> */}
                         <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
@@ -118,6 +137,15 @@ class NewItemPage extends Component {
         );
     }
 
+    handleValueChange = async(val) => {
+        this.mealPriceInput.value = val;
+    }
+//     const [value, setValue] = useState(0);
+//   const handleValueChange = useCallback(val => {
+//     // eslint-disable-next-line
+//     console.log(val);
+//     setValue(val);
+//   }, []);
 
     addPhoto = async() => {
         var files = document.getElementById("photoFile").files;
@@ -151,14 +179,19 @@ class NewItemPage extends Component {
         var email = localStorage.getItem("email");
         console.log(email);
 
-        const Url =
+        const mealUrl =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+
+        const userUrl = 
+            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/user"
+
+
         const _data = {
             mealID: testID,
             mealDescription: this.mealDescriptionInput.current.value,
             mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
             mealName: this.mealNameInput.current.value,
-            mealPrice: this.mealPriceInput.current.value,
+            mealPrice: this.state.amount,
             mealQuantity: this.mealQuantityInput.current.value,
             mealTags: this.mealTagsInput.current.value,
             mealIngredients: this.mealIngredientsInput.current.value,
@@ -167,11 +200,16 @@ class NewItemPage extends Component {
             userEmail: localStorage.getItem("email")
         };
 
+        const _data2 = {
+            mealID: testID,
+            userEmail: localStorage.getItem("email")
+        };
+
 
         console.log(JSON.stringify(_data));
         //Puts the meal information into the database
         $.ajax({
-            url: Url,
+            url: mealUrl,
             type: "POST",
             dataType: "jsonp",
             headers: {
@@ -182,12 +220,34 @@ class NewItemPage extends Component {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (result) {
+                console.log("MealPut success\n")
                 console.log(result);
             },
             error: function (xhr, status, error) {
                 console.log(JSON.stringify(xhr));
             }
         });
+
+        $.ajax({
+            url: userUrl,
+            type: "PUT",
+            dataType: "jsonp",
+            headers: {
+                accept: "application/json",
+            },
+            crossDomain: true,
+            data: JSON.stringify(_data2),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+                console.log("MealPut success\n")
+                console.log(result);
+            },
+            error: function (xhr, status, error) {
+                console.log(JSON.stringify(xhr));
+            }
+        });
+
         return false;
     };
 
