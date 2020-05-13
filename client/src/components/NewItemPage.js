@@ -181,18 +181,32 @@ class NewItemPage extends Component {
 
         const Url =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
+        // const _data = {
+        //     mealID: testID,
+        //     mealDescription: this.mealDescriptionInput.current.value,
+        //     mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
+        //     mealName: this.mealNameInput.current.value,
+        //     mealPrice: this.state.amount,
+        //     mealQuantity: this.mealQuantityInput.current.value,
+        //     mealTags: this.mealTagsInput.current.value,
+        //     mealIngredients: this.mealIngredientsInput.current.value,
+        //     mealAllergy: this.mealAllergyInput.current.value,
+        //     // userEmail: "jerryzhu34@gmail.com"
+        //     userEmail: localStorage.getItem("email")
+        // };
+
         const _data = {
-            mealID: testID,
-            mealDescription: this.mealDescriptionInput.current.value,
-            mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
-            mealName: this.mealNameInput.current.value,
-            mealPrice: this.state.amount,
-            mealQuantity: this.mealQuantityInput.current.value,
-            mealTags: this.mealTagsInput.current.value,
-            mealIngredients: this.mealIngredientsInput.current.value,
-            mealAllergy: this.mealAllergyInput.current.value,
+            mealID: "HardCodeTest3",
+            mealDescription: "HardCodeTest3",
+            mealImagePath: "https://image.shutterstock.com/z/stock-photo-two-tasty-humburgers-with-tomatoes-and-sauce-1571501176.jpg",
+            mealName: "HardCodeTest3",
+            mealPrice: "11.00",
+            mealQuantity: "HardCodeTest3",
+            mealTags: "HardCodHardCHardCodeTest3odeTest2eTest",
+            mealIngredients: "HaHardCHardCodeTest3odeTest2rdCodeTest",
+            mealAllergy: "HardCoHardCoHardCodeTest3deTest2deTest",
             // userEmail: "jerryzhu34@gmail.com"
-            userEmail: localStorage.getItem("email")
+            userEmail: "test@gmail.com"
         };
 
 

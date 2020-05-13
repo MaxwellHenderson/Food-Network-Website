@@ -130,7 +130,7 @@ class ProfilePage extends Component{
     /*sort userPostings[] for active postings*/
     sortActive = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "Active"){
+            if(element.listingStatus === "active"){
                 var temp = this.state.userActivePostings.concat(element);
                 await this.promise_setState({userActivePostings:temp}) 
             }
