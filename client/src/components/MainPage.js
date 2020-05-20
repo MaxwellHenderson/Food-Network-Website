@@ -170,7 +170,7 @@ class MainPage extends Component {
     /* Construct query string */
     const QueryString =
       "?mealName=" +
-      this.mealNameInput.current.value.toLowerCase() +
+      this.mealNameInput.current.value +
       "&minPrice=" +
       this.minPriceInput.current.value +
       "&maxPrice=" +

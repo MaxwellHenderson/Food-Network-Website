@@ -9,6 +9,8 @@ class SignUpForm extends Component{
     super(props);
 
     this.state = {
+      firstName: '',
+      lastName: '',
       username: '',
       email:'', //UUID
       password:'',
@@ -31,6 +33,16 @@ class SignUpForm extends Component{
   }
 
 /* UPDATES */
+    updateFirstName(event){
+      this.setState({
+        firstName: event.target.value
+      });
+    }
+    updateLastName(event){
+      this.setState({
+        lastName: event.target.value
+      });
+    }
     updateUserName(event){
       this.setState({
         username: event.target.value
@@ -70,6 +82,7 @@ class SignUpForm extends Component{
       try{
         await Auth.signUp({username: email, password: password,});
         console.log("Signed up successfully!");
+        this.handleCreateNewUser();
         this.setState({ step: 1 });
       }catch(err){
         console.log("Error signing up: ", err);
@@ -96,8 +109,11 @@ class SignUpForm extends Component{
     }
 
     handleCreateNewUser = async () => { 
+      console.log("Trying to add user to DB");
       const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/user";
       const _data={
+        "firstname": this.state.firstName,
+        "lastname": this.state.lastName,
         "username": this.state.username,
         "email": this.state.email,
         "location": this.state.location,
@@ -177,16 +193,30 @@ class SignUpForm extends Component{
                   <form className="FormFields" onSubmit={this.signUp}>
                     
                     <div className="FormField">
-                      <label className="FormField__Label" htmlFor="name">Full Name</label>
+                      <label className="FormField__Label" htmlFor="firstName">First Name</label>
                       <input
                         type="text"
-                        id="name"
+                        id="firstName"
                         className="FormField__Input"
-                        placeholder="Enter your full name"
-                        name="name"
+                        placeholder="Enter your first name"
+                        name="firstName"
                         required="required"
-                        // value={this.state.username}
-                        // onChange={this.updateUserName.bind(this)}
+                        value={this.state.firstName}
+                        onChange={this.updateFirstName.bind(this)}
+                        />
+                    </div>
+
+                    <div className="FormField">
+                      <label className="FormField__Label" htmlFor="lastName">Last Name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        className="FormField__Input"
+                        placeholder="Enter your last name"
+                        name="lastName"
+                        required="required"
+                        value={this.state.lastName}
+                        onChange={this.updateLastName.bind(this)}
                         />
                     </div>
 
