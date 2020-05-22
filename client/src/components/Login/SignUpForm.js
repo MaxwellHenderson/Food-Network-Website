@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Auth } from "aws-amplify";
+import { Auth, JS } from "aws-amplify";
 import $ from 'jquery';
 
 
@@ -11,8 +11,8 @@ class SignUpForm extends Component{
     this.state = {
       displayname: '',
       email:'', //UUID
-      firstname:'',
-      lastname:'',
+      firstName:'',
+      lastName:'',
       city:'',
       state:'',
       street:'',
@@ -22,6 +22,8 @@ class SignUpForm extends Component{
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.updateFirstName = this.updateFirstName.bind(this);
+    this.updateLastName = this.updateLastName.bind(this);
     this.updateUserName = this.updateUserName.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCode = this.updateCode.bind(this);
@@ -34,6 +36,16 @@ class SignUpForm extends Component{
   }
 
 /* UPDATES */
+    updateFirstName(event){
+      this.setState({
+        firstName: event.target.value
+      });
+    }
+    updateLastName(event){
+      this.setState({
+        lastName: event.target.value
+      });
+    }
     updateUserName(event){
       this.setState({
         username: event.target.value
@@ -90,22 +102,24 @@ class SignUpForm extends Component{
         console.log("Successfully confirmed signup!");
 
         //putting the rest of the user information into dynamo db
-        var result = await this.Check_If_User_Exists_In_DB(); 
-        if(result != NULL && result.Count === 0){
-          console.log("User does not exists. Creating new user.");
+        // var result = await this.Check_If_User_Exists_In_DB(); 
+        // console.log("The result after checking if exists: "+result);
+        // console.log("Count of the result: "+result.Count);
+        // if(result != null && result.Count === 0){
+        //   console.log("User does not exists. Creating new user.");
           this.Create_New_User();
-        }else{
-          console.log("User already exists. Unable to create new user.");
-        }
+        // }else{
+        //   console.log("User already exists. Unable to create new user.");
+        // }
 
         //putting user information to firebase
-        var myRef = firebase.database().ref('users');
-        var firebaseEmail = this.email.replace(".","_DOT_"); //firebase cannot store ids containing special characters such as .
-        myRef.child(firebaseEmail).set({
-            imgsrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTXIqGqYQQW5zSXHNxhx1ZzvNgj4W7xDosW0ERkkoHwX94HMwbv&usqp=CAU", //default imgsrc
-            email: firebaseEmail,
-            displayname: this.displayname
-        })
+        // var myRef = firebase.database().ref('users');
+        // var firebaseEmail = this.email.replace(".","_DOT_"); //firebase cannot store ids containing special characters such as .
+        // myRef.child(firebaseEmail).set({
+        //     imgsrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTXIqGqYQQW5zSXHNxhx1ZzvNgj4W7xDosW0ERkkoHwX94HMwbv&usqp=CAU", //default imgsrc
+        //     email: firebaseEmail,
+        //     displayname: this.displayname
+        // })
       
         this.setState({ step: 0 });
       }catch(err){
@@ -127,11 +141,11 @@ class SignUpForm extends Component{
         type: 'POST',
         crossDomain: true, 
         contentType: 'application/json',
-        dataType: 'json',
-        headers:{
-            "accept": "application/json",
-            "Access-Control-Allow-Origin": '*'
-        },
+        // dataType: 'json',
+        // headers:{
+        //     "accept": "application/json",
+        //     // "Access-Control-Allow-Origin": '*'
+        // },
         data: JSON.stringify(_data),
   
         success: function(result) {
@@ -146,6 +160,7 @@ class SignUpForm extends Component{
 
     Check_If_User_Exists_In_DB = async () => {                 
       var queryString = "/email/?email=" + String(this.state.email);
+      console.log("The email we are checking to see if it is in the DB: "+queryString);
       var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2"
       Url = Url.concat(queryString);
 
@@ -161,7 +176,9 @@ class SignUpForm extends Component{
           },
           
           success: function(result){
-            console.log("Check_If_User_Exists_In_DB success");
+            console.log("Inside AJAX");
+            console.log(result.toString());
+            console.log(result.valueOf("length"));
           },
           error: function(error){
             console.log(error);
@@ -180,18 +197,33 @@ class SignUpForm extends Component{
                   <form className="FormFields" onSubmit={this.Sign_Up}>
                     
                     <div className="FormField">
-                      <label className="FormField__Label" htmlFor="name">Full Name</label>
+                      <label className="FormField__Label" htmlFor="firstName">First Name</label>
                       <input
                         type="text"
-                        id="name"
+                        id="firstName"
                         className="FormField__Input"
-                        placeholder="Enter your full name"
-                        name="name"
+                        placeholder="Enter your last name"
+                        name="firstName"
                         required="required"
-                        // value={this.state.username}
-                        // onChange={this.updateUserName.bind(this)}
+                        value={this.state.fistName}
+                        onChange={this.updateFirstName.bind(this)}
                         />
                     </div>
+
+                    <div className="FormField">
+                      <label className="FormField__Label" htmlFor="lastName">Last Name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        className="FormField__Input"
+                        placeholder="Enter your last name"
+                        name="lastName"
+                        required="required"
+                        value={this.state.lastName}
+                        onChange={this.updateLastName.bind(this)}
+                        />
+                    </div>
+
 
                     <div className="FormField">
                       <label className="FormField__Label" htmlFor="email">Email Address</label>
