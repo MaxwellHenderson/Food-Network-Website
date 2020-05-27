@@ -19,6 +19,12 @@ class MainPage extends Component {
     this.sortOptions = ["Price", "Name", "Date Posted"];
 
     this.state = {
+      user: {},
+      userListings: {
+        active: [],
+        pending: [],
+        sold: [],
+      },
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : "Price",
       selectedCity: this.cities ? this.cities[0] : "All",
       requestedMeal: "",
@@ -40,6 +46,7 @@ class MainPage extends Component {
   }
 
   componentDidMount() {
+    this.getUserInfo();
     this.getMeals();
   }
 
@@ -116,6 +123,27 @@ class MainPage extends Component {
   //       }
   //     })
   // };
+
+  getUserMeals = async () => {
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/getMeals";
+    const Http = new XMLHttpRequest();
+    Http.open("GET", Url);
+    Http.onreadystatechange = (e) => {
+      console.log(Http.responseText);
+    };
+    return $.ajax({
+      url: Url,
+      type: "POST",
+      dataType: "json",
+      data: JSON.stringify(this.state.user.mealIDs),
+      success: function (result) {
+        // console.log(result);
+      },
+      error: function (error) {
+        console.log(`Error ${error}`);
+      },
+    }).promise();
+  };
 
   /* Sets filtered meal objects to foodItems */
   getMeals = async () => {
@@ -199,13 +227,51 @@ class MainPage extends Component {
       .promise();
   };
 
+  getUserInfo = async () => {
+    const email = localStorage.getItem("email");
+    this.loadUserInfo(email)
+      .then((result) => {
+        this.setState({ user: result.Item });
+      })
+      .then(() =>
+        this.getUserMeals().then((meals) => {
+          let activeListings = meals.filter((meal) => {
+            return meal.listingStatus == "active";
+          });
+          let pendingListings = meals.filter((meal) => {
+            return meal.listingStatus == "pending";
+          });
+          let soldListings = meals.filter((meal) => {
+            return meal.listingStatus == "sold";
+          });
+          this.setState({ userListings: { active: activeListings, pending: pendingListings, sold: soldListings } });
+        })
+      );
+  };
+
+  loadUserInfo(email) {
+    var queryString = "/user/" + email;
+    var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
+    Url = Url.concat(queryString);
+
+    return $.ajax({
+      url: Url,
+      type: "GET",
+      crossDomain: true,
+      contentType: "application/json",
+      success: function (data) {},
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {
       return item.mealID === id;
     });
     this.setState({ currMeal: meal });
-    console.log(this.state.mealIDs);
   }
 
   logOut() {
@@ -231,7 +297,7 @@ class MainPage extends Component {
           updateRequestedRating={this.updateRequestedRating}
         />
         <NavBar />
-        <SideBar />
+        <SideBar user={this.state.user} userListings={this.state.userListings} />
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
         <ListingModal meal={this.state.currMeal} />
         <button onClick={this.logOut}>Log Out</button>

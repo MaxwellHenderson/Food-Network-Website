@@ -19,7 +19,7 @@ class SearchForm extends Component {
   clearInputs = () => {
     this.mealNameInput.current.value = "";
     this.setState({ minPrice: 0 });
-    this.setState({ maxPrice: 0 });
+    this.setState({ maxPrice: 99 });
   };
 
   render() {
