@@ -1,31 +1,40 @@
 import React, { Component } from "react";
-import {
-  Form,
-  Button,
-  DropdownButton,
-  Dropdown,
-  Col,
-  Row,
-} from "react-bootstrap";
+import { Form, Button, DropdownButton, Dropdown, Col, Row } from "react-bootstrap";
 import StarRating from "./StarRating";
+import CurrencyInput from "react-currency-input";
+import MealTags from "./MealTags";
 
 class SearchForm extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+
+    this.mealNameInput = React.createRef();
+
+    this.state = {
+      minPrice: 0,
+      maxPrice: 0,
+    };
+  }
+
+  clearInputs = () => {
+    this.mealNameInput.current.value = "";
+    this.setState({ minPrice: 0 });
+    this.setState({ maxPrice: 0 });
+  };
+
   render() {
     const {
-      mealNameInput,
-      minPriceInput,
-      maxPriceInput,
-      mealTagInput,
       cities,
       selectedCity,
-      handleSelectCity,
+      updateSelectedCity,
       sortOptions,
       selectedSortOption,
-      handleSelectSortOption,
-      onClick,
-      handleSelectRating,
-      handleClearInputs,
+      updateSortOption,
+      getMeals,
+      updateRequestedMeal,
+      updatePriceRange,
+      updateMealTags,
+      updateRequestedRating,
     } = this.props;
     return (
       <div
@@ -41,23 +50,33 @@ class SearchForm extends Component {
       >
         <Form>
           <Form.Group>
-            <Form.Control placeholder="Meal Name" ref={mealNameInput} />
+            <Form.Control placeholder="Meal Name" ref={this.mealNameInput} />
           </Form.Group>
           <Form.Group>
             <Row>
               <Col>
-                <Form.Control placeholder="Minimum Price" ref={minPriceInput} />
+                <CurrencyInput
+                  value={this.state.minPrice}
+                  onChangeEvent={(event, maskedvalue, floatvalue) => {
+                    this.setState({ minPrice: maskedvalue });
+                  }}
+                />
               </Col>
               <Col>
-                <Form.Control placeholder="Maximum Price" ref={maxPriceInput} />
+                <CurrencyInput
+                  value={this.state.maxPrice}
+                  onChangeEvent={(event, maskedvalue, floatvalue) => {
+                    this.setState({ maxPrice: maskedvalue });
+                  }}
+                />
               </Col>
             </Row>
           </Form.Group>
           <Form.Group>
-            <StarRating handleSelectRating={handleSelectRating} />
+            <StarRating onSelect={updateRequestedRating} />
           </Form.Group>
           <Form.Group>
-            <Form.Control placeholder="Meal Tag" ref={mealTagInput} />
+            <MealTags updateMealTags={updateMealTags} />
           </Form.Group>
         </Form>
         <Row className="px-3">
@@ -65,7 +84,7 @@ class SearchForm extends Component {
             id="dropdown-basic-button"
             className="mx-3"
             title={selectedCity}
-            onSelect={(event) => handleSelectCity(event)}
+            onSelect={(event) => updateSelectedCity(event)}
           >
             {cities.map((city) => (
               <Dropdown.Item eventKey={city}>{city}</Dropdown.Item>
@@ -75,25 +94,24 @@ class SearchForm extends Component {
             id="dropdown-basic-button"
             className="mx-3"
             title={selectedSortOption}
-            onSelect={(event) => handleSelectSortOption(event)}
+            onSelect={(event) => updateSortOption(event)}
           >
             {sortOptions.map((sortOption) => (
               <Dropdown.Item eventKey={sortOption}>{sortOption}</Dropdown.Item>
             ))}
           </DropdownButton>
-          <Button
-            className="mx-3"
-            variant="primary"
-            type="button"
-            onClick={() => handleClearInputs()}
-          >
+          <Button className="mx-3" variant="primary" type="button" onClick={() => this.clearInputs()}>
             Clear
           </Button>
           <Button
             className="mx-3"
             variant="primary"
             type="button"
-            onClick={() => onClick()}
+            onClick={() => {
+              updateRequestedMeal(this.mealNameInput.current.value);
+              updatePriceRange(this.state.minPrice, this.state.maxPrice);
+              getMeals();
+            }}
             data-toggle="collapse"
             data-target="#searchbar"
           >
