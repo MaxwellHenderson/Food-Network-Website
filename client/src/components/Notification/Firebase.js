@@ -8,8 +8,8 @@ const config = {
     projectId: "food-network-chat",
     storageBucket: "food-network-chat.appspot.com",
     messagingSenderId: "210291696500",
-    appId: "1:210291696500:web:7a90dce672c3146eb94221",
-    measurementId: "G-3J1QEDECCL"
+    appId: "1:210291696500:web:ff7e159b3cf410a3b94221",
+    measurementId: "G-FN9DJ0GZBW"
 };
 firebase.initializeApp(config);
 
