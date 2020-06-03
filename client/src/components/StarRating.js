@@ -10,7 +10,7 @@ class StarRating extends Component {
   }
 
   render() {
-    const { handleSelectRating } = this.props;
+    const { onSelect } = this.props;
     return (
       <div>
         {[...Array(5)].map((star, i) => {
@@ -23,15 +23,11 @@ class StarRating extends Component {
                 value={ratingValue}
                 onClick={() =>
                   this.setState({ rating: ratingValue }, () => {
-                    handleSelectRating(this.state.rating);
+                    onSelect(this.state.rating);
                   })
                 }
               />
-              <FaStar
-                className="star"
-                color={ratingValue <= this.state.rating ? "#ffc107" : "#e4e5e9"}
-                size={40}
-              />
+              <FaStar className="star" color={ratingValue <= this.state.rating ? "#ffc107" : "#e4e5e9"} size={40} />
             </label>
           );
         })}

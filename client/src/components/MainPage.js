@@ -8,25 +8,29 @@ import NewItemPage from "./NewItemPage.js";
 import sortMeals from "./SortMeals.js";
 
 import React, { Component } from "react";
-import $ from 'jquery';
-import { BrowserRouter as Router, Switch, Route, NavLink } from 'react-router-dom';
-import ProfilePage from './Profile/ProfilePage.js';
+import $ from "jquery";
+import { BrowserRouter as Router, Switch, Route, NavLink } from "react-router-dom";
 
 class MainPage extends Component {
   constructor(props) {
     super(props);
-
-    this.mealNameInput = React.createRef();
-    this.minPriceInput = React.createRef();
-    this.maxPriceInput = React.createRef();
-    this.mealTagInput = React.createRef();
-    this.cities = ["All", "Renton", "Issaquah", "Redmond"];
+    this.cities = ["All", "Bellevue", "Renton", "Issaquah", "Redmond"];
 
     this.sortOptions = ["Price", "Name", "Date Posted"];
 
     this.state = {
+      user: {},
+      userListings: {
+        active: [],
+        pending: [],
+        sold: [],
+      },
       selectedSortOption: this.sortOptions ? this.sortOptions[0] : "Price",
-      selectedCity: this.cities ? this.cities[0] : "City",
+      selectedCity: this.cities ? this.cities[0] : "All",
+      requestedMeal: "",
+      minPrice: 0,
+      maxPrice: 999,
+      mealTags: [],
       minRating: 0,
       foodItems: [],
       mealIDs: [],
@@ -42,6 +46,7 @@ class MainPage extends Component {
   }
 
   componentDidMount() {
+    this.getUserInfo();
     this.getMeals();
   }
 
@@ -49,23 +54,29 @@ class MainPage extends Component {
     this.renderMain();
   }
 
-  handleSelectCity = (city) => {
+  updateSelectedCity = (city) => {
     this.setState({ selectedCity: city });
   };
 
-  handleSelectSortOption = (sortOption) => {
+  updateSortOption = (sortOption) => {
     this.setState({ selectedSortOption: sortOption });
   };
 
-  handleSelectRating = (rating) => {
+  updateRequestedRating = (rating) => {
     this.setState({ minRating: rating });
   };
 
-  handleClearInputs = () => {
-    this.mealNameInput.current.value = "";
-    this.minPriceInput.current.value = "";
-    this.maxPriceInput.current.value = "";
-    this.mealTagInput.current.value = "";
+  updateRequestedMeal = (mealName) => {
+    this.setState({ requestedMeal: mealName });
+  };
+
+  updatePriceRange = (minPrice, maxPrice) => {
+    this.setState({ minPrice: minPrice });
+    this.setState({ maxPrice: maxPrice });
+  };
+
+  updateMealTags = (tags) => {
+    this.setState({ mealTags: tags.map((tag) => tag.toLowerCase()) });
   };
 
   // NEED IMPORT AUTH ANS AWS4 FROM AMPLIFY
@@ -113,6 +124,27 @@ class MainPage extends Component {
   //     })
   // };
 
+  getUserMeals = async () => {
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/getMeals";
+    const Http = new XMLHttpRequest();
+    Http.open("GET", Url);
+    Http.onreadystatechange = (e) => {
+      console.log(Http.responseText);
+    };
+    return $.ajax({
+      url: Url,
+      type: "POST",
+      dataType: "json",
+      data: JSON.stringify(this.state.user.mealIDs),
+      success: function (result) {
+        // console.log(result);
+      },
+      error: function (error) {
+        console.log(`Error ${error}`);
+      },
+    }).promise();
+  };
+
   /* Sets filtered meal objects to foodItems */
   getMeals = async () => {
     this.getMealIDs()
@@ -120,10 +152,7 @@ class MainPage extends Component {
       .then((meals) => this.setState({ foodItems: meals }))
       .then(() =>
         this.setState({
-          foodItems: sortMeals(
-            this.state.selectedSortOption,
-            this.state.foodItems
-          ),
+          foodItems: sortMeals(this.state.selectedSortOption, this.state.foodItems),
         })
       );
   };
@@ -131,12 +160,9 @@ class MainPage extends Component {
   /* Returns a promise of mealIDs that are in a specified city */
   getMealIDs = async () => {
     /* Construct query string */
-    const QueryString =
-      "?city=" + this.state.selectedCity + "&minRating=" + this.state.minRating;
+    const QueryString = "?city=" + this.state.selectedCity + "&minRating=" + this.state.minRating;
 
-    const Url =
-      "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" +
-      QueryString;
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/users/" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
@@ -168,20 +194,15 @@ class MainPage extends Component {
   /* Returns a promise of array of meal objects that meet certain criteria */
   filterMeals = async (mealIDs) => {
     /* Construct query string */
-    const QueryString =
-      "?mealName=" +
-      this.mealNameInput.current.value.toLowerCase() +
-      "&minPrice=" +
-      this.minPriceInput.current.value +
-      "&maxPrice=" +
-      this.maxPriceInput.current.value +
-      "&mealTag=" +
-      this.mealTagInput.current.value.toLowerCase();
+    let QueryString =
+      "?mealName=" + this.state.requestedMeal + "&minPrice=" + this.state.minPrice + "&maxPrice=" + this.state.maxPrice;
+
+    if (this.state.mealTags !== undefined && this.state.mealTags.length != 0) {
+      QueryString += "&mealTags=" + JSON.stringify(this.state.mealTags);
+    }
 
     /* Using filterMeals Lambda function */
-    const Url =
-      "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" +
-      QueryString;
+    const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/filterMeals" + QueryString;
     const Http = new XMLHttpRequest();
     Http.open("GET", Url);
     Http.onreadystatechange = (e) => {
@@ -206,13 +227,51 @@ class MainPage extends Component {
       .promise();
   };
 
+  getUserInfo = async () => {
+    const email = localStorage.getItem("email");
+    this.loadUserInfo(email)
+      .then((result) => {
+        this.setState({ user: result.Item });
+      })
+      .then(() =>
+        this.getUserMeals().then((meals) => {
+          let activeListings = meals.filter((meal) => {
+            return meal.listingStatus == "active";
+          });
+          let pendingListings = meals.filter((meal) => {
+            return meal.listingStatus == "pending";
+          });
+          let soldListings = meals.filter((meal) => {
+            return meal.listingStatus == "sold";
+          });
+          this.setState({ userListings: { active: activeListings, pending: pendingListings, sold: soldListings } });
+        })
+      );
+  };
+
+  loadUserInfo(email) {
+    var queryString = "/user/" + email;
+    var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
+    Url = Url.concat(queryString);
+
+    return $.ajax({
+      url: Url,
+      type: "GET",
+      crossDomain: true,
+      contentType: "application/json",
+      success: function (data) {},
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  }
+
   setCurrentMeal(id) {
     let foodArr = this.state.foodItems;
     let meal = foodArr.find((item) => {
       return item.mealID === id;
     });
     this.setState({ currMeal: meal });
-    console.log(this.state.mealIDs);
   }
 
   logOut() {
@@ -225,26 +284,21 @@ class MainPage extends Component {
     return (
       <React.Fragment>
         <SearchForm
-          mealNameInput={this.mealNameInput}
-          minPriceInput={this.minPriceInput}
-          maxPriceInput={this.maxPriceInput}
-          mealTagInput={this.mealTagInput}
           cities={this.cities}
           selectedCity={this.state.selectedCity}
-          handleSelectCity={this.handleSelectCity}
+          updateSelectedCity={this.updateSelectedCity}
           sortOptions={this.sortOptions}
           selectedSortOption={this.state.selectedSortOption}
-          handleSelectSortOption={this.handleSelectSortOption}
-          onClick={this.getMeals}
-          handleSelectRating={this.handleSelectRating}
-          handleClearInputs={this.handleClearInputs}
+          updateSortOption={this.updateSortOption}
+          getMeals={this.getMeals}
+          updateRequestedMeal={this.updateRequestedMeal}
+          updatePriceRange={this.updatePriceRange}
+          updateMealTags={this.updateMealTags}
+          updateRequestedRating={this.updateRequestedRating}
         />
         <NavBar />
-        <SideBar />
-        <CardList
-          foodItems={this.state.foodItems}
-          getMealById={(id) => this.setCurrentMeal(id)}
-        />
+        <SideBar user={this.state.user} userListings={this.state.userListings} />
+        <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
         <ListingModal meal={this.state.currMeal} />
         <button onClick={this.logOut}>Log Out</button>
       </React.Fragment>
@@ -261,7 +315,6 @@ class MainPage extends Component {
         <Route exact path="/" render={this.renderMain} />
         <Route path="/listing" component={renderListing} />
         <Route path="/newItem" component={NewItemPage} />
-        <Route path='/profile/:user' component={ProfilePage} />
       </Router>
     );
   }
