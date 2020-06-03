@@ -217,8 +217,8 @@ class NewItemPage extends Component {
             },
             crossDomain: true,
             data: JSON.stringify(_data),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
+            // dataType: "json",
+            // contentType: "application/json; charset=utf-8",
             success: function (result) {
                 console.log("MealPut success\n")
                 console.log(result);

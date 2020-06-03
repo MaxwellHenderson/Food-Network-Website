@@ -20,7 +20,7 @@ label {
   font-weight: 300;
   letter-spacing: 0.025em;
   margin-top: 16px;
-  display: block;
+  /* display: block; */
 }
 
 #paymentSubmitButton {
