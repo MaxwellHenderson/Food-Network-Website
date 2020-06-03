@@ -19,12 +19,17 @@ class CheckoutForm extends Component {
 
         const queryString = "?mealId=" + (this.props.mealId);
         const url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/payment/" + queryString;
+        console.log(url);
 
         $.ajax({
             url: url,
             type: 'GET',
+            headers: {
+                accept: "application/json",
+            },
             success: async function(response) {
-                const client_secret = response.paymentIntent.client_secret;
+                console.log(response);
+                const client_secret = response.client_secret;
 
                 const result = await stripe.confirmCardPayment(client_secret, {
                     // Gets a reference to a mounted CardElement. Elements knows how
@@ -33,7 +38,7 @@ class CheckoutForm extends Component {
                     payment_method: {
                         card: elements.getElement(CardElement),
                         billing_details: {
-                            name: 'John Doe'
+                            name: "John Doe" 
                         }
                     }
                 });
@@ -45,6 +50,8 @@ class CheckoutForm extends Component {
                     if (result.paymentIntent.status === 'succeeded') {
                         // Show success prompt
                         console.log("Payment succeeded");
+                        window.setTimeout(null, 3000);
+                        window.location.href = "/";
                     }
                 }
             }, 
