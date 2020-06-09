@@ -6,6 +6,7 @@ import SearchForm from "../components/search-form.jsx";
 import ListingPage from "../components/ViewListingPage.js";
 import NewItemPage from "./NewItemPage.js";
 import sortMeals from "./SortMeals.js";
+import NotificationPage from "../components/Notification/NotificationPage.js";
 
 import React, { Component } from "react";
 import $ from "jquery";
@@ -78,51 +79,6 @@ class MainPage extends Component {
   updateMealTags = (tags) => {
     this.setState({ mealTags: tags.map((tag) => tag.toLowerCase()) });
   };
-
-  // NEED IMPORT AUTH ANS AWS4 FROM AMPLIFY
-  // handleGetMeal = async () => {
-  //     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings/";
-  //     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/";
-  //     const Http = new XMLHttpRequest();
-
-  //     Http.open("GET", Url);
-  //     Http.onreadystatechange = (e) => {
-  //       console.log(Http.responseText)
-  //     }
-
-  //     const opts = {
-  //       method: "GET",
-  //       service: "execute-api",
-  //       region: "us-west-2",
-  //       path: "/listings",
-  //       url: "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/stage-1/listings/"
-  //     };
-
-  //     var that = this;
-  //     const credentials = await Auth.currentCredentials();
-  //     const { accessKeyId, secretAccessKey, sessionToken } = credentials;
-  //     const request = aws4.sign(opts.url, {
-  //       accessKeyId,
-  //       secretAccessKey,
-  //       sessionToken
-  //     });
-  //     $.ajax({
-  //       url: Url,
-  //       type: 'GET',
-  //       url: opts.url,
-  //       headers: request.headers,
-  //       success: function(result){
-  //         // console.log(result)
-  //         that.setState({
-  //           foodItems: that.state.selectedSortOption.sort(result)
-  //         })
-  //       },
-  //       error: function(error){
-  //         console.log(`Error ${error}`)
-  //         console.log(`Error ${error.responseText}`)
-  //       }
-  //     })
-  // };
 
   getUserMeals = async () => {
     const Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/getMeals";
@@ -307,14 +263,19 @@ class MainPage extends Component {
 
   render() {
     let renderListing = () => {
-      return <ListingPage meal={this.state.currMeal} />;
+      return <ListingPage meal={this.state.currMeal} user={this.state.user} />;
     };
+
+    let renderNotifications = () => {
+      return <NotificationPage user={this.state.user}/>
+    }
 
     return (
       <Router>
         <Route exact path="/" render={this.renderMain} />
         <Route path="/listing" component={renderListing} />
         <Route path="/newItem" component={NewItemPage} />
+        <Route path="/notifications"  render={renderNotifications}/>
       </Router>
     );
   }

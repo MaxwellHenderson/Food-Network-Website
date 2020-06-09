@@ -20,7 +20,9 @@ class NavBar extends Component {
                         <div className="nav-link" data-toggle="collapse" data-target="#searchbar" aria-expanded="false">
                             <i className="fas fa-search"></i>
                         </div>     
-                        <div className="nav-link" ><i className="fas fa-envelope"></i></div>  
+                        <NavLink to="/notifications">
+                            <div className="nav-link" ><i className="fas fa-envelope"></i></div>  
+                        </NavLink>
                         <NavLink to={{
                             pathname: `/profile/${this.email}`
                             }}>

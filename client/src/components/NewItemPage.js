@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import InputField from "./input-field";
-import CurrencyInput from 'react-currency-input';
+// import CurrencyInput from 'react-currency-input';
+import CurrencyInput from "react-currency-input";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/style.css";
 import NavBar from "./NavBar"
@@ -53,11 +54,6 @@ class NewItemPage extends Component {
         this.mealAllergyInput = React.createRef();
 
         this.s3Url = '';
-//
-    }
-
-    componentDidMount() {
-        console.log("MOUNT");
     }
 
     handleChange(event, maskedvalue, floatvalue){
@@ -66,13 +62,13 @@ class NewItemPage extends Component {
 
     render() {
         return (
-            <div class="mt-2 p-4">
+            <div class="mt-4 p-4">
                 <NavBar></NavBar>
                 {/* <div class="form-group">
                     <label for="title-input" >What is your meal?</label>
                     <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
                 </div> */}
-                <InputField labelName="What is your meal?" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} />
+                <InputField labelName="What is your meal" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} />
 
                 <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
 

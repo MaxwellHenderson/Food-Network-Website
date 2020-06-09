@@ -130,9 +130,11 @@ class ProfilePage extends Component{
     /*sort userPostings[] for active postings*/
     sortActive = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "active"){
-                var temp = this.state.userActivePostings.concat(element);
-                await this.promise_setState({userActivePostings:temp}) 
+            if (element){
+                if (element.listingStatus === "active"){
+                    var temp = this.state.userActivePostings.concat(element);
+                    await this.promise_setState({userActivePostings:temp}) 
+                }
             }
         });
     }
@@ -140,9 +142,11 @@ class ProfilePage extends Component{
     /*sort userPostings[] for pending postings*/
     sortPending = async(array) =>{
         array.forEach(async (element) => {
-            if(element.listingStatus === "pending"){
-                var temp = this.state.userPendingPostings.concat(element);
-                await this.promise_setState({userPendingPostings:temp}) 
+            if (element) {
+                if(element.listingStatus === "pending"){
+                    var temp = this.state.userPendingPostings.concat(element);
+                    await this.promise_setState({userPendingPostings:temp}) 
+                }
             }
         });
     }

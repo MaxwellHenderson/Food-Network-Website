@@ -1,0 +1,22 @@
+.item-container{
+    display: inline-block;
+}
+.item-list{
+    list-style: none;
+}
+.item-list li{
+    border-radius: 10px;
+    border: 2px solid rgb(218, 218, 218);
+    margin: 20px;
+    padding: 25px;
+}
+.item-list li .avatar{
+    float:left;
+}
+.item-list li p{
+    word-wrap: break-word;
+}
+.item-list li button{
+    float:right;
+    margin: 5px 5px 10px 10px;
+}
