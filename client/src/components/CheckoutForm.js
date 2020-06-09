@@ -7,6 +7,45 @@ import firebase from "firebase/app";
 
 // Modified template code from Stripe code sample
 class CheckoutForm extends Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            posterName: {}
+        }
+    }
+    componentDidMount() 
+    {
+        this.getPosterEmail();
+    }
+
+    getPosterEmail= async () => {
+        const email = this.props.meal.poster;
+        this.loadUserInfo(email)
+          .then((result) => {
+            this.setState({ posterName: result.Item.displayname});
+          });
+    };
+
+    loadUserInfo(email) {
+        var queryString = "/user/" + email;
+        var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
+        Url = Url.concat(queryString);
+    
+        return $.ajax({
+            url: Url,
+            type: "GET",
+            crossDomain: true,
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            },
+        });
+    }
+
     handleSubmit = async (event) => {
         // Block native form submission.
         event.preventDefault();
@@ -14,6 +53,7 @@ class CheckoutForm extends Component {
         const { stripe, elements } = this.props;
         const meal = this.props.meal;
         const user = this.props.user;
+        const posterName = this.state.posterName;
         
         if (!stripe || !elements) {
             // Stripe.js has not loaded yet. Make sure to disable
@@ -24,6 +64,7 @@ class CheckoutForm extends Component {
         const queryString = "?mealId=" + (this.props.mealId);
         const url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/payment/" + queryString;
         console.log(url);
+
 
         $.ajax({
             url: url,
@@ -62,24 +103,23 @@ class CheckoutForm extends Component {
                         console.log(user.displayname);
                         console.log(user.email);
 
-
                         var myRef = firebase.database().ref('requests');
                         var key = myRef.push().getKey();
                         console.log("Key: " + key);
                         myRef.child(key).set({
                             meal_id: key,
-                            meal_imgsrc: "https://target.scene7.com/is/image/Target/GUEST_5c921084-dcbe-4785-b426-5fc5a4e3f607?wid=488&hei=488&fmt=pjpeg",
-                            meal_name: "jalapeno chips",
-                            meal_price: "4.99",
+                            meal_imgsrc: meal.mealImagePath,
+                            meal_name: meal.mealName,
+                            meal_price: meal.mealPrice,
                             response: "pending",
-                            seller_displayname: "jerryzhu34",
-                            seller_email: "jerryzhu@gmail_DOT_com",
-                            buyer_displayname: "PJ",
-                            buyer_email: "pj@gmail_DOT_com",
+                            seller_displayname: this.state.posterName,
+                            seller_email: meal.poster.replace(".", "_DOT_"),
+                            buyer_displayname: posterName, 
+                            buyer_email: user.email.replace(".", "_DOT_"),
                         }).then((snap)=>{
                             console.log("What is the value of the key?: " + key);
-                            firebase.database().ref('users/pj@gmail_DOT_com').child("purchase_requests").child(key).set(true);
-                            firebase.database().ref('users/jerryzhu@gmail_DOT_com').child("purchase_requests").child(key).set(true);
+                            firebase.database().ref('users/' + meal.poster.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
+                            firebase.database().ref('users/' + user.email.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
                         });
                         // Show success prompt
                         console.log("Payment succeeded");
@@ -94,6 +134,7 @@ class CheckoutForm extends Component {
             }
         })
     };
+
 
     render() {
         const {stripe} = this.props;

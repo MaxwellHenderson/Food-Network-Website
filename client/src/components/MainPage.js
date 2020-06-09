@@ -215,7 +215,9 @@ class MainPage extends Component {
       type: "GET",
       crossDomain: true,
       contentType: "application/json",
-      success: function (data) {},
+      success: function (data) {
+        console.log(data);
+      },
       error: function (error) {
         console.log(error);
       },
