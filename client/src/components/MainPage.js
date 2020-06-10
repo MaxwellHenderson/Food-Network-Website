@@ -277,7 +277,7 @@ class MainPage extends Component {
         <Route exact path="/" render={this.renderMain} />
         <Route path="/listing" component={renderListing} />
         <Route path="/newItem" component={NewItemPage} />
-        <Route path="/notifications"  render={renderNotifications}/>
+        <Route path="/notifications" render={renderNotifications}/>
       </Router>
     );
   }

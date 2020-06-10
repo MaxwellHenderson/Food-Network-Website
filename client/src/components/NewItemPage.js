@@ -192,7 +192,6 @@ class NewItemPage extends Component {
             mealTags: this.mealTagsInput.current.value,
             mealIngredients: this.mealIngredientsInput.current.value,
             mealAllergy: this.mealAllergyInput.current.value,
-            // userEmail: "jerryzhu34@gmail.com"
             userEmail: localStorage.getItem("email")
         };
 

@@ -39,7 +39,9 @@ class ProfilePage extends Component{
         let result2 = await this.loadPostings(item);
          if(result2 != null){
             var newState = this.state.userPostings.concat(result2.Item);
-            await this.promise_setState({ userPostings: newState }) 
+            await this.promise_setState({ userPostings: newState }, () => {
+                console.log(this.state.userPostings);
+            }) 
          }else{
             console.log("Empty result2")
          }
@@ -66,6 +68,7 @@ class ProfilePage extends Component{
             dataType: 'json',
            
             success: function(data) {
+                console.log(data);
             },   
             error:function(error) {
                 console.log(error); 

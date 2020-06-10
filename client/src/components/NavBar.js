@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-
+import firebase from 'firebase';
+import '../components/Notification/Notification.css';
+import BellIcon from "react-bell-icon";
 var email = localStorage.getItem("email");
-var profileLink = "/profile"+email;
+var profileLink = "/profile" + email;
 
 class NavBar extends Component {
     
