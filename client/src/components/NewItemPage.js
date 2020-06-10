@@ -3,10 +3,13 @@ import InputField from "./input-field";
 import CurrencyInput from 'react-currency-input';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/style.css";
-import NavBar from "./NavBar"
+import MealTags from "./MealTags";
+import NavBar from "./NavBar";
+import Tags from "./Tags";
 import AWS from 'aws-sdk';
 import $ from 'jquery';
 import { v4 as uuidv4 } from 'uuid';
+import { Badge, Form } from "react-bootstrap";
 
 // var AWS = require("aws-sdk");
 
@@ -39,7 +42,10 @@ class NewItemPage extends Component {
         super(props);
 
         this.state = {
-            amount: 0.00
+            amount: 0.00,
+            mealTags: [],
+            ingredientTags: [],
+            allergyTags: []
         };
         
         this.handleChange = this.handleChange.bind(this);
@@ -65,13 +71,12 @@ class NewItemPage extends Component {
     }
 
     render() {
+        const{
+            updateMealTags
+        } = this.props;
         return (
             <div class="mt-2 p-4">
                 <NavBar></NavBar>
-                {/* <div class="form-group">
-                    <label for="title-input" >What is your meal?</label>
-                    <input type="text" class="form-control" id="title-input" placeholder="ex Hamburger, Tofu, Sushi..." ref={this.mealNameInput}></input>
-                </div> */}
                 <InputField labelName="What is your meal?" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} />
 
                 <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
@@ -86,48 +91,34 @@ class NewItemPage extends Component {
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-mdb-color btn-rounded float-left">
                                 <span>Choose file</span>
-                                <input type="file" id="photoFile" onChange="updatePhoto"></input>
+                                {/* <input type="file" id="photoFile" onChange="updatePhoto"></input> */}
+                                <input type="file" id="photoFile"></input>
                             </div>
                         </div>
 
-                        <InputField labelName="Tags" placeHolder="Seafood, Spanish..." input={this.mealTagsInput} />
-                        <InputField labelName="Ingredients" placeHolder="" input={this.mealIngredientsInput} />
-                        <InputField labelName="Allergy" placeHolder="Peanuts, Milk..." input={this.mealAllergyInput} />
-                        {/* <div label="food-tags">
-                            <label for="foodTagsBox">Tags:</label>
-                            <input type="text" class="form-control" id="foodTagsBox" placeholder="Seafood, Spanish..." ref={this.mealTagsInput}></input>
-                        </div>
-                        <div label="ingredients">
-                            <label for="ingredientsField">Ingredients:</label>
-                            <input type="text" class="form-control" id="ingredientsField" placeholder="" ref={this.mealIngredientsInput}></input>
-                        </div>
-                        <div label="allergy-info">
-                            <label for="allergyBox">Allergy:</label>
-                            <input type="text" class="form-control" id="allergyBox" placeholder="Peanuts, Milk..." ref={this.mealAllergyInput}></input>
-                        </div> */}
+                        <label htmlFor="mealTags">Meal Tags:</label>
+                        <Tags id="mealTags" updateMealTags={this.updateMealTags} />
+
+                        <label htmlFor="ingredientTags">Ingredients:</label>
+                        <Tags id="ingredientTags" updateMealTags={this.updateIngredientTags} />
+
+                        <label htmlFor="allergyTags">Allergies:</label>
+                        <Tags id="allergyTags" updateMealTags={this.updateAllergyTags} />
+
                     </form>
 
                     <div label="right column" class="w-50 p-4">
                         <div label="food-description">
-                            <label for="foodDescriptionBox">Food Description</label>
+                            <label htmlFor="foodDescriptionBox">Food Description</label>
                             <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput}></textarea>
                         </div>
 
-                        <label for="price">Price:</label>
+                        <label htmlFor="price">Price:</label>
 
                         <div>
                             <CurrencyInput value={this.state.amount} onChangeEvent={this.handleChange}/>
                         </div>
 
-                        {/* <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">$</span>
-                            </div>
-                            <input type="text" class="form-control" aria-label="Amount" ref={this.mealPriceInput}></input>
-                        </div> */}
-
-                        {/* <label for="quantity">Quantity:</label>
-                        <input type="text" class="form-control" ref={this.mealQuantityInput}></input> */}
                         <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
 
                         <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
@@ -140,12 +131,7 @@ class NewItemPage extends Component {
     handleValueChange = async(val) => {
         this.mealPriceInput.value = val;
     }
-//     const [value, setValue] = useState(0);
-//   const handleValueChange = useCallback(val => {
-//     // eslint-disable-next-line
-//     console.log(val);
-//     setValue(val);
-//   }, []);
+
 
     addPhoto = async() => {
         var files = document.getElementById("photoFile").files;
@@ -168,6 +154,15 @@ class NewItemPage extends Component {
         })
     };
 
+    updateMealTags = (tags) => {
+        this.setState({ mealTags: tags.map((tag) => tag.toLowerCase()) });
+    };
+    updateIngredientTags = (tags) => {
+        this.setState({ ingredientTags: tags.map((tag) => tag.toLowerCase()) });
+    };
+    updateAllergyTags = (tags) => {
+        this.setState({ allergyTags: tags.map((tag) => tag.toLowerCase()) });
+    };
 
     handleAddMeal = async () => {
         
@@ -193,10 +188,12 @@ class NewItemPage extends Component {
             mealName: this.mealNameInput.current.value,
             mealPrice: this.state.amount,
             mealQuantity: this.mealQuantityInput.current.value,
-            mealTags: this.mealTagsInput.current.value,
-            mealIngredients: this.mealIngredientsInput.current.value,
-            mealAllergy: this.mealAllergyInput.current.value,
-            // userEmail: "jerryzhu34@gmail.com"
+            // mealTags: this.mealTagsInput.current.value,
+            mealTags: this.state.mealTags,
+            // mealIngredients: this.mealIngredientsInput.current.value,
+            mealIngredients: this.state.ingredientTags,
+            // mealAllergy: this.mealAllergyInput.current.value,
+            mealAllergy: this.state.allergyTags,
             userEmail: localStorage.getItem("email")
         };
 
@@ -206,7 +203,8 @@ class NewItemPage extends Component {
         };
 
 
-        console.log(JSON.stringify(_data));
+        console.log("The value of _data:\n"+JSON.stringify(_data));
+        console.log("The value of _data2:\n"+JSON.stringify(_data2));
         //Puts the meal information into the database
         $.ajax({
             url: mealUrl,
@@ -220,10 +218,11 @@ class NewItemPage extends Component {
             // dataType: "json",
             // contentType: "application/json; charset=utf-8",
             success: function (result) {
-                console.log("MealPut success\n")
+                console.log("Meal table MealPut success\n")
                 console.log(result);
             },
             error: function (xhr, status, error) {
+                console.log("Meal table MealPut failure");
                 console.log(JSON.stringify(xhr));
             }
         });
@@ -240,10 +239,11 @@ class NewItemPage extends Component {
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             success: function (result) {
-                console.log("MealPut success\n")
+                console.log("User table MealPut success\n")
                 console.log(result);
             },
             error: function (xhr, status, error) {
+                console.log("User table MealPut failure");
                 console.log(JSON.stringify(xhr));
             }
         });
