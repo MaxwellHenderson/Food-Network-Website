@@ -232,11 +232,7 @@ class MainPage extends Component {
     this.setState({ currMeal: meal });
   }
 
-  logOut() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    window.location.reload();
-  }
+
 
   renderMain = () => {
     return (
@@ -258,7 +254,6 @@ class MainPage extends Component {
         <SideBar user={this.state.user} userListings={this.state.userListings} />
         <CardList foodItems={this.state.foodItems} getMealById={(id) => this.setCurrentMeal(id)} />
         <ListingModal meal={this.state.currMeal} />
-        <button onClick={this.logOut}>Log Out</button>
       </React.Fragment>
     );
   };

@@ -30,7 +30,7 @@ class NotificationPage extends Component {
 
 
 
-/*CASE 1: user clicks on notification bell and sees stored notifications from firebase */
+    /*CASE 1: user clicks on notification bell and sees stored notifications from firebase */
 
     promise_setState = async(newState) =>{
         new Promise((resolve) => {
@@ -182,9 +182,6 @@ class NotificationPage extends Component {
         //@TODO-LATER: make notification bell component that can render the number of unseen notifications in the corner
         return(
             <div className="not-container">
-                <form onSubmit={this.Send_Notification}>
-                    <button type="submit">send requests</button>
-                </form>
                 <form onSubmit={this.Read_Notifications}> 
                     <button type="submit">view requests
                         <BellIcon width='40' active={this.state.hasNewNotifications} animate={this.state.hasNewNotifications} color={this.state.bellColor}/>

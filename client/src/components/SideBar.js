@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 
 class SideBar extends Component {
+  logOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    window.location.reload();
+  }
+
+
   render() {
     const { user, userListings } = this.props;
     return (
@@ -9,7 +16,7 @@ class SideBar extends Component {
         className="sidebar collapse"
         style={{
           width: "230px",
-          marginTop: "0px",
+          marginTop: "1vh",
           backgroundColor: "#393D3F",
           height: "95vh",
           position: "fixed",
@@ -122,11 +129,11 @@ class SideBar extends Component {
             className="row mx-0 border-top"
             style={{ fontSize: "28px", position: "absolute", bottom: 0 }}
           >
-            <div className="column px-4 py-2 border-right">
-              <i className="fas fa-plus"></i>
+            <div onClick={() => this.logOut()} className="column px-4 py-2 border-right">
+              <i className="fa fa-sign-out"></i>
             </div>
             <div className="column px-4 py-2 border-right">
-              <i className="far fa-grin-beam-sweat"></i>
+              <i className="fas fa-plus"></i>
             </div>
             <div className="column px-4 py-2">
               <i className="fas fa-cog"></i>
