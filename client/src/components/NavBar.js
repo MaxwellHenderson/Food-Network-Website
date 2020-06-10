@@ -22,7 +22,8 @@ class NavBar extends Component {
             added: false,
             hasNewNotifications: false,
             bellColor: "#000000",
-            email: email.replace(".", "_DOT_") 
+            // email: email.replace(".", "_DOT_") 
+            email: email.split('.').join('_DOT_')
         }
 
         this.Read_Notifications = this.Read_Notifications.bind(this);
@@ -152,7 +153,7 @@ class NavBar extends Component {
                         </div>
                     </div>
                 </div>
-                <NotificationItem notifications={this.state.notifications} myEmail={localStorage.getItem("email").replace(".", "_DOT_")}/>
+                <NotificationItem notifications={this.state.notifications} myEmail={localStorage.getItem("email").split('.').join('_DOT_')}/>
             </React.Fragment>
         );
     }

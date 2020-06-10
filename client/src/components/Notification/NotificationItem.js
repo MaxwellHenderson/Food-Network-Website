@@ -31,7 +31,7 @@ class NotificationItem extends Component{
             return "You have requested to purchase " + meal_name + " from " + seller_name + " for " + meal_price;
         }
         create_Seller_Request_Notification(buyer_name, meal_name, meal_price){
-            return buyer_name + "has requested to purchase " + meal_name + " from you for " + meal_price;
+            return buyer_name + " has requested to purchase " + meal_name + " from you for " + meal_price;
         }
     
         //Notification bodies for when a purchase request is accepted or declined

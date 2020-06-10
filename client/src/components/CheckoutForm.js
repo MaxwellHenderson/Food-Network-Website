@@ -117,13 +117,15 @@ class CheckoutForm extends Component {
                             meal_price: meal.mealPrice,
                             response: "pending",
                             seller_displayname: posterName,
-                            seller_email: meal.poster.replace(".", "_DOT_"),
+                            seller_email: meal.poster.split('.').join('_DOT_'),
                             buyer_displayname: user.displayname, 
-                            buyer_email: user.email.replace(".", "_DOT_"),
+                            buyer_email: user.email.split('.').join('_DOT_')
                         }).then((snap)=>{
                             console.log("What is the value of the key?: " + key);
-                            firebase.database().ref('users/' + meal.poster.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
-                            firebase.database().ref('users/' + user.email.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
+                            // firebase.database().ref('users/' + meal.poster.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
+                            // firebase.database().ref('users/' + user.email.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
+                            firebase.database().ref('users/' + meal.poster.split('.').join('_DOT_')).child("purchase_requests").child(key).set(true);
+                            firebase.database().ref('users/' + user.email.split('.').join('_DOT_')).child("purchase_requests").child(key).set(true);
                         });
 
                         // Show success prompt
