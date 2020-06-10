@@ -39,7 +39,7 @@ class UpdateItemPage extends Component {
         super(props);
 
         let mealIn = this.props.meal; 
-        let mealId = "de5135bf-b227-48c6-8394-f46e54eb640f";
+        let mealId = localStorage.getItem("mealID");
 
 
         this.state = {
@@ -51,7 +51,7 @@ class UpdateItemPage extends Component {
             mealTags: [],
             ingredientTags: [],
             allergyTags: [],
-            mealID: "de5135bf-b227-48c6-8394-f46e54eb640f",
+            mealID: localStorage.getItem("mealID"),
             curMeal: {}
         };
         

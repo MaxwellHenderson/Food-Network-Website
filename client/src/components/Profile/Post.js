@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import $ from "jquery";
 import './Profile.css';
+import UpdateItemPage from "../UpdateItemPage";
 
 class Posts extends Component{
     constructor(props){
@@ -86,6 +87,11 @@ class Posts extends Component{
         this.props.deleteItem(mealID);
     }
 
+    // editItem(mealID){
+    //     localStorage.setItem("mealID",mealID);
+    //     UpdateItemPage uip;
+    // }
+
     //Create PostCard
     createPost(post){
         return <li key={post.mealID}> 
@@ -99,7 +105,7 @@ class Posts extends Component{
                             <button type="button" onClick={()=> {this.deletePost(post.mealID)}}>remove</button>
                             {/* <button type="button">edit</button> */}
                             <NavLink to="/updateItem">
-                                <div className="nav-link"><div className="fas fa-plus"></div></div>
+                                <div className="nav-link" onClick={()=>localStorage.setItem("mealID",post.mealID)}><div className="fas fa-plus"></div></div>
                             </NavLink>
 
                         </div>
