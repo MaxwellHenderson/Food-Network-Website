@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Auth } from "aws-amplify";
+import { Auth, JS } from "aws-amplify";
 import $ from 'jquery';
 
 
@@ -9,28 +9,43 @@ class SignUpForm extends Component{
     super(props);
 
     this.state = {
-      username: '',
+      displayname: '',
       email:'', //UUID
-      password:'',
-      location: '', 
-      hasAgreedToTerms: String(false),
+      firstName:'',
+      lastName:'',
+      city:'',
+      state:'',
+      street:'',
+      zip:'',
       code: '',
       step: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.updateFirstName = this.updateFirstName.bind(this);
+    this.updateLastName = this.updateLastName.bind(this);
     this.updateUserName = this.updateUserName.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.updateCode = this.updateCode.bind(this);
 
-    this.signUp = this.signUp.bind(this);
-    this.confirmSignUp = this.confirmSignUp.bind(this);
+    this.Sign_Up = this.Sign_Up.bind(this);
+    this.Confirm_Sign_Up = this.Confirm_Sign_Up.bind(this);
 
-    this.handleGetEmail = this.handleGetEmail.bind(this);
-    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
+    this.Check_If_User_Exists_In_DB = this.Check_If_User_Exists_In_DB.bind(this);
+    this.Create_New_User = this.Create_New_User.bind(this);
   }
 
 /* UPDATES */
+    updateFirstName(event){
+      this.setState({
+        firstName: event.target.value
+      });
+    }
+    updateLastName(event){
+      this.setState({
+        lastName: event.target.value
+      });
+    }
     updateUserName(event){
       this.setState({
         username: event.target.value
@@ -59,7 +74,7 @@ class SignUpForm extends Component{
 /* EOF UPDATES */
 
 
-  async signUp(event){
+  async Sign_Up(event){
       event.preventDefault();
 
       var email = this.state.email;
@@ -76,26 +91,43 @@ class SignUpForm extends Component{
       }
     }
 
-    async confirmSignUp(event){
+    async Confirm_Sign_Up(event){
       event.preventDefault();
 
       var email = this.state.email;
       var code = this.state.code;
-      console.log("what is the authentication code:", code);
+
       try{
-         await Auth.confirmSignUp(email, code);
+        await Auth.confirmSignUp(email, code);
         console.log("Successfully confirmed signup!");
 
-        //putting the rest of the user information into db
-        this.handleGetEmail();
+        //putting the rest of the user information into dynamo db
+        // var result = await this.Check_If_User_Exists_In_DB(); 
+        // console.log("The result after checking if exists: "+result);
+        // console.log("Count of the result: "+result.Count);
+        // if(result != null && result.Count === 0){
+        //   console.log("User does not exists. Creating new user.");
+          this.Create_New_User();
+        // }else{
+        //   console.log("User already exists. Unable to create new user.");
+        // }
 
+        //putting user information to firebase
+        // var myRef = firebase.database().ref('users');
+        // var firebaseEmail = this.email.replace(".","_DOT_"); //firebase cannot store ids containing special characters such as .
+        // myRef.child(firebaseEmail).set({
+        //     imgsrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTXIqGqYQQW5zSXHNxhx1ZzvNgj4W7xDosW0ERkkoHwX94HMwbv&usqp=CAU", //default imgsrc
+        //     email: firebaseEmail,
+        //     displayname: this.displayname
+        // })
+      
         this.setState({ step: 0 });
       }catch(err){
-        console.log("Error signing up: ", err);
+        console.log("Unable to confirm sign up: ", err);
       }
     }
 
-    handleCreateNewUser = async () => { 
+    Create_New_User = async () => { 
       const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/user";
       const _data={
         "username": this.state.username,
@@ -103,44 +135,36 @@ class SignUpForm extends Component{
         "location": this.state.location,
         "hasAgreedToTerms": this.state.hasAgreedToTerms
       }
-      console.log(JSON.stringify(_data));
-      
-      const Http = new XMLHttpRequest();
-      Http.open("POST", Url);
   
       $.ajax({
         url: Url,
         type: 'POST',
         crossDomain: true, 
         contentType: 'application/json',
-        dataType: 'json',
-        headers:{
-            "accept": "application/json",
-            "Access-Control-Allow-Origin": '*'
-        },
+        // dataType: 'json',
+        // headers:{
+        //     "accept": "application/json",
+        //     // "Access-Control-Allow-Origin": '*'
+        // },
         data: JSON.stringify(_data),
   
         success: function(result) {
-          console.log(result);
+          console.log("Successfully created new user");
         }, 
         error:function(error) {
-          console.log(error); 
+          console.log("Unable to create new user: " + error); 
         }
       });
       return false;
     }
 
-    handleGetEmail = async () => {                 
+    Check_If_User_Exists_In_DB = async () => {                 
       var queryString = "/email/?email=" + String(this.state.email);
+      console.log("The email we are checking to see if it is in the DB: "+queryString);
       var Url = "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2"
       Url = Url.concat(queryString);
 
-      console.log(Url);
-      const Http = new XMLHttpRequest();
-      Http.open("GET", Url);
-
-      var that = this;
-      $.ajax({
+      return $.ajax({
           url: Url,
           type: 'GET',
           crossDomain: true, 
@@ -152,16 +176,12 @@ class SignUpForm extends Component{
           },
           
           success: function(result){
-              if(result.Count === 0){
-                console.log("Email does not exist proceed to signup");
-                that.handleCreateNewUser();
-               // window.location.reload();
-              }else{
-                console.log("Email exists");
-              }
+            console.log("Inside AJAX");
+            console.log(result.toString());
+            console.log(result.valueOf("length"));
           },
           error: function(error){
-              console.log(error);
+            console.log(error);
           }
       })
     }
@@ -174,21 +194,36 @@ class SignUpForm extends Component{
               {
                 this.state.step === 0 && (
                 
-                  <form className="FormFields" onSubmit={this.signUp}>
+                  <form className="FormFields" onSubmit={this.Sign_Up}>
                     
                     <div className="FormField">
-                      <label className="FormField__Label" htmlFor="name">Full Name</label>
+                      <label className="FormField__Label" htmlFor="firstName">First Name</label>
                       <input
                         type="text"
-                        id="name"
+                        id="firstName"
                         className="FormField__Input"
-                        placeholder="Enter your full name"
-                        name="name"
+                        placeholder="Enter your last name"
+                        name="firstName"
                         required="required"
-                        // value={this.state.username}
-                        // onChange={this.updateUserName.bind(this)}
+                        value={this.state.fistName}
+                        onChange={this.updateFirstName.bind(this)}
                         />
                     </div>
+
+                    <div className="FormField">
+                      <label className="FormField__Label" htmlFor="lastName">Last Name</label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        className="FormField__Input"
+                        placeholder="Enter your last name"
+                        name="lastName"
+                        required="required"
+                        value={this.state.lastName}
+                        onChange={this.updateLastName.bind(this)}
+                        />
+                    </div>
+
 
                     <div className="FormField">
                       <label className="FormField__Label" htmlFor="email">Email Address</label>
@@ -268,7 +303,7 @@ class SignUpForm extends Component{
                 {
                 this.state.step === 1 && (
                 
-                  <form className="FormFields" onSubmit={this.confirmSignUp}>
+                  <form className="FormFields" onSubmit={this.Confirm_Sign_Up}>
    
                     <div className="FormField">
                       <label className="FormField__Label" htmlFor="email">Email Address</label>
