@@ -7,6 +7,7 @@ import ListingModal from './components/ListingModal.js';
 import NavBar from "./components/NavBar.js";
 import SideBar from "./SideBar.js";
 import CardList from "./CardList.js";
+import UpdateItemPage from "./components/UpdateItemPage";
 import Login from "./components/Login/Login.js";
 import MainPage from "./components/MainPage.js";
 
@@ -62,6 +63,7 @@ class App extends Component {
             <Route exact path='/' component={renderRoot} />
             <Route path='/newItem' component={NewItemPage} />
             <Route path='/profile' component={ProfilePage} />
+            <Route path='/updateItem' component={UpdateItemPage} />
           </Switch>
         </Router>
       </div>

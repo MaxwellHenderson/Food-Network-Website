@@ -33,20 +33,34 @@ const s3 = new AWS.S3({
     params: {Bucket: bucketName}
 });
 
-class NewItemPage extends Component {
+class UpdateItemPage extends Component {
     
     constructor(props) {
-        
         super(props);
 
+        let mealIn = this.props.meal; 
+        let mealId = "de5135bf-b227-48c6-8394-f46e54eb640f";
+
+
         this.state = {
+            mealName:"",
+            mealImagePath:"",
+            mealQuantity:"",
+            mealDescription:"",
             amount: 0.00,
             mealTags: [],
             ingredientTags: [],
-            allergyTags: []
+            allergyTags: [],
+            mealID: "de5135bf-b227-48c6-8394-f46e54eb640f",
+            curMeal: {}
         };
         
-        this.handleChange = this.handleChange.bind(this);
+        // this.handleChange = this.handleChange.bind(this);
+        this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleQuantityChange = this.handleQuantityChange.bind(this);
+        this.handleValueChange = this.handleValueChange.bind(this);
+        this.fillFields = this.fillFields.bind(this);
 
         this.mealNameInput = React.createRef();
         this.mealPriceInput = React.createRef();
@@ -55,31 +69,92 @@ class NewItemPage extends Component {
         this.mealTagsInput = React.createRef();
         this.mealIngredientsInput = React.createRef();
         this.mealAllergyInput = React.createRef();
+        
 
         this.s3Url = '';
     }
 
     componentDidMount() {
+        this.fillFields();
+        this.render();
         console.log("MOUNT");
     }
 
-    handleChange(event, maskedvalue, floatvalue){
+    /*load user postings from database*/
+    loadPostings = mealID  => {
+        var mealId = String(mealID).trim();
+        var pathParam = "/listings/" + mealId;
+        var Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj_stage_01";
+        Url = Url.concat(pathParam);
+
+        return $.ajax({
+            url: Url,
+            type: 'GET',
+            crossDomain: true, 
+            contentType: 'application/json',
+            dataType: 'json',
+            
+            success: function(data) {
+                console.log("Success finding meal info: \n"+JSON.stringify(data));
+            },   
+            error:function(error) {
+                console.log(error); 
+            }
+        });
+    }
+        
+    
+
+    fillFields(){
+        console.log("Trying to fill the fields");
+        this.loadPostings(this.state.mealID)
+            .then((meal)=>{
+                this.setState({curMeal:meal.Item});
+                console.log("MEAL IN FILL FIELDS: "+ JSON.stringify(this.state.curMeal));
+                this.setState({mealName:this.state.curMeal.mealName});
+                this.setState({mealImagePath:this.state.curMeal.mealImagePath});
+                this.setState({mealDescription:this.state.curMeal.mealDescription});
+                this.setState({mealTags:this.state.curMeal.mealTags});
+                this.setState({allergyTags:this.state.curMeal.allergens});
+                this.setState({ingredientTags:this.state.curMeal.ingredients});
+                this.setState({amount:this.state.curMeal.mealPrice});
+                this.setState({mealQuantity:this.state.curMeal.mealQuantity});
+            });
+        
+
+        console.log("curMeal: \n"+JSON.stringify(this.state.curMeal));
+    }
+    //Change handlers
+    handleDescriptionChange = (event) => {
+        this.setState({mealDescription:event.target.value});
+    }
+    handleNameChange = (event) => {
+        this.setState({mealName:event.target.value});
+    }
+    handleQuantityChange = (event) => {
+        this.setState({mealQuantity:event.target.value});
+    }
+    handleValueChange(event, maskedvalue, floatvalue){
         this.setState({amount: maskedvalue});
     }
 
+
+
     render() {
+        console.log("I have rendered the UpdateItemPage");
         const{
             updateMealTags
         } = this.props;
+        // let meal = this.state.curMeal;
         return (
             <div class="mt-2 p-4">
                 <NavBar></NavBar>
-                <InputField labelName="What is your meal?" placeHolder="Hamburger, Tofu, Sushi..." input={this.mealNameInput} />
+                <InputField labelName="What is your meal?" placeHolder={this.state.mealName} input={this.mealNameInput} onChange = {this.handleNameChange}/>
 
                 <div class="row justify-content-center p-4 border bg-light" id="photo-and-description">
 
                     <form class="md-form w-50 p-4">
-                        <div class="file-field">
+                        {/* <div class="file-field">
                             <div class="z-depth-1-half mb-4">
                                 <img id="FoodImage" src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid"
                                     alt="example placeholder"></img>
@@ -88,10 +163,9 @@ class NewItemPage extends Component {
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-mdb-color btn-rounded float-left">
                                 <span>Choose file</span>
-                                {/* <input type="file" id="photoFile" onChange="updatePhoto"></input> */}
                                 <input type="file" id="photoFile"></input>
                             </div>
-                        </div>
+                        </div> */}
 
                         <label htmlFor="mealTags">Meal Tags:</label>
                         <Tags id="mealTags" updateMealTags={this.updateMealTags} />
@@ -107,16 +181,16 @@ class NewItemPage extends Component {
                     <div label="right column" class="w-50 p-4">
                         <div label="food-description">
                             <label htmlFor="foodDescriptionBox">Food Description</label>
-                            <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput}></textarea>
+                    <textarea class="form-control rounded-0" id="foodDescriptionBox" rows="10" ref={this.mealDescriptionInput} placeholder = {this.state.mealDescription} onChange = {this.handleDescriptionChange}></textarea>
                         </div>
 
                         <label htmlFor="price">Price:</label>
 
                         <div>
-                            <CurrencyInput value={this.state.amount} onChangeEvent={this.handleChange}/>
+                            <CurrencyInput value={this.state.amount} onChangeEvent={this.handleValueChange}/>
                         </div>
 
-                        <InputField labelName="Quantity" placeHolder="" input={this.mealQuantityInput} />
+                        <InputField labelName="Quantity" placeHolder={this.state.mealQuantity} input={this.mealQuantityInput} onChange={this.handleQuantityChange} />
 
                         <button class="btn btn-success mt-4" type="button" onClick={() => this.handleAddMeal()} >Submit Listing</button>
                     </div>
@@ -124,11 +198,6 @@ class NewItemPage extends Component {
             </div>
         );
     }
-
-    handleValueChange = async(val) => {
-        this.mealPriceInput.value = val;
-    }
-
 
     addPhoto = async() => {
         var files = document.getElementById("photoFile").files;
@@ -163,10 +232,10 @@ class NewItemPage extends Component {
 
     handleAddMeal = async () => {
         
-        var testID = uuidv4();
-        console.log(testID);
+        // var testID = uuidv4();
+        // console.log(testID);
 
-        var fileUrl = this.addPhoto();
+        // var fileUrl = this.addPhoto();
         
         var email = localStorage.getItem("email");
         console.log(email);
@@ -174,31 +243,21 @@ class NewItemPage extends Component {
         const mealUrl =
             "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/listings";
 
-        const userUrl = 
-            "https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/max-stage/user";
-
-
         const _data = {
-            mealID: testID,
-            mealDescription: this.mealDescriptionInput.current.value,
+            mealID: this.state.mealID,
+            mealDescription: this.state.mealDescription,
             mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
-            mealName: this.mealNameInput.current.value,
+            mealName: this.state.mealName,
             mealPrice: this.state.amount,
-            mealQuantity: this.mealQuantityInput.current.value,
+            mealQuantity: this.state.mealQuantity,
             mealTags: this.state.mealTags,
             mealIngredients: this.state.ingredientTags,
             mealAllergy: this.state.allergyTags,
             userEmail: localStorage.getItem("email")
         };
 
-        const _data2 = {
-            mealID: testID,
-            userEmail: localStorage.getItem("email")
-        };
-
-
         console.log("The value of _data:\n"+JSON.stringify(_data));
-        console.log("The value of _data2:\n"+JSON.stringify(_data2));
+
         //Puts the meal information into the database
         $.ajax({
             url: mealUrl,
@@ -221,30 +280,9 @@ class NewItemPage extends Component {
             }
         });
 
-        $.ajax({
-            url: userUrl,
-            type: "PUT",
-            dataType: "jsonp",
-            headers: {
-                accept: "application/json",
-            },
-            crossDomain: true,
-            data: JSON.stringify(_data2),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (result) {
-                console.log("User table MealPut success\n")
-                console.log(result);
-            },
-            error: function (xhr, status, error) {
-                console.log("User table MealPut failure");
-                console.log(JSON.stringify(xhr));
-            }
-        });
-
         return false;
     };
 
 }
 
-export default NewItemPage;
+export default UpdateItemPage;

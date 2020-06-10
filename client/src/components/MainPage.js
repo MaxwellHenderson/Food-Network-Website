@@ -5,6 +5,7 @@ import SideBar from "./SideBar.js";
 import SearchForm from "../components/search-form.jsx";
 import ListingPage from "../components/ViewListingPage.js";
 import NewItemPage from "./NewItemPage.js";
+import UpdateItemPage from "./UpdateItemPage";
 import sortMeals from "./SortMeals.js";
 
 import React, { Component } from "react";
@@ -315,6 +316,7 @@ class MainPage extends Component {
         <Route exact path="/" render={this.renderMain} />
         <Route path="/listing" component={renderListing} />
         <Route path="/newItem" component={NewItemPage} />
+        <Route path="/updateItem" component={UpdateItemPage} />
       </Router>
     );
   }

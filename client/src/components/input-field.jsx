@@ -6,7 +6,8 @@ class InputField extends Component {
     const {
       labelName,
       placeHolder,
-      input
+      input,
+      onChange
     } = this.props;
     return (
       <div>
@@ -16,6 +17,7 @@ class InputField extends Component {
           class="form-control"
           placeholder={placeHolder}
           ref={input}
+          onChange={onChange}
         ></input>
       </div>
     );

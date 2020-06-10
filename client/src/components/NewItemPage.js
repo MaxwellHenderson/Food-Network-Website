@@ -91,7 +91,6 @@ class NewItemPage extends Component {
                         <div class="d-flex justify-content-center">
                             <div class="btn btn-mdb-color btn-rounded float-left">
                                 <span>Choose file</span>
-                                {/* <input type="file" id="photoFile" onChange="updatePhoto"></input> */}
                                 <input type="file" id="photoFile"></input>
                             </div>
                         </div>
