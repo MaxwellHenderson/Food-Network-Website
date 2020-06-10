@@ -34,7 +34,7 @@ class SignUpForm extends Component{
     this.Confirm_Sign_Up = this.Confirm_Sign_Up.bind(this);
 
     this.Check_If_User_Exists_In_DB = this.Check_If_User_Exists_In_DB.bind(this);
-    this.Create_New_User = this.Create_New_User.bind(this);
+    this.handleCreateNewUser = this.handleCreateNewUser.bind(this);
   }
 
 /* UPDATES */
@@ -110,7 +110,7 @@ class SignUpForm extends Component{
         // console.log("Count of the result: "+result.Count);
         // if(result != null && result.Count === 0){
         //   console.log("User does not exists. Creating new user.");
-          this.Create_New_User();
+          this.handleCreateNewUser();
         // }else{
         //   console.log("User already exists. Unable to create new user.");
         // }
