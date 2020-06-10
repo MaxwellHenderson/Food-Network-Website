@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from 'react-router-dom';
 import $ from "jquery";
 import './Profile.css';
 
@@ -96,7 +97,11 @@ class Posts extends Component{
                             <p>{post.mealDescription}</p>
                             <p>{post.mealID}</p>
                             <button type="button" onClick={()=> {this.deletePost(post.mealID)}}>remove</button>
-                            <button type="button">edit</button>
+                            {/* <button type="button">edit</button> */}
+                            <NavLink to="/updateItem">
+                                <div className="nav-link"><div className="fas fa-plus"></div></div>
+                            </NavLink>
+
                         </div>
                     </div>         
                 </li>

@@ -319,7 +319,7 @@ class SignUpForm extends Component{
                     </div>
                     
                     <div className="FormField">
-                      <label className="FormField__Label" htmlFor="authenticationCode">City</label>
+                      <label className="FormField__Label" htmlFor="authenticationCode">Authentication Code</label>
                       <input
                         type="text"
                         id="authenticationCode"

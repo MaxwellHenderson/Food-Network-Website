@@ -74,7 +74,6 @@ class ProfilePage extends Component{
                 console.log(error); 
             }
         });
-
     }
 
     /*get userObj from database*/
