@@ -3,13 +3,11 @@ import InputField from "./input-field";
 import CurrencyInput from 'react-currency-input';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/style.css";
-import MealTags from "./MealTags";
 import NavBar from "./NavBar";
 import Tags from "./Tags";
 import AWS from 'aws-sdk';
 import $ from 'jquery';
 import { v4 as uuidv4 } from 'uuid';
-import { Badge, Form } from "react-bootstrap";
 
 // var AWS = require("aws-sdk");
 
@@ -59,7 +57,6 @@ class NewItemPage extends Component {
         this.mealAllergyInput = React.createRef();
 
         this.s3Url = '';
-//
     }
 
     componentDidMount() {
