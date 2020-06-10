@@ -119,7 +119,7 @@ class SignUpForm extends Component{
         //putting user information to firebase
         var myRef = firebase.database().ref('users');
         var firebaseEmail = this.state.email;
-        firebaseEmail = firebaseEmail.replace(/./g,"_DOT_");
+        firebaseEmail = firebaseEmail.split('.').join('_DOT_');
         // var firebaseEmail = this.state.email.replace(/./g,"_DOT_"); //firebase cannot store ids containing special characters such as .
         console.log("FIREBASE EMAIL"+firebaseEmail);
         myRef.child(firebaseEmail).set({
