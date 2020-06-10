@@ -103,9 +103,9 @@ class CheckoutForm extends Component {
                         console.log(meal.mealName);
                         console.log(meal.mealPrice);
 
-                        console.log(meal.poster); // meal poster eamil
+                        console.log(localStorage.getItem("email").split('.').join('_DOT_')); // meal poster eamil
                         console.log(user.displayname);
-                        console.log(user.email);
+                        console.log(user.email.split('.').join('_DOT_'));
 
                         var myRef = firebase.database().ref('requests');
                         var key = myRef.push().getKey();
@@ -119,7 +119,8 @@ class CheckoutForm extends Component {
                             seller_displayname: posterName,
                             seller_email: meal.poster.split('.').join('_DOT_'),
                             buyer_displayname: user.displayname, 
-                            buyer_email: user.email.split('.').join('_DOT_')
+                            // buyer_email: user.email.split('.').join('_DOT_')
+                            buyer_email: localStorage.getItem("email").split('.').join('_DOT_')
                         }).then((snap)=>{
                             console.log("What is the value of the key?: " + key);
                             // firebase.database().ref('users/' + meal.poster.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
