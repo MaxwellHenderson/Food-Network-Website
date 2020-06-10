@@ -87,11 +87,6 @@ class Posts extends Component{
         this.props.deleteItem(mealID);
     }
 
-    // editItem(mealID){
-    //     localStorage.setItem("mealID",mealID);
-    //     UpdateItemPage uip;
-    // }
-
     //Create PostCard
     createPost(post){
         return <li key={post.mealID}> 

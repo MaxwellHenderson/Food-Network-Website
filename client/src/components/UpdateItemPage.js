@@ -246,7 +246,7 @@ class UpdateItemPage extends Component {
         const _data = {
             mealID: this.state.mealID,
             mealDescription: this.state.mealDescription,
-            mealImagePath: "https://"+bucketName+".s3-us-west-2.amazonaws.com/"+fileName,
+            mealImagePath: this.state.mealImagePath,
             mealName: this.state.mealName,
             mealPrice: this.state.amount,
             mealQuantity: this.state.mealQuantity,
