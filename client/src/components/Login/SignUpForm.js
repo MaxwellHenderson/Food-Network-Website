@@ -9,7 +9,9 @@ class SignUpForm extends Component{
     super(props);
 
     this.state = {
-      displayname: '',
+      firstName: '',
+      lastName: '',
+      username: '',
       email:'', //UUID
       firstName:'',
       lastName:'',
@@ -85,6 +87,7 @@ class SignUpForm extends Component{
       try{
         await Auth.signUp({username: email, password: password,});
         console.log("Signed up successfully!");
+        this.handleCreateNewUser();
         this.setState({ step: 1 });
       }catch(err){
         console.log("Error signing up: ", err);
@@ -127,9 +130,12 @@ class SignUpForm extends Component{
       }
     }
 
-    Create_New_User = async () => { 
+    handleCreateNewUser = async () => { 
+      console.log("Trying to add user to DB");
       const Url="https://0o1szwcqn7.execute-api.us-west-2.amazonaws.com/pj-stage-login-v2/user";
       const _data={
+        "firstname": this.state.firstName,
+        "lastname": this.state.lastName,
         "username": this.state.username,
         "email": this.state.email,
         "location": this.state.location,
@@ -202,10 +208,10 @@ class SignUpForm extends Component{
                         type="text"
                         id="firstName"
                         className="FormField__Input"
-                        placeholder="Enter your last name"
+                        placeholder="Enter your first name"
                         name="firstName"
                         required="required"
-                        value={this.state.fistName}
+                        value={this.state.firstName}
                         onChange={this.updateFirstName.bind(this)}
                         />
                     </div>
