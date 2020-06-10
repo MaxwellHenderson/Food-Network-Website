@@ -15,15 +15,19 @@ const stripePromise = loadStripe("pk_test_kZQuSeuPP44KCF82f1BV8s7I00uch6juFm");
 class ListingPage extends Component {
     render() {
         let meal = this.props.meal;
+        let mealTags = [];
+        let allergies = [];
 
-
-        let mealTags = meal.mealTags.map((tag) => {
-            return <div className="mx-1">{tag}</div>
-        });
-        
-        let allergies = meal.allergens.map((allergy) => {
-            return <div className="mx-1">{allergy}</div>
-        });
+        if (meal.mealTags) {
+            mealTags = meal.mealTags.map((tag) => {
+                return <div className="mx-1">{tag}</div>
+            });
+        }
+        if (meal.allergens) {
+            allergies = meal.allergens.map((allergy) => {
+                return <div className="mx-1">{allergy}</div>
+            });
+        } 
 
         return (
             <React.Fragment>

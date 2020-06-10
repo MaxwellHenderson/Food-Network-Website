@@ -17,12 +17,14 @@ class CheckoutForm extends Component {
     componentDidMount() 
     {
         this.getPosterEmail();
+        console.log(this.state.posterName);
     }
 
-    getPosterEmail= async () => {
+    getPosterEmail = async () => {
         const email = this.props.meal.poster;
         this.loadUserInfo(email)
           .then((result) => {
+            console.log(result.Item.displayname);
             this.setState({ posterName: result.Item.displayname});
           });
     };
@@ -53,7 +55,9 @@ class CheckoutForm extends Component {
         const { stripe, elements } = this.props;
         const meal = this.props.meal;
         const user = this.props.user;
+        console.log("SUBMIT");
         const posterName = this.state.posterName;
+        console.log(posterName);
         
         if (!stripe || !elements) {
             // Stripe.js has not loaded yet. Make sure to disable
@@ -112,15 +116,16 @@ class CheckoutForm extends Component {
                             meal_name: meal.mealName,
                             meal_price: meal.mealPrice,
                             response: "pending",
-                            seller_displayname: this.state.posterName,
+                            seller_displayname: posterName,
                             seller_email: meal.poster.replace(".", "_DOT_"),
-                            buyer_displayname: posterName, 
+                            buyer_displayname: user.displayname, 
                             buyer_email: user.email.replace(".", "_DOT_"),
                         }).then((snap)=>{
                             console.log("What is the value of the key?: " + key);
                             firebase.database().ref('users/' + meal.poster.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
                             firebase.database().ref('users/' + user.email.replace(".", "_DOT_")).child("purchase_requests").child(key).set(true);
                         });
+
                         // Show success prompt
                         console.log("Payment succeeded");
                         window.setTimeout(null, 3000);

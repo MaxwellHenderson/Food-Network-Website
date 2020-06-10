@@ -10,6 +10,7 @@ class NotificationPage extends Component {
     constructor(props){
         super(props);
 
+
         //this array will contain notification payloads from firebase
         this.state={
             notifications: [],
@@ -18,7 +19,7 @@ class NotificationPage extends Component {
             added: false,
             hasNewNotifications: false,
             bellColor: "#000000",
-            email: "pj@gmail_DOT_com"
+            email: this.props.user.email.replace(".", "_DOT_") 
         }
 
         this.Read_Notifications = this.Read_Notifications.bind(this);
@@ -45,12 +46,8 @@ class NotificationPage extends Component {
         { 
             await this.promise_setState({ show: true});
 
-            var email = this.props.user.email;
-            var id = email.replace(".","_DOT_");
-            console.log(id);
-
-            // await this.Load_Notifications_From_Firebase(this.state.email);
-            await this.Load_Notifications_From_Firebase(id);
+            await this.Load_Notifications_From_Firebase(this.state.email);
+            // await this.Load_Notifications_From_Firebase(id);
             this.Relax_Notification_Bell();
             //console.log("After first statement show: " + this.state.show + " added: " + this.state.added);
         }
@@ -89,7 +86,8 @@ class NotificationPage extends Component {
 
             if(that.state.show === true){ 
                 var newKey = snapshot.key;
-                that.Load_Request_From_Firebase(newKey); //fill notification array
+                //fill notification array
+                that.Load_Request_From_Firebase(newKey); 
             }
             else if(that.state.show === false)
             {
