@@ -68,13 +68,16 @@ class Posts extends Component{
         var userID = this.props.userObj.email;
 
         //get index
-        var index = 0;
-        this.props.userPostings.forEach((item)=>{
-            console.log(item);
-            if(item.mealID !== mealID){
-                index++;
-            }
-        })
+        var index = this.props.userPostings.map((userPostings) => userPostings.mealID).indexOf(mealID)
+        // var index = 0;
+        // console.log("DELETE MEAL ID: "+ mealID)
+        // this.props.userPostings.forEach((item)=>{
+        //     console.log(item);
+        //     console.log("INNER LOOP MEAL ID: "+item.mealID);
+        //     if(item.mealID !== mealID){
+        //         index++;
+        //     }
+        // })
         console.log("Index: " + index);
 
         //pass userId, mealId, index and execute

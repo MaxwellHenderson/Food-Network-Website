@@ -122,7 +122,7 @@ class NavBar extends Component {
         return (
             <React.Fragment>
                 <div className="navbar bg-light navbar-expand-md fixed-top top-menu justify-content-between shadow">
-                    <NavLink to="./">
+                    <NavLink to="../">
                         <div className="nav-link" >Food Network</div>
                     </NavLink>
                     <div className="navbar-nav">
